@@ -2,4 +2,9 @@
     <string name="app_name">ManagerApp</string>
     <string name="profile_image">profile image</string>
     <string name="user_name">user_name</string>
+    <string name="full_name">Full Name</string>
+    <string name="username">username</string>
+    <string name="informatica">Informatica</string>
+    <string name="email">example@gmail.com</string>
+    <string name="course">course</string>
 </resources>

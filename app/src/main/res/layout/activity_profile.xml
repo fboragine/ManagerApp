@@ -8,14 +8,16 @@
     tools:context=".Profile">
 
     <include
+        android:id="@+id/include"
         layout="@layout/toolbar"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
     <RelativeLayout
+        android:id="@+id/presentation"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="@color/turquoise_500"
+        android:background="@color/turquoise_200"
         android:padding="20dp"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -24,11 +26,11 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_action_name"
-            android:contentDescription="@string/profile_image" />
+            android:contentDescription="@string/profile_image"
+            android:src="@drawable/ic_action_name" />
 
         <TextView
-            android:id="@+id/user_name"
+            android:id="@+id/full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -36,19 +38,72 @@
             android:layout_toEndOf="@+id/ic_action_name"
             android:fontFamily="@font/bungee"
             android:includeFontPadding="false"
-            android:text="User Name"
+            android:text="@string/full_name"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/user_name"
+            android:layout_below="@id/full_name"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/ic_action_name"
             android:includeFontPadding="false"
-            android:text="@string/user_name"
+            android:text="@string/username"
             android:textColor="@color/white"
             android:textSize="14sp" />
+
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="424dp"
+        android:paddingStart="25dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="2dp"
+        tools:ignore="RtlSymmetry,UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_baseline_collections_bookmark_24"
+            android:contentDescription="@string/course" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="@string/informatica"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="368dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_baseline_email_24"
+            android:contentDescription="@string/email" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:text="@string/email"
+            android:textSize="18sp"
+            tools:ignore="RtlSymmetry" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
