@@ -7,4 +7,6 @@
     <string name="informatica">Informatica</string>
     <string name="email">example@gmail.com</string>
     <string name="course">course</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_settings">Settings</string>
 </resources>
