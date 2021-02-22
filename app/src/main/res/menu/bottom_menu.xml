@@ -11,7 +11,7 @@
         android:title="Exams"
         android:icon="@drawable/ic_collections_bookmark"/>
     <item
-        android:id="@+id/profileFragment"
+        android:id="@+id/loginFragment"
         android:title="Profile"
         android:icon="@drawable/ic_person"/>
 </menu>

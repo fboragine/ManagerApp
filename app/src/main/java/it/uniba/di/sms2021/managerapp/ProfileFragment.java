@@ -1,12 +1,27 @@
 package it.uniba.di.sms2021.managerapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import javax.security.auth.callback.Callback;
+
+import entities.Studente;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +38,11 @@ public class ProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private GuestActivity callback;
+    private FirebaseDatabase db;
+    private DatabaseReference userRef;
+
+    private static final String TAG = "SimpleToolbarTest";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -49,10 +69,37 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        Log.d(TAG, "Profilo");
+
+        Intent intent = getActivity().getIntent();
+        String matricola = intent.getStringExtra("matricola");
+
+        TextView fullname = getActivity().findViewById(R.id.full_name);
+        TextView email = getActivity().findViewById(R.id.profile_email);
+
+        db = FirebaseDatabase.getInstance();
+        userRef = db.getReference("Studenti");
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Log.d(TAG, "Arrivoooooo");
+                    if(ds.child("Matricola").equals("1")) {
+                        fullname.setText(ds.child("Nome" + " " + "Cognome").getValue(String.class));
+                        email.setText(ds.child("Email").getValue(String.class));
+                        Log.d(TAG, "Risultatooooooo");
+                        Log.d(TAG, fullname.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
@@ -61,4 +108,12 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
+
+    /*@Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof Callback) {
+            callback = (GuestActivity) context;
+        }
+    }*/
 }

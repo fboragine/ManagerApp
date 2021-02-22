@@ -20,4 +20,8 @@
         android:name="it.uniba.di.sms2021.managerapp.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="it.uniba.di.sms2021.managerapp.LoginFragment"
+        android:label="Login" />
 </navigation>

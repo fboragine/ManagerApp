@@ -3,7 +3,11 @@ package entities;
 import java.util.Date;
 
 public class Esame {
-    private String id, nome, commento, cDs;
+
+    private String id;
+    private String nome;
+    private String commento;
+    private String cDs;
     private Date dataEsame;
 
     public Esame(String id, String nome, String commento, String cDs, Date dataEsame) {

@@ -16,4 +16,5 @@
     <string name="e_mail">E-mail</string>
     <string name="register">Register</string>
     <string name="name">Name</string>
+    <string name="btn_goto_register">Go to  Registration</string>
 </resources>
