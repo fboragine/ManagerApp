@@ -105,7 +105,7 @@ public class LibrettoFragment extends Fragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
 
         // Add Search Menu Item
-        int searchId = View.generateViewId();
+        int searchId = GuestActivity.SEARCH_ITEM_ID;
         if (menu.findItem(searchId) == null) {
             // If it not exists then add the menu item to menu
             MenuItem search = menu.add(
@@ -143,7 +143,7 @@ public class LibrettoFragment extends Fragment {
         }
 
         // Add Filter Menu Item
-        int filterId = View.generateViewId();
+        int filterId = GuestActivity.FILTER_ITEM_ID;
         if (menu.findItem(filterId) == null) {
             // If it not exists then add the menu item to menu
             MenuItem filter = menu.add(
