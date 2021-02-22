@@ -15,12 +15,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Set;
 
-public class Home extends AppCompatActivity {
+public class GuestActivity extends AppCompatActivity {
 
     private static final String TAG = "SimpleToolbarTest";
 
