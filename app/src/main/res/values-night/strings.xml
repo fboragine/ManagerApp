@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ManagerApp</string>
     <string name="profile_image">profile image</string>
     <string name="user_name">user_name</string>
     <string name="full_name">Full Name</string>
