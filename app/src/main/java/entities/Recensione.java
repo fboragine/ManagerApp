@@ -1,8 +1,11 @@
 package entities;
 
 public class Recensione {
+
     private int voto;
-    private String commento, codiceProgetto, id;
+    private String commento;
+    private String codiceProgetto;
+    private String id;
 
     public Recensione(int voto, String commento, String codiceProgetto, String id) {
         this.voto = voto;

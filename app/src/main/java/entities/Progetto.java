@@ -3,7 +3,12 @@ package entities;
 import java.util.Date;
 
 public class Progetto {
-    private String id, nome, descrizione, percorsoImg, codiceEsame;
+
+    private String id;
+    private String nome;
+    private String descrizione;
+    private String percorsoImg;
+    private String codiceEsame;
     private Date dataCreazione;
     private String idStudenti [];
     public static final int MAX_STUDENTI = 5;

@@ -3,16 +3,22 @@ package entities;
 import java.util.Date;
 
 public class Studente {
-    private String matricola, nome, cognome, percorsoImg, email, password, cDs;
+
+    private String matricola;
+    private String nome;
+    private String cognome;
+    private String percorsoImg;
+    private String email;
+    private String cDs;
+
     private Date dataNascita;
 
-    public Studente(String matricola, String nome, String cognome, String percorsoImg, String email, String password, String cDs, Date dataNascita) {
+    public Studente(String matricola, String nome, String cognome, String percorsoImg, String email, String cDs, Date dataNascita) {
         this.matricola = matricola;
         this.nome = nome;
         this.cognome = cognome;
         this.percorsoImg = percorsoImg;
         this.email = email;
-        this.password = password;
         this.cDs = cDs;
         this.dataNascita = dataNascita;
     }
@@ -55,14 +61,6 @@ public class Studente {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getcDs() {
