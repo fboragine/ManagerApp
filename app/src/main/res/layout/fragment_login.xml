@@ -60,12 +60,12 @@
                 <EditText
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
                     android:paddingStart="20dp"
-                    android:text="E-mail"
                     android:textSize="18sp"
-                    tools:ignore="RtlSymmetry" />
+                    tools:ignore="RtlSymmetry"
+                    android:autofillHints="E-mail"
+                    android:hint="@string/e_mail"
+                    android:inputType="textEmailAddress" />
             </LinearLayout>
 
             <LinearLayout
@@ -87,12 +87,12 @@
                 <EditText
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:text="Password"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:autofillHints="Password"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
             </LinearLayout>
 
             <LinearLayout
@@ -111,7 +111,7 @@
                     android:id="@+id/button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Login"
+                    android:text="@string/login"
                     android:background="@color/sand_200"/>
 
                 <Button
