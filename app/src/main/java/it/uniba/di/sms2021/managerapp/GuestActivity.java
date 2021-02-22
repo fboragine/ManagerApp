@@ -27,7 +27,7 @@ public class GuestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_guest);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
