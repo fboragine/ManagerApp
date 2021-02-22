@@ -23,7 +23,7 @@
             <RelativeLayout
                 android:id="@+id/presentation"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="170dp"
                 android:layout_marginTop="?attr/actionBarSize"
                 android:background="@color/turquoise_200"
                 android:padding="20dp"
