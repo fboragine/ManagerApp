@@ -9,4 +9,9 @@
     <string name="course">course</string>
     <string name="action_filter">Filter</string>
     <string name="action_settings">Settings</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_forgot_password">Forgot your password?</string>
+    <string name="btn_link_to_register">Sign up</string>
+    <string name="password" />
+    <string name="btn_already_reg">Already registered. Login Me!</string>
 </resources>
