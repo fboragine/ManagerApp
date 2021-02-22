@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="profile_image">profile image</string>
-    <string name="user_name">user_name</string>
     <string name="full_name">Full Name</string>
-    <string name="username">username</string>
     <string name="informatica">Informatica</string>
     <string name="email">example@gmail.com</string>
     <string name="course">course</string>
@@ -13,4 +11,9 @@
     <string name="btn_link_to_register">Sign up</string>
     <string name="password" />
     <string name="btn_already_reg">Already registered. Login Me!</string>
+    <string name="person_image">Person image</string>
+    <string name="surname">Surname</string>
+    <string name="e_mail">E-mail</string>
+    <string name="register">Register</string>
+    <string name="name">Name</string>
 </resources>
