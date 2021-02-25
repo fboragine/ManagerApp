@@ -3,6 +3,8 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+apply plugin: "androidx.navigation.safeargs"
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
