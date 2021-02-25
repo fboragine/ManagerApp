@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GuestActivity">
+    tools:context=".StudentActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_toolbar"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:theme="?attr/actionBarTheme"
-        app:menu="@menu/bottom_guest_menu"/>
+        app:menu="@menu/bottom_menu"/>
 
     <fragment
         android:id="@+id/fragment"
@@ -42,6 +42,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/guest_nav" />
+        app:navGraph="@navigation/nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

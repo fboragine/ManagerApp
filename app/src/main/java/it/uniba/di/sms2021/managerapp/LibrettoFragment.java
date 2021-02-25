@@ -107,17 +107,14 @@ public class LibrettoFragment extends Fragment {
                     Menu.NONE,
                     searchId,
                     1,
-                    "Search"
+                    getString(R.string.search)
             );
 
             // Set an icon for the new menu item
             search.setIcon(R.drawable.ic_search);
 
             // Set the show as action flags for new menu item
-            search.setShowAsActionFlags(
-                    MenuItem.SHOW_AS_ACTION_WITH_TEXT |
-                            MenuItem.SHOW_AS_ACTION_ALWAYS
-            );
+            search.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
             search.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -138,17 +135,14 @@ public class LibrettoFragment extends Fragment {
                     Menu.NONE,
                     filterId,
                     2,
-                    "Filter"
+                    getString(R.string.action_filter)
             );
 
             // Set an icon for the new menu item
             filter.setIcon(R.drawable.ic_baseline_filter_alt_24);
 
             // Set the show as action flags for new menu item
-            filter.setShowAsActionFlags(
-                    MenuItem.SHOW_AS_ACTION_WITH_TEXT |
-                            MenuItem.SHOW_AS_ACTION_ALWAYS
-            );
+            filter.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
             filter.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
