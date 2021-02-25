@@ -20,4 +20,5 @@
     <string name="name">Name</string>
     <string name="btn_goto_register">Do not have an account yet? Register Now.</string>
     <string name="login">Login</string>
+    <string name="save">Save</string>
 </resources>
