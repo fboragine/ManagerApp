@@ -37,7 +37,7 @@
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
                     android:contentDescription="@string/profile_image"
-                    android:src="@drawable/ic_launcher_foreground" />
+                    android:src="@mipmap/ic_launcher_round" />
 
             </RelativeLayout>
 
