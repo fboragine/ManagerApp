@@ -19,5 +19,14 @@
         android:id="@+id/profileFragment"
         android:name="it.uniba.di.sms2021.managerapp.ProfileFragment"
         android:label="@string/profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="it.uniba.di.sms2021.managerapp.EditProfileFragment"
+        android:label="@string/edit"
+        tools:layout="@layout/fragment_edit_profile" />
 </navigation>

@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -157,6 +159,8 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                    NavDirections action = ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment();
+                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                     return true;
                 }
             });
