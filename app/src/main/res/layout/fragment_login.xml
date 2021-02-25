@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".LoginFragment">
 
     <ScrollView
         android:id="@+id/ScrollViewID"
@@ -23,7 +23,7 @@
             <RelativeLayout
                 android:id="@+id/presentation"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="170dp"
                 android:layout_marginTop="?attr/actionBarSize"
                 android:background="@color/turquoise_200"
                 android:padding="20dp"
@@ -35,21 +35,9 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
                     android:contentDescription="@string/profile_image"
-                    android:src="@drawable/ic_action_name" />
-
-                <TextView
-                    android:id="@+id/full_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/ic_action_name"
-                    android:fontFamily="@font/bungee"
-                    android:includeFontPadding="false"
-                    android:text="@string/full_name"
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:src="@drawable/ic_launcher_foreground" />
 
             </RelativeLayout>
 
@@ -69,15 +57,15 @@
                     android:contentDescription="@string/email"
                     android:src="@drawable/ic_baseline_email_24" />
 
-                <TextView
-                    android:id="@+id/profile_email"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:paddingStart="20dp"
-                    android:text="@string/email"
                     android:textSize="18sp"
-                    tools:ignore="RtlSymmetry" />
+                    tools:ignore="RtlSymmetry"
+                    android:autofillHints="E-mail"
+                    android:hint="@string/e_mail"
+                    android:inputType="textEmailAddress" />
             </LinearLayout>
 
             <LinearLayout
@@ -94,17 +82,60 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:contentDescription="@string/course"
-                    android:src="@drawable/ic_baseline_collections_bookmark_24" />
+                    android:src="@drawable/ic_baseline_vpn_key_24" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
-                    android:text="@string/informatica"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:autofillHints="Password"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="60dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="RtlSymmetry,UseCompoundDrawables"
+                tools:layout_editor_absoluteX="2dp">
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login"
+                    android:background="@color/sand_200"/>
+
+                <Button
+                    android:id="@+id/btn_reset_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dip"
+                    android:background="@null"
+                    android:text="@string/btn_forgot_password"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_goto_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dip"
+                    android:background="@null"
+                    android:text="@string/btn_goto_register"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
