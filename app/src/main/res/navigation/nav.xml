@@ -23,5 +23,6 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="it.uniba.di.sms2021.managerapp.LoginFragment"
-        android:label="Login" />
+        android:label="Login"
+        tools:layout="@layout/fragment_login" />
 </navigation>

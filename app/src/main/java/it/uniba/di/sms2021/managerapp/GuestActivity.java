@@ -9,11 +9,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -22,6 +26,9 @@ import java.util.Set;
 public class GuestActivity extends AppCompatActivity {
 
     private static final String TAG = "SimpleToolbarTest";
+    protected static final int SEARCH_ITEM_ID = View.generateViewId();
+    protected static final int FILTER_ITEM_ID = View.generateViewId();
+    protected static final int MODIFY_ITEM_ID = View.generateViewId();
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -42,6 +49,7 @@ public class GuestActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
@@ -63,4 +71,6 @@ public class GuestActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+     */
 }
