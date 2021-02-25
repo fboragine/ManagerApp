@@ -127,12 +127,13 @@
                 <Button
                     android:id="@+id/btn_goto_register"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="20dip"
                     android:background="@null"
                     android:text="@string/btn_goto_register"
                     android:textAllCaps="false"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:onClick="goToRegister"/>
 
             </LinearLayout>
 
