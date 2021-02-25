@@ -89,12 +89,7 @@ public class LibrettoFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Log.d(TAG, "Settings");
-            return true;
-        }
-
-        if (id == R.id.action_filter) {
-            Log.d(TAG, "Filter");
+            Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -133,13 +128,6 @@ public class LibrettoFragment extends Fragment {
                 }
             });
 
-        }
-
-        // Remove Filter Menu Item
-        if (menu.findItem(R.id.action_filter) != null) {
-            // If blue menu item is not deleted then delete/remove it from the menu
-            menu.removeItem(R.id.action_filter);
-            Toast.makeText(getActivity().getApplicationContext(), "Filter Menu Item Deleted", Toast.LENGTH_SHORT).show();
         }
 
         // Add Filter Menu Item
