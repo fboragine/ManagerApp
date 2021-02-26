@@ -29,4 +29,7 @@
     <string name="cancel">Cancel</string>
     <string name="signup">Sign Up</string>
     <string name="edit_image">Edit Image</string>
+    <string name="in_progress">In Progress</string>
+    <string name="closed">Closed</string>
+    <string name="logout">Logout</string>
 </resources>

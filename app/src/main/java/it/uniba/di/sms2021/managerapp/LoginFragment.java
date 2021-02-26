@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -88,5 +89,9 @@ public class LoginFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    public void fakeLogin(View view) {
+        Intent intent = new Intent(getActivity().getApplicationContext(), StudentActivity.class);
+        startActivity(intent);
+    }
 
 }
