@@ -50,7 +50,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="55dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="50dp"
                     android:src="@drawable/ic_baseline_person_24"
                     android:contentDescription="@string/person_image" />
 
@@ -70,6 +70,17 @@
                     android:autofillHints="@string/surname"
                     android:hint="@string/surname"
                     android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/editTextNumber"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginStart="100dp"
+                    android:autofillHints="Matricola"
+                    android:hint="Matricola"
+                    android:inputType="number" />
+
             </RelativeLayout>
 
             <LinearLayout

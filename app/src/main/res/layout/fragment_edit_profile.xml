@@ -52,16 +52,31 @@
                         android:id="@+id/full_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginStart="10dp"
                         android:layout_toEndOf="@+id/ic_action_name"
-                        android:fontFamily="@font/bungee"
-                        android:includeFontPadding="false"
                         android:autofillHints="Name"
+                        android:fontFamily="@font/bungee"
                         android:hint="@string/full_name"
+                        android:includeFontPadding="false"
                         android:inputType="textPersonName"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/serial_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_below="@+id/full_name"
+                        android:layout_toEndOf="@+id/ic_action_name"
+                        android:fontFamily="@font/bungee"
+                        android:autofillHints="Serial Number"
+                        android:hint="@string/serial_number"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/white"
+                        android:inputType="number"
+                        android:textSize="15dp" />
 
                 </RelativeLayout>
 
