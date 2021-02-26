@@ -11,8 +11,10 @@ import androidx.navigation.ui.NavigationUI;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Set;
 
@@ -39,5 +41,12 @@ public class StudentActivity extends AppCompatActivity {
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
+    }
+
+    public void logout(){
+        FirebaseAuth.getInstance().signOut();
+        //deleteFile(fileCacheAuth);
+        Toast.makeText(StudentActivity.this," Logout effettuato con successo ", Toast.LENGTH_SHORT).show();
+        //Richiama l'activity ospite.
     }
 }

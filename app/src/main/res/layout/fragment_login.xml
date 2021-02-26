@@ -58,14 +58,15 @@
                     android:src="@drawable/ic_baseline_email_24" />
 
                 <EditText
+                    android:id="@+id/emailTxt"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:paddingStart="20dp"
-                    android:textSize="18sp"
-                    tools:ignore="RtlSymmetry"
                     android:autofillHints="E-mail"
                     android:hint="@string/e_mail"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:paddingStart="20dp"
+                    android:textSize="18sp"
+                    tools:ignore="RtlSymmetry" />
             </LinearLayout>
 
             <LinearLayout
@@ -85,14 +86,15 @@
                     android:src="@drawable/ic_baseline_vpn_key_24" />
 
                 <EditText
+                    android:id="@+id/passwordTxt"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:textSize="18sp"
                     android:autofillHints="Password"
                     android:hint="@string/password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -108,7 +110,7 @@
                 tools:layout_editor_absoluteX="2dp">
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/buttonLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/login"
