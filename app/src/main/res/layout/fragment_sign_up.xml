@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpFragment">
+    tools:context=".SignUpFragment"
+    android:id="@+id/sign_up">
 
     <ScrollView
         android:id="@+id/ScrollViewID"
@@ -142,7 +143,7 @@
                     android:inputType="textPassword" />
             </LinearLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -156,7 +157,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/register"
-                    android:background="@color/sand_200"/>
+                    android:background="@color/sand_200"
+                    app:layout_constraintBottom_toTopOf="@id/btn_reset_password"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <Button
                     android:id="@+id/btn_reset_password"
@@ -166,19 +171,29 @@
                     android:text="@string/btn_forgot_password"
                     android:textAllCaps="false"
                     android:background="@null"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@id/btn_already_reg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/button"/>
 
                 <Button
                     android:id="@+id/btn_already_reg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
                     android:background="@null"
                     android:text="@string/btn_already_reg"
                     android:textAllCaps="false"
-                    android:textColor="@color/black" />
+                    android:onClick="go_to_login"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dip"
+                    android:layout_marginBottom="?attr/actionBarSize"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_reset_password"/>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>
