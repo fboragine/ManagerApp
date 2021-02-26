@@ -58,6 +58,7 @@
                         android:includeFontPadding="false"
                         android:autofillHints="Name"
                         android:hint="Mario Rossi"
+                        android:inputType="textPersonName"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
@@ -112,6 +113,7 @@
                         android:paddingStart="20dp"
                         android:paddingEnd="20dp"
                         android:autofillHints="Course"
+                        android:inputType="text"
                         android:hint="Course"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -138,6 +140,7 @@
                         android:paddingStart="20dp"
                         android:paddingEnd="20dp"
                         android:autofillHints="Password"
+                        android:inputType="textPassword"
                         android:hint="Password"
                         android:textSize="18sp" />
                 </LinearLayout>
