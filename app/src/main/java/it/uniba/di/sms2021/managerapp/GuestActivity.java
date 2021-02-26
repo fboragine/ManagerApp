@@ -75,4 +75,6 @@ public class GuestActivity extends AppCompatActivity {
         NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
         Navigation.findNavController(this,R.id.fragment).navigate(action);
     }
+
+
 }
