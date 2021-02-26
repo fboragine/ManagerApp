@@ -58,7 +58,7 @@
                         android:fontFamily="@font/bungee"
                         android:includeFontPadding="false"
                         android:autofillHints="Name"
-                        android:hint="Mario Rossi"
+                        android:hint="@string/full_name"
                         android:inputType="textPersonName"
                         android:textColor="@color/white"
                         android:textSize="20sp" />

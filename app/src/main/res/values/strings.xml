@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ManagerApp</string>
     <string name="profile_image">profile image</string>
-    <string name="full_name">Full Name</string>
+    <string name="full_name">Mario Rossi</string>
     <string name="informatica">Informatica</string>
     <string name="email">example@gmail.com</string>
     <string name="course">Course</string>
@@ -19,8 +19,6 @@
     <string name="name">Name</string>
     <string name="btn_goto_register">Do not have an account yet? Register Now.</string>
     <string name="login">Login</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="save">Save</string>
     <string name="home">Home</string>
     <string name="exams">Exams</string>
