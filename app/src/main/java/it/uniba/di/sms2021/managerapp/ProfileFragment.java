@@ -190,6 +190,7 @@ public class ProfileFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
                     startActivity(intent);
+                    getActivity().finish();
                     return true;
                 }
             });

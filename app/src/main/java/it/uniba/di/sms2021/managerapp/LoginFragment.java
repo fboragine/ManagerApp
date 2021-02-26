@@ -89,9 +89,4 @@ public class LoginFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void fakeLogin(View view) {
-        Intent intent = new Intent(getActivity().getApplicationContext(), StudentActivity.class);
-        startActivity(intent);
-    }
-
 }
