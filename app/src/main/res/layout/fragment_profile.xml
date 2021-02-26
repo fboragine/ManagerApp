@@ -74,6 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
                     android:text="@string/email"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -84,6 +85,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="60dp"
                 android:paddingStart="55dp"
+                android:paddingEnd="10dp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
@@ -93,6 +95,7 @@
                     android:src="@drawable/ic_baseline_collections_bookmark_24" />
 
                 <TextView
+                    android:id="@+id/profile_course"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
