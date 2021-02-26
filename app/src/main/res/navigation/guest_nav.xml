@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/guest_nav"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/guestHomeFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="it.uniba.di.sms2021.managerapp.HomeFragment"
+        android:id="@+id/guestHomeFragment"
+        android:name="it.uniba.di.sms2021.managerapp.GuestHomeFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_guest_home" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="it.uniba.di.sms2021.managerapp.LoginFragment"
