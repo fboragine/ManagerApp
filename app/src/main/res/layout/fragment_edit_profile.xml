@@ -3,6 +3,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="60dp"
         android:layout_height="match_parent"
         tools:context=".EditProfileFragment">
 
@@ -24,7 +26,6 @@
                     android:id="@+id/presentation"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginTop="?attr/actionBarSize"
                     android:background="@color/turquoise_200"
                     android:padding="20dp"
                     app:layout_constraintTop_toTopOf="parent"
@@ -44,7 +45,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Edit Image"
+                        android:text="@string/edit_image"
                         android:background="@color/sand_200"/>
 
                     <EditText
@@ -114,7 +115,7 @@
                         android:paddingEnd="20dp"
                         android:autofillHints="Course"
                         android:inputType="text"
-                        android:hint="Course"
+                        android:hint="@string/course"
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -141,7 +142,7 @@
                         android:paddingEnd="20dp"
                         android:autofillHints="Password"
                         android:inputType="textPassword"
-                        android:hint="Password"
+                        android:hint="@string/password"
                         android:textSize="18sp" />
                 </LinearLayout>
 
