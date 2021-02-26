@@ -3,6 +3,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="60dp"
         android:layout_height="match_parent"
         tools:context=".EditProfileFragment">
 
@@ -24,7 +26,6 @@
                     android:id="@+id/presentation"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginTop="?attr/actionBarSize"
                     android:background="@color/turquoise_200"
                     android:padding="20dp"
                     app:layout_constraintTop_toTopOf="parent"
@@ -44,22 +45,38 @@
                         android:layout_marginStart="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Edit Image"
+                        android:text="@string/edit_image"
                         android:background="@color/sand_200"/>
 
                     <EditText
                         android:id="@+id/full_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginStart="10dp"
                         android:layout_toEndOf="@+id/ic_action_name"
-                        android:fontFamily="@font/bungee"
-                        android:includeFontPadding="false"
                         android:autofillHints="Name"
-                        android:hint="Mario Rossi"
+                        android:fontFamily="@font/bungee"
+                        android:hint="@string/full_name"
+                        android:includeFontPadding="false"
+                        android:inputType="textPersonName"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/serial_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_below="@+id/full_name"
+                        android:layout_toEndOf="@+id/ic_action_name"
+                        android:fontFamily="@font/bungee"
+                        android:autofillHints="Serial Number"
+                        android:hint="@string/serial_number"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/white"
+                        android:inputType="number"
+                        android:textSize="15dp" />
 
                 </RelativeLayout>
 
@@ -112,7 +129,8 @@
                         android:paddingStart="20dp"
                         android:paddingEnd="20dp"
                         android:autofillHints="Course"
-                        android:hint="Course"
+                        android:inputType="text"
+                        android:hint="@string/course"
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -138,7 +156,8 @@
                         android:paddingStart="20dp"
                         android:paddingEnd="20dp"
                         android:autofillHints="Password"
-                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:hint="@string/password"
                         android:textSize="18sp" />
                 </LinearLayout>
 

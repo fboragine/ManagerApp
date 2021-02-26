@@ -2,6 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:layout_marginBottom="60dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SignUpFragment"
@@ -25,7 +27,6 @@
                 android:id="@+id/presentation"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:layout_marginTop="?attr/actionBarSize"
                 android:background="@color/turquoise_200"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -49,7 +50,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="55dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="50dp"
                     android:src="@drawable/ic_baseline_person_24"
                     android:contentDescription="@string/person_image" />
 
@@ -69,6 +70,17 @@
                     android:autofillHints="@string/surname"
                     android:hint="@string/surname"
                     android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/editTextNumber"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginStart="100dp"
+                    android:autofillHints="Matricola"
+                    android:hint="Matricola"
+                    android:inputType="number" />
+
             </RelativeLayout>
 
             <LinearLayout
@@ -187,7 +199,6 @@
                     android:onClick="go_to_login"
                     android:textColor="@color/black"
                     android:layout_marginTop="10dip"
-                    android:layout_marginBottom="?attr/actionBarSize"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

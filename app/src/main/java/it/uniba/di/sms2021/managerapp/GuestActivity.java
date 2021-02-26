@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -36,7 +37,7 @@ public class GuestActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         NavController navController = Navigation.findNavController(findViewById(R.id.fragment));
-        AppBarConfiguration appBarConfiguration = (new AppBarConfiguration.Builder(Set.of(R.id.homeFragment, R.id.loginFragment))).build();
+        AppBarConfiguration appBarConfiguration = (new AppBarConfiguration.Builder(Set.of(R.id.guestHomeFragment, R.id.loginFragment))).build();
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
@@ -74,5 +75,11 @@ public class GuestActivity extends AppCompatActivity {
     public void go_to_login(View view) {
         NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
         Navigation.findNavController(this,R.id.fragment).navigate(action);
+    }
+
+    public void fakeLogin(View view) {
+        Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

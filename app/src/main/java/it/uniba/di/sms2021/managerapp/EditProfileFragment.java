@@ -3,7 +3,10 @@ package it.uniba.di.sms2021.managerapp;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NavUtils;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -77,10 +80,14 @@ public class EditProfileFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-            return true;
+        switch(item.getItemId()) {
+            case R.id.action_settings:
+                Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
+                Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -111,6 +118,8 @@ public class EditProfileFragment extends Fragment {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                    NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
+                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                     return true;
                 }
             });
@@ -139,10 +148,11 @@ public class EditProfileFragment extends Fragment {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                    NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
+                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                     return true;
                 }
             });
-
         }
 
         super.onPrepareOptionsMenu(menu);
