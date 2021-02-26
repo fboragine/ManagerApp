@@ -8,21 +8,30 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="it.uniba.di.sms2021.managerapp.HomeFragment"
-        android:label="Home"
+        android:label="@string/home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/librettoFragment"
         android:name="it.uniba.di.sms2021.managerapp.LibrettoFragment"
-        android:label="Exams"
+        android:label="@string/exams"
         tools:layout="@layout/fragment_libretto" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="it.uniba.di.sms2021.managerapp.ProfileFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="it.uniba.di.sms2021.managerapp.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="it.uniba.di.sms2021.managerapp.EditProfileFragment"
+        android:label="@string/edit"
+        tools:layout="@layout/fragment_edit_profile" />
 </navigation>
