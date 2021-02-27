@@ -1,41 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="?attr/actionBarSize"
     android:layout_marginBottom="60dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".HomeFragment">
 
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Home Fragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
+        app:tabMode="fixed">
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/tab_in_progress"
+            android:id="@+id/inprogress_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/in_progress" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/closed"
+            android:id="@+id/closed_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/closed" />
     </com.google.android.material.tabs.TabLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/home_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
