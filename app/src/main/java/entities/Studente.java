@@ -1,9 +1,8 @@
 package entities;
 
-import java.util.Date;
-
 public class Studente {
 
+    private String id;
     private String matricola;
     private String nome;
     private String cognome;
@@ -11,16 +10,21 @@ public class Studente {
     private String email;
     private String cDs;
 
-    private Date dataNascita;
-
-    public Studente(String matricola, String nome, String cognome, String percorsoImg, String email, String cDs, Date dataNascita) {
+    public Studente(String matricola, String nome, String cognome, String email, String cDs) {
         this.matricola = matricola;
         this.nome = nome;
         this.cognome = cognome;
-        this.percorsoImg = percorsoImg;
+        this.percorsoImg = null;
         this.email = email;
         this.cDs = cDs;
-        this.dataNascita = dataNascita;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMatricola() {
@@ -71,11 +75,4 @@ public class Studente {
         this.cDs = cDs;
     }
 
-    public Date getDataNascita() {
-        return dataNascita;
-    }
-
-    public void setDataNascita(Date dataNascita) {
-        this.dataNascita = dataNascita;
-    }
 }
