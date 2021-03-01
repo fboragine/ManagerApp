@@ -24,11 +24,11 @@ public class ListViewAdapter extends BaseAdapter {
         mContext = context;
         this.modellist = modellist;
         inflater = LayoutInflater.from(mContext);
-        this.arrayList = new ArrayList<Model>();
+        this.arrayList = new ArrayList<>();
         this.arrayList.addAll(modellist);
     }
 
-    public class ViewHolder{
+    public static class ViewHolder{
         TextView mTitleTv, mDescTv;
     }
 
