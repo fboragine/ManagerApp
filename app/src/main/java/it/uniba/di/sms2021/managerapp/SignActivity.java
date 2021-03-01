@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
@@ -46,9 +47,21 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.button) {
-            register(v);
+        switch (v.getId()) {
+            case R.id.button:
+                register(v);
+            case R.id.btn_already_reg:
+                go_to_login(v);
         }
+    }
+
+    public void go_to_login(View v) {
+        /*
+        Intent intent = new Intent(getApplicationContext(), GuestActivity.class);
+        startActivity(intent);
+
+         */
+        finish();
     }
 
     public void register(View v) {

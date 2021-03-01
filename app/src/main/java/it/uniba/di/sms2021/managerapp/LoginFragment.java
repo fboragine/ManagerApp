@@ -88,5 +88,4 @@ public class LoginFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
-
 }
