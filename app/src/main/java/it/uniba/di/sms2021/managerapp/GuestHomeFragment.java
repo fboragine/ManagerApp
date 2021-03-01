@@ -5,68 +5,61 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GuestHomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
 public class GuestHomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    View viewGuestHome;
+    ListView listView;
+    ListViewAdapter adapter;
+    String[] title;
+    String[] description;
+    ArrayList<Model> arrayList = new ArrayList<>();
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public GuestHomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GuestHomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GuestHomeFragment newInstance(String param1, String param2) {
-        GuestHomeFragment fragment = new GuestHomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
         setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        viewGuestHome = inflater.inflate(R.layout.fragment_guest_home, container, false);
+        title = new String[]{"Informatica", "Lingue", "Medicina", "Matematica", "Lettere", "Informatica", "Lingue", "Medicina", "Matematica", "Lettere"};
+        description = new String[]{"Informatica description", "Lingue description", "Medicina description", "Matematica description", "Lettere description", "Informatica description", "Lingue description", "Medicina description", "Matematica description", "Lettere description"};
+
+        listView = viewGuestHome.findViewById(R.id.listView);
+
+        for (int i = 0; i<title.length; i++) {
+            Model model = new Model(title[i], description[i]);
+            //bind all strings in an array
+            arrayList.add(model);
+        }
+
+        //pass results to listViewAdapter class
+        adapter = new ListViewAdapter(getActivity().getApplicationContext(), arrayList);
+
+        //bind the adapter to the listview
+        listView.setAdapter(adapter);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_guest_home, container, false);
+        return viewGuestHome;
     }
 
     @Override
@@ -106,15 +99,35 @@ public class GuestHomeFragment extends Fragment {
             // Set the show as action flags for new menu item
             search.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
+            search.setActionView(new SearchView(getActivity().getApplicationContext()));
+
             // Set a click listener for the new menu item
             search.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                    SearchView searchView = (SearchView) item.getActionView();
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String s) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String s) {
+                            if(TextUtils.isEmpty(s)) {
+                                adapter.filter("");
+                                listView.clearTextFilter();
+                            }
+                            else {
+                                adapter.filter(s);
+                            }
+                            return true;
+                        }
+                    });
                     return true;
                 }
             });
-
         }
 
         // Add Filter Menu Item
@@ -142,7 +155,6 @@ public class GuestHomeFragment extends Fragment {
                     return true;
                 }
             });
-
         }
 
         super.onPrepareOptionsMenu(menu);
