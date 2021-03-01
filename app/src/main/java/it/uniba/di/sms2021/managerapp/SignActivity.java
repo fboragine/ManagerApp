@@ -32,8 +32,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
     private FirebaseAuth mAuth;
 
-    private Button btnRegister;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +41,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-        /*btnRegister = (Button) findViewById(R.id.button);
-
-        btnRegister.setOnClickListener(this);*/
         return super.onCreateView(parent, name, context, attrs);
     }
 
@@ -87,29 +82,8 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
         mAuth = FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(aux.getEmail(), pw.getText().toString());
-        /*mAuth.createUserWithEmailAndPassword(aux.getEmail(), pw.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //salvaCacheFile((Object) user, flag);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });*/
-
-        //mAuth.createUserWithEmailAndPassword(aux.getEmail(), pw.getText().toString());
-
-
-
 
         user.put("id", mAuth.getUid());
-
 
         //Getting Reference to "users" collection
         //REMEMBER: at this point, no collection will be created
@@ -120,11 +94,5 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
         DocumentReference documentReference = collectionReference.document(mAuth.getUid());
         documentReference.set(user);
-
-
-        //Writing data
-        //REMEMBER: here both collection and document will be created and fields and values we created in hash will be stored to that document.
-
-
     }
 }
