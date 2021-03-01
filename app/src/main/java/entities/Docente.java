@@ -7,15 +7,13 @@ public class Docente {
     private String matricola;
     private String nome;
     private String cognome;
-    private Date data;
-    private String percorsoImmagine;
+    private String email;
 
-    public Docente(String matricola, String nome, String cognome, Date data, String percorsoImmagine) {
+    public Docente(String matricola, String nome, String cognome, String email) {
         this.matricola = matricola;
         this.nome = nome;
         this.cognome = cognome;
-        this.data = data;
-        this.percorsoImmagine = percorsoImmagine;
+        this.email = email;
     }
 
     public String getMatricola() {
@@ -42,19 +40,11 @@ public class Docente {
         this.cognome = cognome;
     }
 
-    public Date getData() {
-        return data;
+    public String getEmail() {
+        return email;
     }
 
-    public void setData(Date data) {
-        this.data = data;
-    }
-
-    public String getPercorsoImmagine() {
-        return percorsoImmagine;
-    }
-
-    public void setPercorsoImmagine(String percorsoImmagine) {
-        this.percorsoImmagine = percorsoImmagine;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

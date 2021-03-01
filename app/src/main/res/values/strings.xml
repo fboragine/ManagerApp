@@ -34,4 +34,6 @@
     <string name="in_progress">In Progress</string>
     <string name="closed">Closed</string>
     <string name="logout">Logout</string>
+    <string name="welcome_msg">\"Welcome\"</string>
+    <string name="login_error_msg">\"Login failed. Access denied\"</string>
 </resources>

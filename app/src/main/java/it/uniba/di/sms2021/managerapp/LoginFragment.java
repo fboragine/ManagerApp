@@ -1,14 +1,13 @@
 package it.uniba.di.sms2021.managerapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,8 +23,23 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.concurrent.Executor;
+import java.io.ObjectStreamException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import entities.Docente;
+import entities.Studente;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +55,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private FirebaseFirestore db;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -67,6 +82,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         mAuth = FirebaseAuth.getInstance();
         mUser = FirebaseAuth.getInstance().getCurrentUser();
+        db = FirebaseFirestore.getInstance();
 
         // Inflate the layout for this fragment
         return vistaLogin;
@@ -100,26 +116,114 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     public void login(String email, String password) {
 
+        boolean flag = false;
+        final Studente[] studenteLogged = new Studente[1];
+        final Docente[] docenteLogged = new Docente[1];
+        final String[] uid = new String[1];
+
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener((Activity) getContext(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) //Login avvenuto con successo
                 {
                     FirebaseUser user;
+
                     user = mAuth.getCurrentUser();
+                    uid[0] = user.getUid();
 
-                    Toast.makeText(getActivity().getApplicationContext()," Benvenuto " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                    if(flag){
+                        studenteLogged[0] = prendiStudente(uid[0]);
+                        if(studenteLogged[0] == null) {
+
+                            docenteLogged[0] = prendiDocente(uid[0]);
+                            if(docenteLogged[0] != null){
+                                Toast.makeText(getActivity().getApplicationContext(),"Benvenuto" + docenteLogged[0].getNome() + " " + docenteLogged[0].getCognome(), Toast.LENGTH_LONG).show();
+                            }
+
+                            if(studenteLogged[0] == null && docenteLogged[0] == null)
+                            {
+                                Toast.makeText(getActivity().getApplicationContext(),"Nessun utente trovato", Toast.LENGTH_LONG).show();
+                            }else {
+                                Intent intent = new Intent(getActivity().getApplicationContext(), StudentActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+
+                        }else {
+                            Toast.makeText(getActivity().getApplicationContext(),"Benvenuto" + studenteLogged[0].getNome() + " " + studenteLogged[0].getCognome(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.welcome_msg) + " " + user.getEmail(), Toast.LENGTH_SHORT).show();
                     //salvaCacheFile((Object) user);
-
-                    //Trasferire a fragment home
                 }
                 else {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(getActivity().getApplicationContext()," Autenticazione fallita" + task.getException(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_error_msg) + task.getException(), Toast.LENGTH_LONG).show();
                 }
             }
         });
 
+
+
+    }
+
+     public Studente prendiStudente(String id) {
+
+        DocumentReference docRef = db.collection("studenti").document(id);
+        final Studente[] risultato = new Studente[1];
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                    risultato[0] = new Studente((String) document.get("matricola"),
+                                                (String) document.get("nome"),
+                                                (String) document.get("cognome"),
+                                                (String) document.get("email"),
+                                                (String) document.get("cDs"));
+                    } else {
+                        Log.d(TAG, "No such document");
+                        risultato[0] = null;
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                    risultato[0] = null;
+                }
+            }
+        });
+        return risultato[0];
+    }
+
+    public Docente prendiDocente(String id) {
+
+        DocumentReference docRef = db.collection("studenti").document(id);
+        final Docente[] risultato = new Docente[1];
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        risultato[0] = new Docente((String) document.get("matricola"),
+                                (String) document.get("nome"),
+                                (String) document.get("cognome"),
+                                (String) document.get("email"));
+                    } else {
+                        Log.d(TAG, "No such document");
+                        risultato[0] = null;
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                    risultato[0] = null;
+                }
+            }
+        });
+        return risultato[0];
     }
 
     @Override

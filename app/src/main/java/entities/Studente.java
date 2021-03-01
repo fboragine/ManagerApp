@@ -7,20 +7,17 @@ public class Studente {
     private String matricola;
     private String nome;
     private String cognome;
-    private String percorsoImg;
     private String email;
     private String cDs;
 
     private Date dataNascita;
 
-    public Studente(String matricola, String nome, String cognome, String percorsoImg, String email, String cDs, Date dataNascita) {
+    public Studente(String matricola, String nome, String cognome, String email, String cDs) {
         this.matricola = matricola;
         this.nome = nome;
         this.cognome = cognome;
-        this.percorsoImg = percorsoImg;
         this.email = email;
         this.cDs = cDs;
-        this.dataNascita = dataNascita;
     }
 
     public String getMatricola() {
@@ -45,14 +42,6 @@ public class Studente {
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
-    }
-
-    public String getPercorsoImg() {
-        return percorsoImg;
-    }
-
-    public void setPercorsoImg(String percorsoImg) {
-        this.percorsoImg = percorsoImg;
     }
 
     public String getEmail() {

@@ -76,10 +76,4 @@ public class GuestActivity extends AppCompatActivity {
         NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
         Navigation.findNavController(this,R.id.fragment).navigate(action);
     }
-
-    public void fakeLogin(View view) {
-        Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
-        startActivity(intent);
-        finish();
-    }
 }
