@@ -10,14 +10,15 @@
         android:id="@+id/ScrollViewID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_register_toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginTop="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent">
 
             <RelativeLayout
@@ -33,8 +34,7 @@
                     android:layout_height="100dp"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:contentDescription="@string/profile_image"
-                    android:src="@drawable/ic_launcher_foreground" />
+                    android:src="@mipmap/ic_launcher" />
 
             </RelativeLayout>
 
@@ -162,15 +162,15 @@
     </ScrollView>
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/bottom_register_toolbar"
+        android:id="@+id/top_register_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/turquoise_500"
         android:elevation="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_register_menu"
+        app:menu="@menu/top_register_menu"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     </androidx.appcompat.widget.Toolbar>
