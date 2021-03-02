@@ -43,30 +43,6 @@ public class GuestActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
     }
 
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        return  true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Log.d(TAG, "Settings");
-            return true;
-        }
-
-        if (id == R.id.action_filter) {
-            Log.d(TAG, "Filter");
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-     */
     public void go_to_register(View view) {
         NavDirections action = LoginFragmentDirections.actionLoginFragmentToSignUpFragment();
         Intent intent = new Intent(getApplicationContext(), SignActivity.class);
