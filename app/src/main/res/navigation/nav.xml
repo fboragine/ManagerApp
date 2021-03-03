@@ -25,11 +25,6 @@
             app:destination="@id/editProfileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="it.uniba.di.sms2021.managerapp.LoginFragment"
-        android:label="Login"
-        tools:layout="@layout/fragment_login" />
-    <fragment
         android:id="@+id/editProfileFragment"
         android:name="it.uniba.di.sms2021.managerapp.EditProfileFragment"
         android:label="@string/edit"

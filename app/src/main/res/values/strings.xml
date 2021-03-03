@@ -31,6 +31,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="serial_number">705624</string>
+    <string name="in_progress">In Progress</string>
+    <string name="closed">Closed</string>
+    <string name="logout">Logout</string>
     <string name="description">Description</string>
     <string name="search_a_course">Search a Course</string>
 </resources>

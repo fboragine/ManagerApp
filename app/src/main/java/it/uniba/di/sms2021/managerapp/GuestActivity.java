@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -44,11 +45,21 @@ public class GuestActivity extends AppCompatActivity {
 
     public void go_to_register(View view) {
         NavDirections action = LoginFragmentDirections.actionLoginFragmentToSignUpFragment();
-        Navigation.findNavController(this,R.id.fragment).navigate(action);
+        Intent intent = new Intent(getApplicationContext(), SignActivity.class);
+        startActivity(intent);
     }
 
+    /*
     public void go_to_login(View view) {
         NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
         Navigation.findNavController(this,R.id.fragment).navigate(action);
+    }
+
+     */
+
+    public void fakeLogin(View view) {
+        Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
