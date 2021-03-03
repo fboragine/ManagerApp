@@ -57,13 +57,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Student"
-                        android:checked="true" />
+                        android:checked="true"
+                        android:buttonTint="@color/blue_700"/>
 
                     <RadioButton
                         android:id="@+id/radio_teacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Teacher" />
+                        android:text="Teacher"
+                        android:buttonTint="@color/blue_700"/>
                 </RadioGroup>
             </LinearLayout>
 
