@@ -1,9 +1,10 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Docente {
-
+public class Docente implements Serializable {
+    private static final long serialVersionUID = 166L;
     private String matricola;
     private String nome;
     private String cognome;

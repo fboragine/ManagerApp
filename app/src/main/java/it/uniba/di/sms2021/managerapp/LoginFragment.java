@@ -2,7 +2,6 @@ package it.uniba.di.sms2021.managerapp;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,22 +24,19 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.io.File;
-import java.io.ObjectStreamException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import entities.Docente;
 import entities.Studente;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 
 import static android.content.ContentValues.TAG;
 
@@ -54,6 +51,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     Button btnResetPw;
     EditText email;
     EditText password;
+    RadioButton studenteLogin;
 
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -78,6 +76,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         btnLogin = (Button) vistaLogin.findViewById(R.id.buttonLogin);
         btnResetPw = (Button) vistaLogin.findViewById(R.id.btn_reset_password);
+
+        studenteLogin = (RadioButton) vistaLogin.findViewById(R.id.radio_student);
 
         btnLogin.setOnClickListener(this);
         btnResetPw.setOnClickListener(this);
@@ -118,9 +118,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     public void login(String email, String password) {
 
-        boolean flag = false;
-        final Studente[] studenteLogged = new Studente[1];
-
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener((Activity) getContext(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -129,7 +126,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     FirebaseUser user;
 
                     user = mAuth.getCurrentUser();
-                    prendiStudente(user.getUid());
+                    if(studenteLogin.isChecked()){
+                        getDataFromFireStore(user.getUid(),"studenti");
+                    }else {
+                        getDataFromFireStore(user.getUid(),"docenti");
+                    }
+
                 }
                 else {
                     // If sign in fails, display a message to the user.
@@ -140,24 +142,35 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     }
 
-     public void prendiStudente(String id) {
+     public void getDataFromFireStore(String id, String collectionPath) {
 
-        DocumentReference docRef = db.collection("studenti").document(id);
+        DocumentReference docRef = db.collection(collectionPath).document(id);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    Studente risultato;
 
                     if (document.exists()) {
-                        risultato = new Studente((String) document.get("matricola"),
-                                                (String) document.get("nome"),
-                                                (String) document.get("cognome"),
-                                                (String) document.get("email"),
-                                                (String) document.get("cDs"));
-                        assegnaStudente(risultato);
+                        if(collectionPath.toString().matches("studenti")){
+                            Studente risultato;
+                            risultato = new Studente((String) document.get("matricola"),
+                                    (String) document.get("nome"),
+                                    (String) document.get("cognome"),
+                                    (String) document.get("email"),
+                                    (String) document.get("cDs"));
+                            salvaSessione((Object)risultato, collectionPath);
+
+                        } else if(collectionPath.toString().matches("docenti")){
+                            Docente risultato;
+                            risultato = new Docente((String) document.get("matricola"),
+                                    (String) document.get("nome"),
+                                    (String) document.get("cognome"),
+                                    (String) document.get("email"));
+                            salvaSessione((Object)risultato, collectionPath);
+                        }
+
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -169,47 +182,33 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    public void assegnaStudente(Studente logged) {
-        String FILENAME = "saved_login_session";
-        File fileLogin = new File(getContext().getFilesDir(), FILENAME);
-        
+    public void salvaSessione(Object logged, String collectionPath) {
+        String FILENAME = String.format("%s.srl", collectionPath);
+
+        saveFile(FILENAME, logged);
         trasferisciIstanza();
     }
 
+    public void saveFile(String FILE_NAME,Object oggetto) {
+
+        ObjectOutput out = null;
+
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(new File(getContext().getExternalFilesDir(null), FILE_NAME)));
+            out.writeObject(oggetto);
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void trasferisciIstanza() {
         Intent intent = new Intent(getActivity().getApplicationContext(), StudentActivity.class);;
         startActivity(intent);
         getActivity().finish();
     }
-    public Docente prendiDocente(String id) {
-
-        DocumentReference docRef = db.collection("studenti").document(id);
-        final Docente[] risultato = new Docente[1];
-
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-
-                    if (document.exists()) {
-                        risultato[0] = new Docente((String) document.get("matricola"),
-                                (String) document.get("nome"),
-                                (String) document.get("cognome"),
-                                (String) document.get("email"));
-                    } else {
-                        Log.d(TAG, "No such document");
-                        risultato[0] = null;
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                    risultato[0] = null;
-                }
-            }
-        });
-        return risultato[0];
-    }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
