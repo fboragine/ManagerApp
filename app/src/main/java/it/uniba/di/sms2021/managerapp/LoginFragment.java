@@ -2,6 +2,7 @@ package it.uniba.di.sms2021.managerapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.File;
 import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -118,8 +120,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         boolean flag = false;
         final Studente[] studenteLogged = new Studente[1];
-        final Docente[] docenteLogged = new Docente[1];
-        final String[] uid = new String[1];
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener((Activity) getContext(), new OnCompleteListener<AuthResult>() {
             @Override
@@ -129,32 +129,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     FirebaseUser user;
 
                     user = mAuth.getCurrentUser();
-                    uid[0] = user.getUid();
-
-                    if(flag){
-                        studenteLogged[0] = prendiStudente(uid[0]);
-                        if(studenteLogged[0] == null) {
-
-                            docenteLogged[0] = prendiDocente(uid[0]);
-                            if(docenteLogged[0] != null){
-                                Toast.makeText(getActivity().getApplicationContext(),"Benvenuto" + docenteLogged[0].getNome() + " " + docenteLogged[0].getCognome(), Toast.LENGTH_LONG).show();
-                            }
-
-                            if(studenteLogged[0] == null && docenteLogged[0] == null)
-                            {
-                                Toast.makeText(getActivity().getApplicationContext(),"Nessun utente trovato", Toast.LENGTH_LONG).show();
-                            }else {
-                                Intent intent = new Intent(getActivity().getApplicationContext(), StudentActivity.class);
-                                startActivity(intent);
-                                getActivity().finish();
-                            }
-
-                        }else {
-                            Toast.makeText(getActivity().getApplicationContext(),"Benvenuto" + studenteLogged[0].getNome() + " " + studenteLogged[0].getCognome(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.welcome_msg) + " " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                    //salvaCacheFile((Object) user);
+                    prendiStudente(user.getUid());
                 }
                 else {
                     // If sign in fails, display a message to the user.
@@ -163,40 +138,49 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-
-
     }
 
-     public Studente prendiStudente(String id) {
+     public void prendiStudente(String id) {
 
         DocumentReference docRef = db.collection("studenti").document(id);
-        final Studente[] risultato = new Studente[1];
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
+                    Studente risultato;
 
                     if (document.exists()) {
-                    risultato[0] = new Studente((String) document.get("matricola"),
+                        risultato = new Studente((String) document.get("matricola"),
                                                 (String) document.get("nome"),
                                                 (String) document.get("cognome"),
                                                 (String) document.get("email"),
                                                 (String) document.get("cDs"));
+                        assegnaStudente(risultato);
                     } else {
                         Log.d(TAG, "No such document");
-                        risultato[0] = null;
                     }
                 } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                    risultato[0] = null;
+                    Log.d(TAG, getString(R.string.firebase_studente_error), task.getException());
                 }
+
             }
         });
-        return risultato[0];
     }
 
+    public void assegnaStudente(Studente logged) {
+        String FILENAME = "saved_login_session";
+        File fileLogin = new File(getContext().getFilesDir(), FILENAME);
+        
+        trasferisciIstanza();
+    }
+
+    public void trasferisciIstanza() {
+        Intent intent = new Intent(getActivity().getApplicationContext(), StudentActivity.class);;
+        startActivity(intent);
+        getActivity().finish();
+    }
     public Docente prendiDocente(String id) {
 
         DocumentReference docRef = db.collection("studenti").document(id);
