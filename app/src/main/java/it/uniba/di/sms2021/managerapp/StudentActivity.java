@@ -8,15 +8,29 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.StreamCorruptedException;
 import java.util.Set;
+
+import entities.Docente;
+import entities.Studente;
+import entities.Utente;
+
+import static android.content.ContentValues.TAG;
 
 public class StudentActivity extends AppCompatActivity {
 
@@ -24,6 +38,7 @@ public class StudentActivity extends AppCompatActivity {
     protected static final int SAVE_ITEM_ID = View.generateViewId();
     protected static final int CANCEL_ITEM_ID = View.generateViewId();
     protected static final int LOGOUT_ITEM_ID = View.generateViewId();
+    private Utente loggedUser;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -42,6 +57,48 @@ public class StudentActivity extends AppCompatActivity {
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
+
+        File loginFile = new File(getApplicationContext().getExternalFilesDir(null), "studenti.srl");
+        if(loginFile.exists()) {
+            readFile("studenti.srl");
+        }else {
+            loginFile = new File(getApplicationContext().getExternalFilesDir(null), "docenti.srl");
+            if(loginFile.exists()) {
+                readFile("docenti.srl");
+            }else {
+                Intent intent = new Intent(getApplicationContext(), GuestActivity.class);;
+                startActivity(intent);
+                finish();
+            }
+        }
+
+
+    }
+
+    public void readFile(String filename){
+        ObjectInputStream input;
+
+        try {
+            input = new ObjectInputStream(new FileInputStream(new File(getExternalFilesDir(null),filename)));
+            if(filename.toString().matches("studenti.srl")) {
+                loggedUser = new Studente();
+                loggedUser = (Studente) input.readObject();
+            }else if(filename.toString().matches("docenti.srl")) {
+                loggedUser = new Docente();
+                loggedUser = (Docente) input.readObject();
+            }
+            input.close();
+            Toast.makeText(getApplicationContext(), String.format("%s %s %s", getString(R.string.welcome_msg), loggedUser.getNome(), loggedUser.getCognome()),Toast.LENGTH_LONG).show();
+        } catch (StreamCorruptedException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void logout(){

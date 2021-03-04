@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+
 import javax.security.auth.callback.Callback;
 
 import entities.Studente;
@@ -37,38 +39,15 @@ import entities.Studente;
  */
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private GuestActivity callback;
-    private FirebaseDatabase db;
-    private DatabaseReference userRef;
-
     private static final String TAG = "SimpleToolbarTest";
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,28 +66,6 @@ public class ProfileFragment extends Fragment {
         TextView fullname = getActivity().findViewById(R.id.full_name);
         TextView email = getActivity().findViewById(R.id.profile_email);
 
-        db = FirebaseDatabase.getInstance();
-        userRef = db.getReference("Studenti");
-
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Log.d(TAG, "Arrivoooooo");
-                    if(ds.child("Matricola").equals("1")) {
-                        fullname.setText(ds.child("Nome" + " " + "Cognome").getValue(String.class));
-                        email.setText(ds.child("Email").getValue(String.class));
-                        Log.d(TAG, "Risultatooooooo");
-                        Log.d(TAG, fullname.toString());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     @Override
@@ -189,7 +146,7 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     FirebaseAuth.getInstance().signOut();
-                    //deleteFile(fileCacheAuth);
+                    deleteFile();
                     Toast.makeText(getActivity().getApplicationContext()," Logout effettuato con successo ", Toast.LENGTH_SHORT).show();
                     //Richiama l'activity ospite.
 
@@ -200,7 +157,19 @@ public class ProfileFragment extends Fragment {
                 }
             });
         }
-
         super.onPrepareOptionsMenu(menu);
+    }
+
+    private void deleteFile() {
+        File delFile = new File(getContext().getExternalFilesDir(null),"studenti.srl");
+        if(delFile.exists()){
+            delFile.delete();
+        } else {
+            delFile = new File(getContext().getExternalFilesDir(null),"docenti.srl");
+            if(delFile.exists()) {
+                delFile.delete();
+            }
+        }
+
     }
 }
