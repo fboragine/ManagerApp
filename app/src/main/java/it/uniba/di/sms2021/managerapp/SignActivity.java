@@ -23,7 +23,7 @@ import java.util.Map;
 
 import entities.Studente;
 
-public class SignActivity extends AppCompatActivity implements View.OnClickListener{
+public class SignActivity extends AppCompatActivity{
 
     private FirebaseAuth mAuth;
 
@@ -34,7 +34,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.top_register_toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setTitle("Registration");
     }
 
@@ -63,70 +62,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button:
-                register(v);
-            case R.id.btn_already_reg:
-                go_to_login(v);
-        }
-    }
-
-    public void go_to_login(View v) {
-        /*
-        Intent intent = new Intent(getApplicationContext(), GuestActivity.class);
-        startActivity(intent);
-
-         */
-        finish();
-    }
-
-    public void register(View v) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        EditText mat = (EditText) findViewById(R.id.serial_number);
-        EditText nome = (EditText) findViewById(R.id.name);
-        EditText cognome = (EditText) findViewById(R.id.surname);
-        EditText email = (EditText) findViewById(R.id.email);
-        EditText cDs = (EditText) findViewById(R.id.course);
-
-        EditText pw = (EditText) findViewById(R.id.password);
-
-
-
-        Studente aux = new Studente(mat.getText().toString(),
-                nome.getText().toString(),
-                cognome.getText().toString(),
-                email.getText().toString(),
-                cDs.getText().toString());
-
-        Map<String ,String> user = new HashMap<>();
-        user.put("nome",aux.getNome());
-        user.put("cognome",aux.getCognome());
-        user.put("email",aux.getEmail());
-        user.put("matricola",aux.getMatricola());
-        user.put("cDs",aux.getcDs());
-        user.put("percorsoImg", "");
-
-
-
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.createUserWithEmailAndPassword(aux.getEmail(), pw.getText().toString());
-
-        user.put("id", mAuth.getUid());
-
-        //Getting Reference to "users" collection
-        //REMEMBER: at this point, no collection will be created
-        CollectionReference collectionReference = db.collection("studenti");
-
-        //Getting reference to "new doc" document
-        //REMEMBER: at this point, no document will be created either
-
-        DocumentReference documentReference = collectionReference.document(mAuth.getUid());
-        documentReference.set(user);
-    }
-
     private void register() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -138,8 +73,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
         EditText pw = (EditText) findViewById(R.id.password);
 
-
-
         Studente aux = new Studente(mat.getText().toString(),
                 nome.getText().toString(),
                 cognome.getText().toString(),
@@ -153,8 +86,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         user.put("matricola",aux.getMatricola());
         user.put("cDs",aux.getcDs());
         user.put("percorsoImg", "");
-
-
 
         mAuth = FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(aux.getEmail(), pw.getText().toString());

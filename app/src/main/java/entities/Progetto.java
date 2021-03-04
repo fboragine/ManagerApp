@@ -1,5 +1,9 @@
 package entities;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Progetto {
@@ -7,21 +11,36 @@ public class Progetto {
     private String id;
     private String nome;
     private String descrizione;
-    private String percorsoImg;
     private String codiceEsame;
     private Date dataCreazione;
-    private String idStudenti [];
-    public static final int MAX_STUDENTI = 5;
+    private ArrayList<String> idStudenti;
 
-    public Progetto(String id, String nome, String descrizione, String percorsoImg,
-                    String codiceEsame, Date dataCreazione, String[] idStudenti) {
+    public Progetto(String id, String nome, String descrizione, String codiceEsame, Date dataCreazione, ArrayList<String> idStudenti) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
-        this.percorsoImg = percorsoImg;
         this.codiceEsame = codiceEsame;
         this.dataCreazione = dataCreazione;
-        this.idStudenti = new String[MAX_STUDENTI];
+        this.idStudenti = idStudenti;
+    }
+
+    public Progetto(String nome) {
+        this.nome = nome;
+    }
+
+    public Progetto(String nome, String codiceEsame, ArrayList<String> idStudenti) {
+        this.id = idGenerator();
+        this.nome = nome;
+        this.codiceEsame = codiceEsame;
+        this.idStudenti = idStudenti;
+    }
+
+    public Progetto(String nome, String descrizione, String codiceEsame,
+                    Date dataCreazione, ArrayList<String> idStudenti) {
+        this.nome = nome;
+        this.descrizione = descrizione;
+        this.codiceEsame = codiceEsame;
+        this.dataCreazione = dataCreazione;
         this.idStudenti = idStudenti;
     }
 
@@ -49,14 +68,6 @@ public class Progetto {
         this.descrizione = descrizione;
     }
 
-    public String getPercorsoImg() {
-        return percorsoImg;
-    }
-
-    public void setPercorsoImg(String percorsoImg) {
-        this.percorsoImg = percorsoImg;
-    }
-
     public String getCodiceEsame() {
         return codiceEsame;
     }
@@ -73,11 +84,19 @@ public class Progetto {
         this.dataCreazione = dataCreazione;
     }
 
-    public String[] getIdStudenti() {
+    public ArrayList<String> getIdStudenti() {
         return idStudenti;
     }
 
-    public void setIdStudenti(String[] idStudenti) {
+    public void setIdStudenti(ArrayList<String> idStudenti) {
         this.idStudenti = idStudenti;
+    }
+
+    public String idGenerator() {
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference progettRef = rootRef.child("progetti");
+        String key = progettRef.push().getKey();
+
+        return key;
     }
 }
