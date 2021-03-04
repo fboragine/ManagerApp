@@ -15,13 +15,13 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private ArrayList<String> projectName;
-    private ArrayList<Integer> projectImage;
+    private ArrayList<String> projectExam;
     private Context context;
-    RecyclerViewAdapter(Context context, ArrayList<String> numberName, ArrayList<Integer> numberImage) {
+    RecyclerViewAdapter(Context context, ArrayList<String> projectName, ArrayList<String> projectExam) {
         super();
         this.context = context;
-        this.projectName = numberName;
-        this.projectImage = numberImage;
+        this.projectName = projectName;
+        this.projectExam = projectExam;
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -30,8 +30,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.textView.setText(projectName.get(i));
-        viewHolder.imgThumbnail.setImageResource(projectImage.get(i));
+        viewHolder.projectTextView.setText(projectName.get(i));
+        viewHolder.examTextView.setText(projectExam.get(i));
         viewHolder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
@@ -49,13 +49,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnLongClickListener {
-        ImageView imgThumbnail;
-        TextView textView;
+        TextView projectTextView;
+        TextView examTextView;
         private ItemClickListener clickListener;
         ViewHolder(View itemView) {
             super(itemView);
-            imgThumbnail = itemView.findViewById(R.id.imgThumbnail);
-            textView = itemView.findViewById(R.id.cardTextView);
+            projectTextView = itemView.findViewById(R.id.projectNameCardTextView);
+            examTextView = itemView.findViewById(R.id.projectExamCardTextView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }
