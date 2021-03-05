@@ -76,6 +76,8 @@ public class LoginFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        menuItem.setVisible(false);
     }
 
     @Override
