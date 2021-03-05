@@ -38,7 +38,10 @@ public class StudentActivity extends AppCompatActivity {
     protected static final int SAVE_ITEM_ID = View.generateViewId();
     protected static final int CANCEL_ITEM_ID = View.generateViewId();
     protected static final int LOGOUT_ITEM_ID = View.generateViewId();
-    private Utente loggedUser;
+    protected static Utente loggedUser;
+    protected static File loginFile;
+    protected static Studente loggedStudent;
+    protected static Docente loggedDocent;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -58,7 +61,7 @@ public class StudentActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
 
-        File loginFile = new File(getApplicationContext().getExternalFilesDir(null), "studenti.srl");
+        loginFile = new File(getApplicationContext().getExternalFilesDir(null), "studenti.srl");
         if(loginFile.exists()) {
             readFile("studenti.srl");
         }else {
@@ -72,6 +75,9 @@ public class StudentActivity extends AppCompatActivity {
             }
         }
 
+       /* Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra("MyClass", obj);*/
 
     }
 
@@ -83,6 +89,8 @@ public class StudentActivity extends AppCompatActivity {
             if(filename.toString().matches("studenti.srl")) {
                 loggedUser = new Studente();
                 loggedUser = (Studente) input.readObject();
+
+                loggedStudent = (Studente) loggedUser;
             }else if(filename.toString().matches("docenti.srl")) {
                 loggedUser = new Docente();
                 loggedUser = (Docente) input.readObject();
@@ -103,8 +111,7 @@ public class StudentActivity extends AppCompatActivity {
 
     public void logout(){
         FirebaseAuth.getInstance().signOut();
-        //deleteFile(fileCacheAuth);
-        Toast.makeText(StudentActivity.this," Logout effettuato con successo ", Toast.LENGTH_SHORT).show();
+        Toast.makeText(StudentActivity.this,R.string.logout, Toast.LENGTH_SHORT).show();
         //Richiama l'activity ospite.
     }
 }

@@ -1,6 +1,5 @@
 package it.uniba.di.sms2021.managerapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -20,17 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 
-import javax.security.auth.callback.Callback;
-
 import entities.Studente;
+import entities.Utente;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +31,8 @@ import entities.Studente;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
+
+    private View vistaProfilo;
 
     private static final String TAG = "SimpleToolbarTest";
 
@@ -57,22 +52,35 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-
-        Log.d(TAG, "Profilo");
-
-        Intent intent = getActivity().getIntent();
-        String matricola = intent.getStringExtra("matricola");
-
-        TextView fullname = getActivity().findViewById(R.id.full_name);
-        TextView email = getActivity().findViewById(R.id.profile_email);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
+        TextView label = (TextView) vistaProfilo.findViewById(R.id.full_name);
+        label.setText(StudentActivity.loggedUser.getNome() + " " + StudentActivity.loggedUser.getCognome());
+
+        label = (TextView) vistaProfilo.findViewById(R.id.serial_number);
+        label.setText(StudentActivity.loggedUser.getMatricola());
+
+        label = (TextView) vistaProfilo.findViewById(R.id.profile_email);
+        label.setText(StudentActivity.loggedUser.getEmail());
+
+        if(StudentActivity.loginFile.getName().matches("studenti.srl")){
+            vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.VISIBLE);
+            vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.VISIBLE);
+            label = (TextView) vistaProfilo.findViewById(R.id.profile_course);
+            label.setText(StudentActivity.loggedStudent.getcDs());
+        }else {
+            label = (TextView) vistaProfilo.findViewById(R.id.profile_course);
+            label.setText("");
+
+            vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.INVISIBLE);
+            vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.INVISIBLE);
+        }
+        return vistaProfilo;
     }
 
     @Override
@@ -146,7 +154,7 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     FirebaseAuth.getInstance().signOut();
-                    deleteFile();
+                    StudentActivity.loginFile.delete();
                     Toast.makeText(getActivity().getApplicationContext()," Logout effettuato con successo ", Toast.LENGTH_SHORT).show();
                     //Richiama l'activity ospite.
 
@@ -160,16 +168,4 @@ public class ProfileFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
     }
 
-    private void deleteFile() {
-        File delFile = new File(getContext().getExternalFilesDir(null),"studenti.srl");
-        if(delFile.exists()){
-            delFile.delete();
-        } else {
-            delFile = new File(getContext().getExternalFilesDir(null),"docenti.srl");
-            if(delFile.exists()) {
-                delFile.delete();
-            }
-        }
-
-    }
 }
