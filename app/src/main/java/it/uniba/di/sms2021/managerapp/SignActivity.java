@@ -66,7 +66,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button:
+            case R.id.buttonLogin:
                 register(v);
             case R.id.btn_already_reg:
                 go_to_login(v);
