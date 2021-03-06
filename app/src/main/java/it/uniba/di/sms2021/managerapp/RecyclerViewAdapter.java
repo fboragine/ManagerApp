@@ -9,9 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import entities.Progetto;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private ArrayList<String> projectName;
@@ -39,6 +43,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Toast.makeText(context, "#" + position + " - " + projectName.get(position) + " (Long click)", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "#" + position + " - " + projectName.get(position), Toast.LENGTH_SHORT).show();
+                    String[] studenti = new String[]{"Mario Rossi", "Luigi Verdi", "Rosa Neri", "Filippo Neri"};
+                    Progetto progetto = new Progetto("ciao",projectName.get(position), "Descrizione progetto", projectExam.get(position), "01-01-2020", studenti);
+                    Intent intent = new Intent(context, ProjectActivity.class);
+                    intent.putExtra("progetto",progetto);
+                    context.startActivity(intent);
                 }
             }
         });
@@ -47,6 +56,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public int getItemCount() {
         return projectName.size();
     }
+
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnLongClickListener {
         TextView projectTextView;
