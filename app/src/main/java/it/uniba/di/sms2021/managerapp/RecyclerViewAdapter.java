@@ -47,6 +47,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Progetto progetto = new Progetto("ciao",projectName.get(position), "Descrizione progetto", projectExam.get(position), "01-01-2020", studenti);
                     Intent intent = new Intent(context, ProjectActivity.class);
                     intent.putExtra("progetto",progetto);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
             }
