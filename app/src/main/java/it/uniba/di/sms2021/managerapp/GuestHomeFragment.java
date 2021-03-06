@@ -66,6 +66,27 @@ public class GuestHomeFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if(TextUtils.isEmpty(s)) {
+                    adapter.filter("");
+                    listView.clearTextFilter();
+                }
+                else {
+                    adapter.filter(s);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -81,54 +102,6 @@ public class GuestHomeFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-
-        // Add Search Menu Item
-        int searchId = GuestActivity.SEARCH_ITEM_ID;
-        if (menu.findItem(searchId) == null) {
-            // If it not exists then add the menu item to menu
-            MenuItem search = menu.add(
-                    Menu.NONE,
-                    searchId,
-                    1,
-                    getString(R.string.search)
-            );
-
-            // Set an icon for the new menu item
-            search.setIcon(R.drawable.ic_search);
-
-            // Set the show as action flags for new menu item
-            search.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            search.setActionView(new SearchView(getActivity().getApplicationContext()));
-
-            // Set a click listener for the new menu item
-            search.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-                    SearchView searchView = (SearchView) item.getActionView();
-                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                        @Override
-                        public boolean onQueryTextSubmit(String s) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onQueryTextChange(String s) {
-                            if(TextUtils.isEmpty(s)) {
-                                adapter.filter("");
-                                listView.clearTextFilter();
-                            }
-                            else {
-                                adapter.filter(s);
-                            }
-                            return true;
-                        }
-                    });
-                    return true;
-                }
-            });
-        }
 
         // Add Filter Menu Item
         int filterId = GuestActivity.FILTER_ITEM_ID;
