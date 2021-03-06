@@ -14,6 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -21,30 +24,15 @@ import android.widget.Toast;
  * Use the {@link EditProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditProfileFragment extends Fragment {
+public class EditProfileFragment extends Fragment implements View.OnClickListener{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    View vistaModifica;
+    EditText editValue;
+    Button btnEdit;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public EditProfileFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static EditProfileFragment newInstance(String param1, String param2) {
         EditProfileFragment fragment = new EditProfileFragment();
         Bundle args = new Bundle();
@@ -57,10 +45,6 @@ public class EditProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         setHasOptionsMenu(true);
     }
@@ -69,7 +53,26 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        vistaModifica = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+
+        editValue = (EditText) vistaModifica.findViewById(R.id.full_name);
+        editValue.setText(StudentActivity.loggedUser.getNome() + " " + StudentActivity.loggedUser.getCognome());
+
+        editValue = (EditText) vistaModifica.findViewById(R.id.serial_number);
+        editValue.setText(StudentActivity.loggedUser.getMatricola());
+
+        editValue = (EditText) vistaModifica.findViewById(R.id.email_txt);
+        editValue.setText(StudentActivity.loggedUser.getEmail());
+
+        if(!StudentActivity.loginFile.getName().matches("studenti.srl")){
+            vistaModifica.findViewById(R.id.course_txt).setVisibility(View.INVISIBLE);
+            vistaModifica.findViewById(R.id.course_img).setVisibility(View.INVISIBLE);
+        }
+
+        btnEdit = (Button) vistaModifica.findViewById(R.id.btn_edit);
+        btnEdit.setOnClickListener(this);
+
+        return vistaModifica;
     }
 
     @Override
@@ -156,5 +159,11 @@ public class EditProfileFragment extends Fragment {
         }
 
         super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+
     }
 }

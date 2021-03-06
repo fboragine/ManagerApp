@@ -97,14 +97,15 @@
                         android:src="@drawable/ic_baseline_email_24" />
 
                     <EditText
+                        android:id="@+id/email_txt"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:textSize="18sp"
-                        tools:ignore="RtlSymmetry"
                         android:autofillHints="E-mail"
                         android:hint="@string/e_mail"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:paddingStart="20dp"
+                        android:textSize="18sp"
+                        tools:ignore="RtlSymmetry" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -123,14 +124,15 @@
                         android:src="@drawable/ic_baseline_collections_bookmark_24" />
 
                     <EditText
+                        android:id="@+id/course_txt"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:autofillHints="Course"
+                        android:hint="@string/course"
+                        android:inputType="text"
                         android:paddingStart="20dp"
                         android:paddingEnd="20dp"
-                        android:autofillHints="Course"
-                        android:inputType="text"
-                        android:hint="@string/course"
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -150,14 +152,15 @@
                         android:src="@drawable/ic_baseline_vpn_key_24" />
 
                     <EditText
+                        android:id="@+id/course_img"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:autofillHints="Password"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
                         android:paddingStart="20dp"
                         android:paddingEnd="20dp"
-                        android:autofillHints="Password"
-                        android:inputType="textPassword"
-                        android:hint="@string/password"
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -171,7 +174,7 @@
                     tools:layout_editor_absoluteX="2dp">
 
                     <Button
-                        android:id="@+id/button3"
+                        android:id="@+id/btn_edit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/save"
