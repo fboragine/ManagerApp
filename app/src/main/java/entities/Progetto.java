@@ -1,29 +1,52 @@
 package entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.text.DateFormat;
 import java.util.Date;
 
-public class Progetto {
+public class Progetto implements Parcelable {
 
     private String id;
     private String nome;
     private String descrizione;
-    private String percorsoImg;
     private String codiceEsame;
-    private Date dataCreazione;
+    private String dataCreazione;
     private String idStudenti [];
     public static final int MAX_STUDENTI = 5;
 
-    public Progetto(String id, String nome, String descrizione, String percorsoImg,
-                    String codiceEsame, Date dataCreazione, String[] idStudenti) {
+    public Progetto(String id, String nome, String descrizione,
+                    String codiceEsame, String dataCreazione, String[] idStudenti) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
-        this.percorsoImg = percorsoImg;
         this.codiceEsame = codiceEsame;
         this.dataCreazione = dataCreazione;
         this.idStudenti = new String[MAX_STUDENTI];
         this.idStudenti = idStudenti;
     }
+
+    protected Progetto(Parcel in) {
+        id = in.readString();
+        nome = in.readString();
+        descrizione = in.readString();
+        codiceEsame = in.readString();
+        dataCreazione = in.readString();
+        idStudenti = in.createStringArray();
+    }
+
+    public static final Creator<Progetto> CREATOR = new Creator<Progetto>() {
+        @Override
+        public Progetto createFromParcel(Parcel in) {
+            return new Progetto(in);
+        }
+
+        @Override
+        public Progetto[] newArray(int size) {
+            return new Progetto[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -49,14 +72,6 @@ public class Progetto {
         this.descrizione = descrizione;
     }
 
-    public String getPercorsoImg() {
-        return percorsoImg;
-    }
-
-    public void setPercorsoImg(String percorsoImg) {
-        this.percorsoImg = percorsoImg;
-    }
-
     public String getCodiceEsame() {
         return codiceEsame;
     }
@@ -65,11 +80,11 @@ public class Progetto {
         this.codiceEsame = codiceEsame;
     }
 
-    public Date getDataCreazione() {
+    public String getDataCreazione() {
         return dataCreazione;
     }
 
-    public void setDataCreazione(Date dataCreazione) {
+    public void setDataCreazione(String dataCreazione) {
         this.dataCreazione = dataCreazione;
     }
 
@@ -79,5 +94,20 @@ public class Progetto {
 
     public void setIdStudenti(String[] idStudenti) {
         this.idStudenti = idStudenti;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(nome);
+        dest.writeString(descrizione);
+        dest.writeString(codiceEsame);
+        dest.writeString(dataCreazione);
+        dest.writeStringArray(idStudenti);
     }
 }
