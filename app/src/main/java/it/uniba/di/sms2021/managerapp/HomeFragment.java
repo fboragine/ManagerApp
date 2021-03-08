@@ -35,14 +35,15 @@ import java.util.Arrays;
 
 import javax.security.auth.callback.Callback;
 
+import entities.GestioneProgetti;
+import entities.Progetto;
+
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "SimpleToolbarTest";
 
-    private ArrayList<String> inProgressProjectName;
-    private ArrayList<String> inProgressProjectExam;
-    private ArrayList<String> closedProjectName;
-    private ArrayList<String> closedProjectExam;
+    private ArrayList<Progetto> inProgressProject;
+    private ArrayList<Progetto> closedProject;
     private RecyclerView inProgressRecyclerView;
     private RecyclerView closedRecyclerView;
     private RecyclerView.LayoutManager inProgressLayoutManager;
@@ -69,12 +70,18 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         viewHome = inflater.inflate(R.layout.fragment_home, container, false);
 
-        inProgressProjectName = new ArrayList<>(Arrays.asList("Project 1", "Project 2", "Project 3", "Project 4", "Project 5", "Project 6", "Project 7", "Project 8", "Project 9", "Project 10"));
-        inProgressProjectExam = new ArrayList<>(Arrays.asList("Exam 1", "Exam 2", "Exam 3", "Exam 4", "Exam 5", "Exam 6", "Exam 7", "Exam 8", "Exam 9", "Exam 10"));
+        GestioneProgetti gestioneProgetti = new GestioneProgetti();
 
-        closedProjectName = new ArrayList<>(Arrays.asList("Closed Project 1", "Closed Project 2", "Closed Project 3", "Closed Project 4", "Closed Project 5", "Closed Project 6", "Closed Project 7", "Closed Project 8", "Closed Project 9", "Closed Project 10"));
-        closedProjectExam = new ArrayList<>(Arrays.asList("Exam 1", "Exam 2", "Exam 3", "Exam 4", "Exam 5", "Exam 6", "Exam 7", "Exam 8", "Exam 9", "Exam 10"));
+        inProgressProject = gestioneProgetti.getProgetti();
+        Log.d(TAG, "Entro funzione 2");
 
+        try {
+            Thread.sleep(Long.parseLong("5"));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        closedProject = gestioneProgetti.getProgetti();
         inProgressRecyclerView = viewHome.findViewById(R.id.inProgressRecyclerView);
         inProgressRecyclerView.setHasFixedSize(true);
         closedRecyclerView = viewHome.findViewById(R.id.closedRecyclerView);
@@ -84,9 +91,9 @@ public class HomeFragment extends Fragment {
         inProgressRecyclerView.setLayoutManager(inProgressLayoutManager);
         closedLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         closedRecyclerView.setLayoutManager(closedLayoutManager);
-        inProgressAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), inProgressProjectName, inProgressProjectExam);
+        inProgressAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), inProgressProject);
         inProgressRecyclerView.setAdapter(inProgressAdapter);
-        closedAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), closedProjectName, closedProjectExam);
+        closedAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), closedProject);
         closedRecyclerView.setAdapter(closedAdapter);
 
         return viewHome;

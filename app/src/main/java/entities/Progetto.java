@@ -26,6 +26,7 @@ public class Progetto {
 
     public Progetto(String nome) {
         this.nome = nome;
+        this.codiceEsame = "prova";
     }
 
     public Progetto(String nome, String codiceEsame, ArrayList<String> idStudenti) {

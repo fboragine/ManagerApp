@@ -13,15 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import entities.Progetto;
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private ArrayList<String> projectName;
-    private ArrayList<String> projectExam;
+    private ArrayList<Progetto> project;
     private Context context;
-    RecyclerViewAdapter(Context context, ArrayList<String> projectName, ArrayList<String> projectExam) {
+    RecyclerViewAdapter(Context context, ArrayList<Progetto> project) {
         super();
         this.context = context;
-        this.projectName = projectName;
-        this.projectExam = projectExam;
+        this.project = project;
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -30,22 +30,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.projectTextView.setText(projectName.get(i));
-        viewHolder.examTextView.setText(projectExam.get(i));
+        viewHolder.projectTextView.setText(project.get(i).getNome());
+        viewHolder.examTextView.setText(project.get(i).getCodiceEsame());
         viewHolder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
                 if (isLongClick) {
-                    Toast.makeText(context, "#" + position + " - " + projectName.get(position) + " (Long click)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "#" + position + " - " + project.get(position) + " (Long click)", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "#" + position + " - " + projectName.get(position), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "#" + position + " - " + project.get(position), Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
     @Override
     public int getItemCount() {
-        return projectName.size();
+        return 0;
     }
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnLongClickListener {

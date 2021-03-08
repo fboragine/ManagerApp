@@ -10,19 +10,26 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.Set;
+
+import entities.GestioneProgetti;
+import entities.Progetto;
 
 public class GuestActivity extends AppCompatActivity {
 
     private static final String TAG = "SimpleToolbarTest";
     protected static final int SEARCH_ITEM_ID = View.generateViewId();
     protected static final int FILTER_ITEM_ID = View.generateViewId();
+
+    private ArrayList<Progetto> progetti;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -49,17 +56,33 @@ public class GuestActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /*
-    public void go_to_login(View view) {
-        NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
-        Navigation.findNavController(this,R.id.fragment).navigate(action);
-    }
-
-     */
-
     public void fakeLogin(View view) {
         Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
         startActivity(intent);
         finish();
     }
+
+    private class taskProgetti extends AsyncTask<ArrayList<Progetto>, ArrayList<Progetto>, ArrayList<Progetto>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ArrayList<Progetto> doInBackground(ArrayList<Progetto>... progetti) {
+
+            GestioneProgetti gestioneProgetti = new GestioneProgetti();
+            progetti[0] = gestioneProgetti.getProgetti();
+
+            return progetti[0];
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Progetto> progetti) {
+            super.onPostExecute(progetti);
+
+        }
+    }
+}
 }

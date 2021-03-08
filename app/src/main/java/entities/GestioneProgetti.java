@@ -27,27 +27,23 @@ public class GestioneProgetti {
     public ArrayList<Progetto> getProgetti() {
 
         FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
-        CollectionReference progRef = rootRef.collection("progetti");
 
-        rootRef.collection("progetti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Log.d(TAG, "ENTROOOOOOOOOOOOOOOOOOOOOOO");
-                if (task.isSuccessful()) {
-                    ArrayList<Progetto> progetti = new ArrayList<Progetto>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Progetto progetto = new Progetto(document.getString("id"), document.getString("nome"), document.getString("descrizione"),
-                                                         document.getString("codiceEsame"), document.getDate("dataCreazione"),
-                                                         (ArrayList<String>) document.get("idStudenti"));
-                        progetti.add(progetto);
-                    }
-
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
+        rootRef.collection("progetti").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ArrayList<Progetto> progetti = new ArrayList<Progetto>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Progetto progetto = new Progetto(document.getString("id"), document.getString("nome"), document.getString("descrizione"),
+                                                     document.getString("codiceEsame"), document.getDate("dataCreazione"),
+                                                     (ArrayList<String>) document.get("idStudenti"));
+                    progetti.add(progetto);
+                    Log.d(TAG, progetto.getNome());
                 }
+                Log.d(TAG, "Escooooo");
+
+            } else {
+                Log.d(TAG, "Error getting documents: ", task.getException());
             }
         });
-
 
         return  progetti;
     }
