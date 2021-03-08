@@ -35,4 +35,5 @@
     <string name="serial_number">705624</string>
     <string name="description">Description</string>
     <string name="search_a_course">Search a Course</string>
+    <string name="action_search">Search</string>
 </resources>

@@ -4,18 +4,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.text.DateFormat;
 import java.util.Date;
 
-public class Progetto {
+public class Progetto implements Parcelable {
 
     private String id;
     private String nome;
     private String descrizione;
     private String codiceEsame;
-    private Date dataCreazione;
+    private String dataCreazione;
     private ArrayList<String> idStudenti;
 
-    public Progetto(String id, String nome, String descrizione, String codiceEsame, Date dataCreazione, ArrayList<String> idStudenti) {
+    public Progetto(String id, String nome, String descrizione, String codiceEsame, String dataCreazione, ArrayList<String> idStudenti) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -37,13 +41,34 @@ public class Progetto {
     }
 
     public Progetto(String nome, String descrizione, String codiceEsame,
-                    Date dataCreazione, ArrayList<String> idStudenti) {
+                    String dataCreazione, ArrayList<String> idStudenti) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.codiceEsame = codiceEsame;
         this.dataCreazione = dataCreazione;
         this.idStudenti = idStudenti;
     }
+
+    protected Progetto(Parcel in) {
+        id = in.readString();
+        nome = in.readString();
+        descrizione = in.readString();
+        codiceEsame = in.readString();
+        dataCreazione = in.readString();
+        idStudenti = in.createStringArrayList();
+    }
+
+    public static final Creator<Progetto> CREATOR = new Creator<Progetto>() {
+        @Override
+        public Progetto createFromParcel(Parcel in) {
+            return new Progetto(in);
+        }
+
+        @Override
+        public Progetto[] newArray(int size) {
+            return new Progetto[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -77,11 +102,11 @@ public class Progetto {
         this.codiceEsame = codiceEsame;
     }
 
-    public Date getDataCreazione() {
+    public String getDataCreazione() {
         return dataCreazione;
     }
 
-    public void setDataCreazione(Date dataCreazione) {
+    public void setDataCreazione(String dataCreazione) {
         this.dataCreazione = dataCreazione;
     }
 
@@ -99,5 +124,20 @@ public class Progetto {
         String key = progettRef.push().getKey();
 
         return key;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(nome);
+        dest.writeString(descrizione);
+        dest.writeString(codiceEsame);
+        dest.writeString(dataCreazione);
+        dest.writeStringList(idStudenti);
     }
 }

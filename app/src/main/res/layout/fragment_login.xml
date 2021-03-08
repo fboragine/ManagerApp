@@ -45,27 +45,27 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <RadioGroup
-                    android:layout_marginTop="20dp"
+                    android:id="@+id/loginType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <RadioButton
                         android:id="@+id/radio_student"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Student"
                         android:checked="true"
-                        android:buttonTint="@color/blue_700"/>
+                        android:text="Student" />
 
                     <RadioButton
                         android:id="@+id/radio_teacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Teacher"
-                        android:buttonTint="@color/blue_700"/>
+                        android:text="Teacher" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -86,14 +86,15 @@
                     android:src="@drawable/ic_baseline_email_24" />
 
                 <EditText
+                    android:id="@+id/emailTxt"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:paddingStart="20dp"
-                    android:textSize="18sp"
-                    tools:ignore="RtlSymmetry"
                     android:autofillHints="E-mail"
                     android:hint="@string/e_mail"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:paddingStart="20dp"
+                    android:textSize="18sp"
+                    tools:ignore="RtlSymmetry" />
             </LinearLayout>
 
             <LinearLayout
@@ -113,14 +114,15 @@
                     android:src="@drawable/ic_baseline_vpn_key_24" />
 
                 <EditText
+                    android:id="@+id/passwordTxt"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:textSize="18sp"
                     android:autofillHints="Password"
                     android:hint="@string/password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -136,12 +138,11 @@
                 tools:layout_editor_absoluteX="2dp">
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/buttonLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/login"
-                    android:background="@color/deep_orange_500"
-                    android:onClick="fakeLogin"/>
+                    android:background="@color/deep_orange_500" />
 
                 <Button
                     android:id="@+id/btn_reset_password"
@@ -162,7 +163,7 @@
                     android:text="@string/btn_goto_register"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
-                    android:onClick="go_to_register"/>
+                    android:onClick="register"/>
 
             </LinearLayout>
 
