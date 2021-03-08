@@ -9,15 +9,25 @@ public abstract class Utente  implements Serializable {
     private String nome;
     private String cognome;
     private String email;
+    private String id;
 
     public Utente() {
 
     }
+
     public Utente(String matricola, String nome, String cognome, String email) {
         this.matricola = matricola;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
+    }
+
+    public Utente(String matricola, String nome, String cognome, String email, String id) {
+        this.matricola = matricola;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.id = id;
     }
 
     public String getMatricola() {
@@ -50,5 +60,13 @@ public abstract class Utente  implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

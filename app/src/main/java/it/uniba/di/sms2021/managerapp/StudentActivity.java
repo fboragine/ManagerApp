@@ -15,13 +15,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.Set;
 
@@ -66,7 +68,7 @@ public class StudentActivity extends AppCompatActivity {
             if(loginFile.exists()) {
                 readFile("docenti.srl");
             }else {
-                Intent intent = new Intent(getApplicationContext(), GuestActivity.class);;
+                Intent intent = new Intent(getApplicationContext(), GuestActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -86,6 +88,8 @@ public class StudentActivity extends AppCompatActivity {
             }else if(filename.toString().matches("docenti.srl")) {
                 loggedUser = new Docente();
                 loggedUser = (Docente) input.readObject();
+
+                loggedDocent = (Docente) loggedUser;
             }
             input.close();
             Toast.makeText(getApplicationContext(), String.format("%s %s %s", getString(R.string.welcome_msg), loggedUser.getNome(), loggedUser.getCognome()),Toast.LENGTH_LONG).show();
@@ -100,4 +104,5 @@ public class StudentActivity extends AppCompatActivity {
         }
 
     }
+
 }

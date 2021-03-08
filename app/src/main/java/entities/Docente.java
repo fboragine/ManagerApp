@@ -9,6 +9,10 @@ public class Docente extends Utente implements Serializable {
     public Docente(){
         super();
     }
+    public Docente(String matricola, String nome, String cognome, String email, String id) {
+        super(matricola, nome, cognome, email, id);
+    }
+
     public Docente(String matricola, String nome, String cognome, String email) {
         super(matricola, nome, cognome, email);
     }

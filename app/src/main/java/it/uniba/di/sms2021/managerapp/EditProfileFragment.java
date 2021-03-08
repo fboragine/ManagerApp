@@ -5,9 +5,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.app.NavUtils;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +21,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import entities.Docente;
+import entities.Studente;
+
+import static android.content.ContentValues.TAG;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link EditProfileFragment#newInstance} factory method to
@@ -27,8 +50,15 @@ import android.widget.Toast;
 public class EditProfileFragment extends Fragment implements View.OnClickListener{
 
     View vistaModifica;
-    EditText editValue;
+    EditText editName;
+    EditText editMatricola;
+    EditText editEmail;
+    EditText editCourse;
+
     Button btnEdit;
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     public static EditProfileFragment newInstance(String param1, String param2) {
         EditProfileFragment fragment = new EditProfileFragment();
@@ -50,14 +80,17 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         // Inflate the layout for this fragment
         vistaModifica = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        editValue = (EditText) vistaModifica.findViewById(R.id.full_name);
-        editValue.setText(StudentActivity.loggedUser.getNome() + " " + StudentActivity.loggedUser.getCognome());
+        editName = (EditText) vistaModifica.findViewById(R.id.full_name);
+        editName.setText(StudentActivity.loggedUser.getNome() + " " + StudentActivity.loggedUser.getCognome());
 
-        editValue = (EditText) vistaModifica.findViewById(R.id.serial_number);
-        editValue.setText(StudentActivity.loggedUser.getMatricola());
+        editMatricola = (EditText) vistaModifica.findViewById(R.id.serial_number);
+        editMatricola.setText(StudentActivity.loggedUser.getMatricola());
 
-        editValue = (EditText) vistaModifica.findViewById(R.id.email_txt);
-        editValue.setText(StudentActivity.loggedUser.getEmail());
+        editEmail = (EditText) vistaModifica.findViewById(R.id.email_txt);
+        editEmail.setText(StudentActivity.loggedUser.getEmail());
+
+        editCourse = (EditText) vistaModifica.findViewById(R.id.course_txt);
+        editCourse.setText(StudentActivity.loggedStudent.getcDs());
 
         if(!StudentActivity.loginFile.getName().matches("studenti.srl")){
             vistaModifica.findViewById(R.id.course_txt).setVisibility(View.INVISIBLE);
@@ -66,6 +99,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         btnEdit = (Button) vistaModifica.findViewById(R.id.btn_edit);
         btnEdit.setOnClickListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         return vistaModifica;
     }
@@ -157,8 +193,90 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         super.onPrepareOptionsMenu(menu);
     }
 
+    public void saveFile(String FILE_NAME, Object oggetto) {
+
+        ObjectOutput out = null;
+
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(new File(getContext().getExternalFilesDir(null), FILE_NAME)));
+            out.writeObject(oggetto);
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void modificaFile() {
 
+        if(StudentActivity.loginFile.getName().matches("studenti.srl")) {
+
+            Map<String ,Object> userModify = new HashMap<>();
+            Studente tempStudent = new Studente(editMatricola.getText().toString(),
+                                                "nome",
+                                                "cognome",
+                                                editEmail.getText().toString(),
+                                                editCourse.getText().toString());
+
+            userModify.put("cDs",editCourse.getText().toString());
+            //userModify.put("cognome",StudentActivity.loggedStudent.getCognome());
+            userModify.put("email",editEmail.getText().toString());
+            userModify.put("id",StudentActivity.loggedStudent.getId());
+            userModify.put("matricola",editMatricola.getText().toString());
+            //userModify.put("nome",StudentActivity.loggedStudent.getNome());
+            userModify.put("percorsoImg", "");
+
+            DocumentReference docUpdate = db.collection("studenti").document(StudentActivity.loggedStudent.getId());
+            modifyFirebase(docUpdate, userModify);
+
+            StudentActivity.loginFile.delete();
+            saveFile("studenti.srl", tempStudent);
+
+            getActivity().finish();
+            getActivity().startActivity(getActivity().getIntent());
+
+        }else if(StudentActivity.loginFile.getName().matches("docenti.srl")) {
+
+            Map<String ,Object> userModify = new HashMap<>();
+            Docente tempDocent = new Docente(editMatricola.getText().toString(),
+                    "nome",
+                    "cognome",
+                    editEmail.getText().toString());
+
+            //userModify.put("cognome",StudentActivity.loggedStudent.getCognome());
+            userModify.put("email",StudentActivity.loggedStudent.getEmail());
+            userModify.put("id",StudentActivity.loggedStudent.getId());
+            userModify.put("matricola",StudentActivity.loggedStudent.getMatricola());
+            //userModify.put("nome",StudentActivity.loggedStudent.getNome());
+            userModify.put("percorsoImg", "");
+
+            StudentActivity.loginFile.delete();
+            saveFile("docenti.srl", tempDocent);
+
+            DocumentReference docUpdate = db.collection("docenti").document(StudentActivity.loggedDocent.getId());
+            modifyFirebase(docUpdate, userModify);
+
+
+        }
+    }
+
+    private void modifyFirebase(DocumentReference docUpdate, Map<String, Object> userModify) {
+
+        docUpdate
+        .update(userModify)
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "DocumentSnapshot successfully updated!");
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error updating document", e);
+            }
+        });
     }
 
     @Override

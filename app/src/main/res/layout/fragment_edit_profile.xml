@@ -126,7 +126,7 @@
                     <EditText
                         android:id="@+id/course_txt"
                         android:layout_width="250dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:autofillHints="Course"
                         android:hint="@string/course"

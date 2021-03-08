@@ -160,10 +160,10 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="20dip"
                     android:background="@null"
+                    android:onClick="go_to_register"
                     android:text="@string/btn_goto_register"
                     android:textAllCaps="false"
-                    android:textColor="@color/black"
-                    android:onClick="register"/>
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 

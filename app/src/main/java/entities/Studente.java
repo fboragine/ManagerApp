@@ -16,6 +16,11 @@ public class Studente extends Utente implements Serializable {
         this.cDs = cDs;
     }
 
+    public Studente(String matricola, String nome, String cognome, String email, String cDs,String id) {
+        super (matricola, nome, cognome, email, id);
+        this.cDs = cDs;
+    }
+
     public String getcDs() {
         return cDs;
     }

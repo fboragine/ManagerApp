@@ -54,7 +54,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     RadioButton studenteLogin;
 
     private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
     private FirebaseFirestore db;
 
     public LoginFragment() {
@@ -83,7 +82,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         btnResetPw.setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
         // Inflate the layout for this fragment
@@ -163,7 +161,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                     (String) document.get("nome"),
                                     (String) document.get("cognome"),
                                     (String) document.get("email"),
-                                    (String) document.get("cDs"));
+                                    (String) document.get("cDs"),
+                                    (String) document.get("id"));
                             salvaSessione((Object)risultato, collectionPath);
 
                         } else if(collectionPath.toString().matches("docenti")){
@@ -171,7 +170,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             risultato = new Docente((String) document.get("matricola"),
                                     (String) document.get("nome"),
                                     (String) document.get("cognome"),
-                                    (String) document.get("email"));
+                                    (String) document.get("email"),
+                                    (String) document.get("id"));
                             salvaSessione((Object)risultato, collectionPath);
                         }
 
@@ -186,14 +186,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    public void salvaSessione(Object logged, String collectionPath) {
-        String FILENAME = String.format("%s.srl", collectionPath);
-
-        saveFile(FILENAME, logged);
-        trasferisciIstanza();
-    }
-
-    public void saveFile(String FILE_NAME,Object oggetto) {
+    public void saveFile(String FILE_NAME, Object oggetto) {
 
         ObjectOutput out = null;
 
@@ -206,6 +199,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void salvaSessione(Object logged, String collectionPath) {
+        String FILENAME = String.format("%s.srl", collectionPath);
+
+        saveFile(FILENAME, logged);
+        trasferisciIstanza();
     }
 
     public void trasferisciIstanza() {
