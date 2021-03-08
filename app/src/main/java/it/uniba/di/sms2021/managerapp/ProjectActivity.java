@@ -9,8 +9,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import entities.Progetto;
 
@@ -22,6 +27,8 @@ public class ProjectActivity extends AppCompatActivity {
 
     private Progetto progetto;
     private TextView textViewNome;
+    private ArrayList<String> studenti;
+    private ListView listViewStudenti;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,11 @@ public class ProjectActivity extends AppCompatActivity {
         //Nascondo pulsante ricerca
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
+
+        studenti = new ArrayList<>(Arrays.asList("Mario Rossi", "Luigi Verdi", "Rosa Neri", "Filippo Neri"));
+        listViewStudenti = findViewById(R.id.project_students);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, studenti);
+        listViewStudenti.setAdapter(adapter);
 
         return true;
     }
