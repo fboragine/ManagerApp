@@ -61,6 +61,7 @@ public class StudentActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
 
+        /*
         loginFile = new File(getApplicationContext().getExternalFilesDir(null), "studenti.srl");
         if(loginFile.exists()) {
             readFile("studenti.srl");
@@ -74,6 +75,8 @@ public class StudentActivity extends AppCompatActivity {
                 finish();
             }
         }
+
+         */
 
        /* Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
