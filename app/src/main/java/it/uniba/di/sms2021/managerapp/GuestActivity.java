@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,9 +14,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -58,31 +65,8 @@ public class GuestActivity extends AppCompatActivity {
 
     public void fakeLogin(View view) {
         Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
+        intent.putParcelableArrayListExtra("progetti", progetti);
         startActivity(intent);
         finish();
     }
-
-    private class taskProgetti extends AsyncTask<ArrayList<Progetto>, ArrayList<Progetto>, ArrayList<Progetto>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected ArrayList<Progetto> doInBackground(ArrayList<Progetto>... progetti) {
-
-            GestioneProgetti gestioneProgetti = new GestioneProgetti();
-            progetti[0] = gestioneProgetti.getProgetti();
-
-            return progetti[0];
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Progetto> progetti) {
-            super.onPostExecute(progetti);
-
-        }
-    }
-}
 }

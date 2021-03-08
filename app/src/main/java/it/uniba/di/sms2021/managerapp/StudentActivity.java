@@ -24,9 +24,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
+import java.util.ArrayList;
 import java.util.Set;
 
 import entities.Docente;
+import entities.Progetto;
 import entities.Studente;
 import entities.Utente;
 
@@ -42,6 +44,7 @@ public class StudentActivity extends AppCompatActivity {
     protected static File loginFile;
     protected static Studente loggedStudent;
     protected static Docente loggedDocent;
+    private ArrayList<Progetto> progetti;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -61,7 +64,12 @@ public class StudentActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
 
-        loginFile = new File(getApplicationContext().getExternalFilesDir(null), "studenti.srl");
+        final Intent src = getIntent();
+        if(src != null) {
+            progetti = src.getParcelableArrayListExtra("progetti");
+        }
+
+        /*loginFile = new File(getApplicationContext().getExternalFilesDir(null), "studenti.srl");
         if(loginFile.exists()) {
             readFile("studenti.srl");
         }else {
@@ -73,7 +81,7 @@ public class StudentActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }
+        }*/
 
        /* Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -113,5 +121,9 @@ public class StudentActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         Toast.makeText(StudentActivity.this,R.string.logout, Toast.LENGTH_SHORT).show();
         //Richiama l'activity ospite.
+    }
+
+    public ArrayList<Progetto> getProgetti() {
+        return progetti;
     }
 }

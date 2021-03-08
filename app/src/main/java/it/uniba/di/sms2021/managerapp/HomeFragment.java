@@ -27,8 +27,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,29 +77,42 @@ public class HomeFragment extends Fragment {
 
         GestioneProgetti gestioneProgetti = new GestioneProgetti();
 
-        inProgressProject = gestioneProgetti.getProgetti();
-        Log.d(TAG, "Entro funzione 2");
+        inProgressProject = new ArrayList<>();
+        closedProject = new ArrayList<>();
 
-        try {
-            Thread.sleep(Long.parseLong("5"));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        //inProgressProject = ((StudentActivity) getActivity()).getProgetti();
 
-        closedProject = gestioneProgetti.getProgetti();
-        inProgressRecyclerView = viewHome.findViewById(R.id.inProgressRecyclerView);
-        inProgressRecyclerView.setHasFixedSize(true);
-        closedRecyclerView = viewHome.findViewById(R.id.closedRecyclerView);
-        closedRecyclerView.setHasFixedSize(true);
+        //closedProject = ((StudentActivity) getActivity()).getProgetti();
 
-        inProgressLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        inProgressRecyclerView.setLayoutManager(inProgressLayoutManager);
-        closedLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        closedRecyclerView.setLayoutManager(closedLayoutManager);
-        inProgressAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), inProgressProject);
-        inProgressRecyclerView.setAdapter(inProgressAdapter);
-        closedAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), closedProject);
-        closedRecyclerView.setAdapter(closedAdapter);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("progetti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Progetto progetto = new Progetto(document.getString("id"), document.getString("nome"), document.getString("descrizione"),
+                                document.getString("codiceEsame"), document.getString("dataCreazione"),
+                                (ArrayList<String>) document.get("idStudenti"));
+                        inProgressProject.add(progetto);
+                        closedProject.add(progetto);
+
+                        inProgressRecyclerView = viewHome.findViewById(R.id.inProgressRecyclerView);
+                        inProgressRecyclerView.setHasFixedSize(true);
+                        closedRecyclerView = viewHome.findViewById(R.id.closedRecyclerView);
+                        closedRecyclerView.setHasFixedSize(true);
+
+                        inProgressLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                        inProgressRecyclerView.setLayoutManager(inProgressLayoutManager);
+                        closedLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                        closedRecyclerView.setLayoutManager(closedLayoutManager);
+                        inProgressAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), inProgressProject);
+                        inProgressRecyclerView.setAdapter(inProgressAdapter);
+                        closedAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), closedProject);
+                        closedRecyclerView.setAdapter(closedAdapter);
+                    }
+                }
+            }
+        });
 
         return viewHome;
     }

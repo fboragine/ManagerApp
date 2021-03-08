@@ -142,7 +142,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/login"
-                    android:background="@color/deep_orange_500" />
+                    android:background="@color/deep_orange_500"
+                    android:onClick="fakeLogin"/>
 
                 <Button
                     android:id="@+id/btn_reset_password"
@@ -163,7 +164,7 @@
                     android:text="@string/btn_goto_register"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
-                    android:onClick="register"/>
+                    android:onClick="go_to_register"/>
 
             </LinearLayout>
 

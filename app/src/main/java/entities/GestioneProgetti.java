@@ -33,17 +33,18 @@ public class GestioneProgetti {
                 ArrayList<Progetto> progetti = new ArrayList<Progetto>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Progetto progetto = new Progetto(document.getString("id"), document.getString("nome"), document.getString("descrizione"),
-                                                     document.getString("codiceEsame"), document.getDate("dataCreazione"),
+                                                     document.getString("codiceEsame"), document.getString("dataCreazione"),
                                                      (ArrayList<String>) document.get("idStudenti"));
                     progetti.add(progetto);
-                    Log.d(TAG, progetto.getNome());
                 }
-                Log.d(TAG, "Escooooo");
 
+                this.progetti = progetti;
             } else {
                 Log.d(TAG, "Error getting documents: ", task.getException());
             }
         });
+        Log.d(TAG, "Prima ruturn");
+        Log.d(TAG, this.progetti.get(0).getNome());
 
         return  progetti;
     }
