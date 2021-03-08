@@ -1,5 +1,9 @@
 package entities;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,17 +17,35 @@ public class Progetto implements Parcelable {
     private String descrizione;
     private String codiceEsame;
     private String dataCreazione;
-    private String idStudenti [];
-    public static final int MAX_STUDENTI = 5;
+    private ArrayList<String> idStudenti;
 
-    public Progetto(String id, String nome, String descrizione,
-                    String codiceEsame, String dataCreazione, String[] idStudenti) {
+    public Progetto(String id, String nome, String descrizione, String codiceEsame, String dataCreazione, ArrayList<String> idStudenti) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
         this.codiceEsame = codiceEsame;
         this.dataCreazione = dataCreazione;
-        this.idStudenti = new String[MAX_STUDENTI];
+        this.idStudenti = idStudenti;
+    }
+
+    public Progetto(String nome) {
+        this.nome = nome;
+        this.codiceEsame = "prova";
+    }
+
+    public Progetto(String nome, String codiceEsame, ArrayList<String> idStudenti) {
+        this.id = idGenerator();
+        this.nome = nome;
+        this.codiceEsame = codiceEsame;
+        this.idStudenti = idStudenti;
+    }
+
+    public Progetto(String nome, String descrizione, String codiceEsame,
+                    String dataCreazione, ArrayList<String> idStudenti) {
+        this.nome = nome;
+        this.descrizione = descrizione;
+        this.codiceEsame = codiceEsame;
+        this.dataCreazione = dataCreazione;
         this.idStudenti = idStudenti;
     }
 
@@ -33,7 +55,7 @@ public class Progetto implements Parcelable {
         descrizione = in.readString();
         codiceEsame = in.readString();
         dataCreazione = in.readString();
-        idStudenti = in.createStringArray();
+        idStudenti = in.createStringArrayList();
     }
 
     public static final Creator<Progetto> CREATOR = new Creator<Progetto>() {
@@ -88,12 +110,20 @@ public class Progetto implements Parcelable {
         this.dataCreazione = dataCreazione;
     }
 
-    public String[] getIdStudenti() {
+    public ArrayList<String> getIdStudenti() {
         return idStudenti;
     }
 
-    public void setIdStudenti(String[] idStudenti) {
+    public void setIdStudenti(ArrayList<String> idStudenti) {
         this.idStudenti = idStudenti;
+    }
+
+    public String idGenerator() {
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference progettRef = rootRef.child("progetti");
+        String key = progettRef.push().getKey();
+
+        return key;
     }
 
     @Override
@@ -108,6 +138,6 @@ public class Progetto implements Parcelable {
         dest.writeString(descrizione);
         dest.writeString(codiceEsame);
         dest.writeString(dataCreazione);
-        dest.writeStringArray(idStudenti);
+        dest.writeStringList(idStudenti);
     }
 }

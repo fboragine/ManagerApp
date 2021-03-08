@@ -24,9 +24,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
+import java.util.ArrayList;
 import java.util.Set;
 
 import entities.Docente;
+import entities.Progetto;
 import entities.Studente;
 import entities.Utente;
 
@@ -42,6 +44,7 @@ public class StudentActivity extends AppCompatActivity {
     protected static File loginFile;
     protected static Studente loggedStudent;
     protected static Docente loggedDocent;
+    private ArrayList<Progetto> progetti;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -60,6 +63,11 @@ public class StudentActivity extends AppCompatActivity {
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
+
+        final Intent src = getIntent();
+        if(src != null) {
+            progetti = src.getParcelableArrayListExtra("progetti");
+        }
 
         /*
         loginFile = new File(getApplicationContext().getExternalFilesDir(null), "studenti.srl");

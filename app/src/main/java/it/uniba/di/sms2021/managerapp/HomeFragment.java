@@ -1,48 +1,36 @@
 package it.uniba.di.sms2021.managerapp;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import javax.security.auth.callback.Callback;
+import entities.Progetto;
 
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "SimpleToolbarTest";
 
-    private ArrayList<String> inProgressProjectName;
-    private ArrayList<String> inProgressProjectExam;
-    private ArrayList<String> closedProjectName;
-    private ArrayList<String> closedProjectExam;
+    private ArrayList<Progetto> inProgressProject;
+    private ArrayList<Progetto> closedProject;
     private RecyclerView inProgressRecyclerView;
     private RecyclerView closedRecyclerView;
     private RecyclerView.LayoutManager inProgressLayoutManager;
@@ -69,25 +57,38 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         viewHome = inflater.inflate(R.layout.fragment_home, container, false);
 
-        inProgressProjectName = new ArrayList<>(Arrays.asList("Project 1", "Project 2", "Project 3", "Project 4", "Project 5", "Project 6", "Project 7", "Project 8", "Project 9", "Project 10"));
-        inProgressProjectExam = new ArrayList<>(Arrays.asList("Exam 1", "Exam 2", "Exam 3", "Exam 4", "Exam 5", "Exam 6", "Exam 7", "Exam 8", "Exam 9", "Exam 10"));
+        inProgressProject = new ArrayList<>();
+        closedProject = new ArrayList<>();
 
-        closedProjectName = new ArrayList<>(Arrays.asList("Closed Project 1", "Closed Project 2", "Closed Project 3", "Closed Project 4", "Closed Project 5", "Closed Project 6", "Closed Project 7", "Closed Project 8", "Closed Project 9", "Closed Project 10"));
-        closedProjectExam = new ArrayList<>(Arrays.asList("Exam 1", "Exam 2", "Exam 3", "Exam 4", "Exam 5", "Exam 6", "Exam 7", "Exam 8", "Exam 9", "Exam 10"));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("progetti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Progetto progetto = new Progetto(document.getString("id"), document.getString("nome"), document.getString("descrizione"),
+                                document.getString("codiceEsame"), document.getString("dataCreazione"),
+                                (ArrayList<String>) document.get("idStudenti"));
+                        inProgressProject.add(progetto);
+                        closedProject.add(progetto);
 
-        inProgressRecyclerView = viewHome.findViewById(R.id.inProgressRecyclerView);
-        inProgressRecyclerView.setHasFixedSize(true);
-        closedRecyclerView = viewHome.findViewById(R.id.closedRecyclerView);
-        closedRecyclerView.setHasFixedSize(true);
+                        inProgressRecyclerView = viewHome.findViewById(R.id.inProgressRecyclerView);
+                        inProgressRecyclerView.setHasFixedSize(true);
+                        closedRecyclerView = viewHome.findViewById(R.id.closedRecyclerView);
+                        closedRecyclerView.setHasFixedSize(true);
 
-        inProgressLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        inProgressRecyclerView.setLayoutManager(inProgressLayoutManager);
-        closedLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        closedRecyclerView.setLayoutManager(closedLayoutManager);
-        inProgressAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), inProgressProjectName, inProgressProjectExam);
-        inProgressRecyclerView.setAdapter(inProgressAdapter);
-        closedAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), closedProjectName, closedProjectExam);
-        closedRecyclerView.setAdapter(closedAdapter);
+                        inProgressLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                        inProgressRecyclerView.setLayoutManager(inProgressLayoutManager);
+                        closedLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                        closedRecyclerView.setLayoutManager(closedLayoutManager);
+                        inProgressAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), inProgressProject);
+                        inProgressRecyclerView.setAdapter(inProgressAdapter);
+                        closedAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), closedProject);
+                        closedRecyclerView.setAdapter(closedAdapter);
+                    }
+                }
+            }
+        });
 
         return viewHome;
     }

@@ -16,13 +16,18 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.Set;
+
+import entities.Progetto;
 
 public class GuestActivity extends AppCompatActivity {
 
     private static final String TAG = "SimpleToolbarTest";
     protected static final int SEARCH_ITEM_ID = View.generateViewId();
     protected static final int FILTER_ITEM_ID = View.generateViewId();
+
+    private ArrayList<Progetto> progetti;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -49,16 +54,9 @@ public class GuestActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /*
-    public void go_to_login(View view) {
-        NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
-        Navigation.findNavController(this,R.id.fragment).navigate(action);
-    }
-
-     */
-
     public void fakeLogin(View view) {
         Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
+        intent.putParcelableArrayListExtra("progetti", progetti);
         startActivity(intent);
         finish();
     }
