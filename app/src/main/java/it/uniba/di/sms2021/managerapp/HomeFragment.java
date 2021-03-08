@@ -1,46 +1,28 @@
 package it.uniba.di.sms2021.managerapp;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import javax.security.auth.callback.Callback;
-
-import entities.GestioneProgetti;
 import entities.Progetto;
 
 public class HomeFragment extends Fragment {
@@ -75,14 +57,8 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         viewHome = inflater.inflate(R.layout.fragment_home, container, false);
 
-        GestioneProgetti gestioneProgetti = new GestioneProgetti();
-
         inProgressProject = new ArrayList<>();
         closedProject = new ArrayList<>();
-
-        //inProgressProject = ((StudentActivity) getActivity()).getProgetti();
-
-        //closedProject = ((StudentActivity) getActivity()).getProgetti();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("progetti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

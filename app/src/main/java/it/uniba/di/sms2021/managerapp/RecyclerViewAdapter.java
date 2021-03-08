@@ -52,7 +52,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
     @Override
     public int getItemCount() {
-        // TODO risolvere il return della size: project.size()
         return project.size();
     }
 
