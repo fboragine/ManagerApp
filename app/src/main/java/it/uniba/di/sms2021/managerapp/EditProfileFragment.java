@@ -26,9 +26,6 @@ import android.widget.Toast;
  */
 public class EditProfileFragment extends Fragment implements View.OnClickListener{
 
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     View vistaModifica;
     EditText editValue;
     Button btnEdit;
@@ -36,8 +33,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     public static EditProfileFragment newInstance(String param1, String param2) {
         EditProfileFragment fragment = new EditProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -120,7 +115,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             save.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                    modificaFile();
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
                     NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
                     Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                     return true;
@@ -150,7 +146,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             cancel.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.undone_save, Toast.LENGTH_SHORT).show();
                     NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
                     Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                     return true;
@@ -161,9 +157,17 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         super.onPrepareOptionsMenu(menu);
     }
 
+    private void modificaFile() {
+
+    }
+
     @Override
     public void onClick(View v) {
-
-
+        if(v.getId() == R.id.btn_edit){
+            modificaFile();
+            Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
+            NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
+            Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+        }
     }
 }

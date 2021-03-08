@@ -71,11 +71,6 @@ public class StudentActivity extends AppCompatActivity {
                 finish();
             }
         }
-
-       /* Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra("MyClass", obj);*/
-
     }
 
     public void readFile(String filename){
@@ -104,11 +99,5 @@ public class StudentActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-    }
-
-    public void logout(){
-        FirebaseAuth.getInstance().signOut();
-        Toast.makeText(StudentActivity.this,R.string.logout, Toast.LENGTH_SHORT).show();
-        //Richiama l'activity ospite.
     }
 }

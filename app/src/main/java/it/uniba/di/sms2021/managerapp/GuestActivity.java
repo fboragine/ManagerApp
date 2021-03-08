@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,36 +31,32 @@ public class GuestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
-        toolbar.setTitle("Home");
+        if(getApplicationContext().getExternalFilesDir(null).listFiles().length == 0){
+            Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
+            setSupportActionBar(toolbar);
+            toolbar.setLogo(R.mipmap.ic_launcher);
+            toolbar.setTitle("Home");
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        NavController navController = Navigation.findNavController(findViewById(R.id.fragment));
-        AppBarConfiguration appBarConfiguration = (new AppBarConfiguration.Builder(Set.of(R.id.guestHomeFragment, R.id.loginFragment))).build();
+            BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+            NavController navController = Navigation.findNavController(findViewById(R.id.fragment));
+            AppBarConfiguration appBarConfiguration = (new AppBarConfiguration.Builder(Set.of(R.id.guestHomeFragment, R.id.loginFragment))).build();
 
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(bottomNavigationView,navController);
+            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+            NavigationUI.setupWithNavController(bottomNavigationView,navController);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), StudentActivity.class);;
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void go_to_register(View view) {
         NavDirections action = LoginFragmentDirections.actionLoginFragmentToSignUpFragment();
-        Intent intent = new Intent(getApplicationContext(), SignActivity.class);
-        startActivity(intent);
-    }
-
-    /*
-    public void go_to_login(View view) {
-        NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
         Navigation.findNavController(this,R.id.fragment).navigate(action);
     }
 
-     */
-
-    public void fakeLogin(View view) {
-        Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
-        startActivity(intent);
-        finish();
+    public void go_to_login(View view) {
+        NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
+        Navigation.findNavController(this,R.id.fragment).navigate(action);
     }
 }

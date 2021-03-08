@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,14 +37,7 @@ import entities.Studente;
  */
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private View vistaProfilo;
     private GuestActivity callback;
     private FirebaseDatabase db;
     private DatabaseReference userRef;
@@ -66,8 +60,6 @@ public class ProfileFragment extends Fragment {
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -114,7 +106,31 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
+        TextView label = (TextView) vistaProfilo.findViewById(R.id.full_name);
+        label.setText(StudentActivity.loggedUser.getNome() + " " + StudentActivity.loggedUser.getCognome());
+
+        label = (TextView) vistaProfilo.findViewById(R.id.serial_number);
+        label.setText(StudentActivity.loggedUser.getMatricola());
+
+        label = (TextView) vistaProfilo.findViewById(R.id.profile_email);
+        label.setText(StudentActivity.loggedUser.getEmail());
+
+        if(StudentActivity.loginFile.getName().matches("studenti.srl")){
+            vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.VISIBLE);
+            vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.VISIBLE);
+            label = (TextView) vistaProfilo.findViewById(R.id.profile_course);
+            label.setText(StudentActivity.loggedStudent.getcDs());
+        }else {
+            /*
+            label = (TextView) vistaProfilo.findViewById(R.id.profile_course);
+            label.setText("");
+
+            vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.INVISIBLE);
+            vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.INVISIBLE);
+             */
+        }
+        return vistaProfilo;
     }
 
     @Override
@@ -160,7 +176,6 @@ public class ProfileFragment extends Fragment {
             edit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
                     NavDirections action = ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment();
                     Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                     return true;
@@ -189,7 +204,7 @@ public class ProfileFragment extends Fragment {
             logout.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                    logout();
                     Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
                     startActivity(intent);
                     getActivity().finish();
@@ -199,5 +214,12 @@ public class ProfileFragment extends Fragment {
         }
 
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void logout(){
+        FirebaseAuth.getInstance().signOut();
+        StudentActivity.loginFile.delete();
+        Toast.makeText(getContext(),R.string.logout, Toast.LENGTH_SHORT).show();
+        //Richiama l'activity ospite.
     }
 }
