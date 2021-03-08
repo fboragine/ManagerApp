@@ -7,6 +7,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,57 +22,43 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.security.auth.callback.Callback;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "SimpleToolbarTest";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ArrayList<String> inProgressProjectName;
+    private ArrayList<String> inProgressProjectExam;
+    private ArrayList<String> closedProjectName;
+    private ArrayList<String> closedProjectExam;
+    private RecyclerView inProgressRecyclerView;
+    private RecyclerView closedRecyclerView;
+    private RecyclerView.LayoutManager inProgressLayoutManager;
+    private RecyclerView.LayoutManager closedLayoutManager;
+    private RecyclerView.Adapter inProgressAdapter;
+    private RecyclerView.Adapter closedAdapter;
+
+    private View viewHome;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         setHasOptionsMenu(true);
     }
@@ -74,7 +67,29 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        viewHome = inflater.inflate(R.layout.fragment_home, container, false);
+
+        inProgressProjectName = new ArrayList<>(Arrays.asList("Project 1", "Project 2", "Project 3", "Project 4", "Project 5", "Project 6", "Project 7", "Project 8", "Project 9", "Project 10"));
+        inProgressProjectExam = new ArrayList<>(Arrays.asList("Exam 1", "Exam 2", "Exam 3", "Exam 4", "Exam 5", "Exam 6", "Exam 7", "Exam 8", "Exam 9", "Exam 10"));
+
+        closedProjectName = new ArrayList<>(Arrays.asList("Closed Project 1", "Closed Project 2", "Closed Project 3", "Closed Project 4", "Closed Project 5", "Closed Project 6", "Closed Project 7", "Closed Project 8", "Closed Project 9", "Closed Project 10"));
+        closedProjectExam = new ArrayList<>(Arrays.asList("Exam 1", "Exam 2", "Exam 3", "Exam 4", "Exam 5", "Exam 6", "Exam 7", "Exam 8", "Exam 9", "Exam 10"));
+
+        inProgressRecyclerView = viewHome.findViewById(R.id.inProgressRecyclerView);
+        inProgressRecyclerView.setHasFixedSize(true);
+        closedRecyclerView = viewHome.findViewById(R.id.closedRecyclerView);
+        closedRecyclerView.setHasFixedSize(true);
+
+        inProgressLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        inProgressRecyclerView.setLayoutManager(inProgressLayoutManager);
+        closedLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        closedRecyclerView.setLayoutManager(closedLayoutManager);
+        inProgressAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), inProgressProjectName, inProgressProjectExam);
+        inProgressRecyclerView.setAdapter(inProgressAdapter);
+        closedAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), closedProjectName, closedProjectExam);
+        closedRecyclerView.setAdapter(closedAdapter);
+
+        return viewHome;
     }
 
     @Override
@@ -150,7 +165,6 @@ public class HomeFragment extends Fragment {
                     return true;
                 }
             });
-
         }
 
         super.onPrepareOptionsMenu(menu);

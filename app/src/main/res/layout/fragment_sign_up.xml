@@ -27,7 +27,7 @@
                 android:id="@+id/presentation"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:background="@color/turquoise_200"
+                android:background="@color/blue_200"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
@@ -169,7 +169,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/register"
-                    android:background="@color/sand_200"
+                    android:background="@color/deep_orange_500"
                     app:layout_constraintBottom_toTopOf="@id/btn_reset_password"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

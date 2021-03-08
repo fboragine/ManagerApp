@@ -33,6 +33,7 @@
     <string name="serial_number">705624</string>
     <string name="description">Description</string>
     <string name="search_a_course">Search a Course</string>
+    <string name="action_search">Search</string>
     <string name="login_error_msg">Authentication error</string>
     <string name="welcome_msg">Welcome</string>
     <string name="firebase_studente_error">\"get failed with \"</string>
