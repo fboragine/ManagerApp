@@ -143,4 +143,10 @@ public class ProjectActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void go_to_documents(View view) {
+        Intent intent = new Intent(getApplicationContext(), ProjectDocumentsActivity.class);
+        intent.putExtra("progetto",progetto);
+        startActivity(intent);
+    }
 }
