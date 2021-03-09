@@ -73,4 +73,10 @@ public class ProjectActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void go_to_documents(View view) {
+        Intent intent = new Intent(getApplicationContext(), ProjectDocumentsActivity.class);
+        intent.putExtra("progetto",progetto);
+        startActivity(intent);
+    }
 }
