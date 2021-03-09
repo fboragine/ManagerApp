@@ -39,7 +39,7 @@
                     android:src="@drawable/ic_action_name" />
 
                 <TextView
-                    android:id="@+id/full_name"
+                    android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -47,7 +47,20 @@
                     android:layout_toEndOf="@+id/ic_action_name"
                     android:fontFamily="@font/bungee"
                     android:includeFontPadding="false"
-                    android:text="@string/full_name"
+                    android:text="Mario"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/surname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/name"
+                    android:fontFamily="@font/bungee"
+                    android:includeFontPadding="false"
+                    android:text="Rossi"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -57,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
-                    android:layout_below="@+id/full_name"
+                    android:layout_below="@+id/name"
                     android:layout_toEndOf="@+id/ic_action_name"
                     android:fontFamily="@font/bungee"
                     android:includeFontPadding="false"

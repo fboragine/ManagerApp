@@ -42,4 +42,8 @@
     <string name="logout">Logout successful </string>
     <string name="succesful_save">Successfully edited</string>
     <string name="undone_save">Changes undone</string>
+    <string name="reauth_msg_email">For another email change, you must logout and re-authenticate in Manager App</string>
+    <string name="doc_not_found">User not found</string>
+    <string name="reauth_msg_password">For another password change, you must logout and re-authenticate in Manager App</string>
+    <string name="weak_password">Weak Password: Password should be at least 6 characters</string>
 </resources>

@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,36 +33,17 @@ import entities.Studente;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
 
     private View vistaProfilo;
     private GuestActivity callback;
-    private FirebaseDatabase db;
-    private DatabaseReference userRef;
 
-    private static final String TAG = "SimpleToolbarTest";
+    TextView label;
 
     public ProfileFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -69,37 +51,6 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-
-        Log.d(TAG, "Profilo");
-
-        Intent intent = getActivity().getIntent();
-        String matricola = intent.getStringExtra("matricola");
-
-        TextView fullname = getActivity().findViewById(R.id.full_name);
-        TextView email = getActivity().findViewById(R.id.profile_email);
-
-        db = FirebaseDatabase.getInstance();
-        userRef = db.getReference("Studenti");
-
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Log.d(TAG, "Arrivoooooo");
-                    if(ds.child("Matricola").equals("1")) {
-                        fullname.setText(ds.child("Nome" + " " + "Cognome").getValue(String.class));
-                        email.setText(ds.child("Email").getValue(String.class));
-                        Log.d(TAG, "Risultatooooooo");
-                        Log.d(TAG, fullname.toString());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     @Override
@@ -107,8 +58,12 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
-        TextView label = (TextView) vistaProfilo.findViewById(R.id.full_name);
-        label.setText(StudentActivity.loggedUser.getNome() + " " + StudentActivity.loggedUser.getCognome());
+
+        label = (TextView) vistaProfilo.findViewById(R.id.name);
+        label.setText(StudentActivity.loggedUser.getNome());
+
+        label = (TextView) vistaProfilo.findViewById(R.id.surname);
+        label.setText(StudentActivity.loggedUser.getCognome());
 
         label = (TextView) vistaProfilo.findViewById(R.id.serial_number);
         label.setText(StudentActivity.loggedUser.getMatricola());
@@ -119,16 +74,14 @@ public class ProfileFragment extends Fragment {
         if(StudentActivity.loginFile.getName().matches("studenti.srl")){
             vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.VISIBLE);
             vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.VISIBLE);
+
             label = (TextView) vistaProfilo.findViewById(R.id.profile_course);
             label.setText(StudentActivity.loggedStudent.getcDs());
         }else {
-            /*
-            label = (TextView) vistaProfilo.findViewById(R.id.profile_course);
-            label.setText("");
 
             vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.INVISIBLE);
             vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.INVISIBLE);
-             */
+
         }
         return vistaProfilo;
     }
@@ -220,6 +173,5 @@ public class ProfileFragment extends Fragment {
         FirebaseAuth.getInstance().signOut();
         StudentActivity.loginFile.delete();
         Toast.makeText(getContext(),R.string.logout, Toast.LENGTH_SHORT).show();
-        //Richiama l'activity ospite.
     }
 }

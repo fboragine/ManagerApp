@@ -176,7 +176,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         }
 
                     } else {
-                        Log.d(TAG, "No such document");
+                        Toast.makeText(getActivity().getApplicationContext(), R.string.doc_not_found, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Log.d(TAG, getString(R.string.firebase_studente_error), task.getException());
