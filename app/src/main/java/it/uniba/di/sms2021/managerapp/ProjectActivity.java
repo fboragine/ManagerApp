@@ -3,9 +3,11 @@ package it.uniba.di.sms2021.managerapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,21 +16,32 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import entities.Progetto;
+import entities.Studente;
 
 public class ProjectActivity extends AppCompatActivity {
 
     protected static final int EDIT_ITEM_ID = View.generateViewId();
     protected static final int SAVE_ITEM_ID = View.generateViewId();
     protected static final int CANCEL_ITEM_ID = View.generateViewId();
+    private static final String TAG = "ProjectActivityLog";
 
     private Progetto progetto;
     private TextView textViewNome;
-    private ArrayList<String> studenti;
+    private TextView textDescEsame;
     private ListView listViewStudenti;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +60,12 @@ public class ProjectActivity extends AppCompatActivity {
 
         textViewNome = findViewById(R.id.project_name);
         textViewNome.setText(progetto.getNome());
+
+        textDescEsame = findViewById(R.id.project_description);
+        textDescEsame.setText(progetto.getDescrizione());
+
+        getDisplayName();
+        getEsame();
     }
 
     @Override
@@ -55,11 +74,6 @@ public class ProjectActivity extends AppCompatActivity {
         //Nascondo pulsante ricerca
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
-
-        studenti = new ArrayList<>(Arrays.asList("Mario Rossi", "Luigi Verdi", "Rosa Neri", "Filippo Neri"));
-        listViewStudenti = findViewById(R.id.project_students);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, studenti);
-        listViewStudenti.setAdapter(adapter);
 
         return true;
     }
@@ -72,5 +86,61 @@ public class ProjectActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getDisplayName() {
+        ArrayList<String> idStudentiPart = progetto.getIdStudenti();
+        ArrayList<Studente> studenti = new ArrayList<Studente>();
+        ArrayList<String> displayNameStudenti = new ArrayList<String>();
+
+        db.collection("studenti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        boolean flag;
+                        int count = 0;
+
+                        do {
+                            flag = false;
+                            if(idStudentiPart.get(count).equals(document.getString("id"))) {
+                                Studente studente = new Studente(document.getString("id"), document.getString("matricola"), document.getString("nome"), document.getString("cognome"),
+                                        document.getString("email"), document.getString("cDs"));
+                                studenti.add(studente);
+
+                                displayNameStudenti.add(studente.getNome() + " " + studente.getCognome());
+                            }
+                            count ++;
+                        }while(!flag  && count < idStudentiPart.size());
+                    }
+
+                    listViewStudenti = findViewById(R.id.project_students);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, displayNameStudenti);
+                    listViewStudenti.setAdapter(adapter);
+                }
+            }
+        });
+    }
+
+    private void getEsame() {
+
+        db.collection("esami").document(progetto.getCodiceEsame()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        TextView textEsame = findViewById(R.id.project_exam);
+                        textEsame.setText(document.getString("nome").toString());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }

@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Esame {
@@ -8,14 +9,15 @@ public class Esame {
     private String nome;
     private String commento;
     private String cDs;
-    private Date dataEsame;
+    private String dataEsame;
+    private ArrayList<String> idDocenti;
 
-    public Esame(String id, String nome, String commento, String cDs, Date dataEsame) {
+    public Esame(String id, String nome, String cDs, String dataEsame, ArrayList<String> idDocenti) {
         this.id = id;
         this.nome = nome;
-        this.commento = commento;
         this.cDs = cDs;
         this.dataEsame = dataEsame;
+        this.idDocenti = idDocenti;
     }
 
     public String getId() {
@@ -50,11 +52,11 @@ public class Esame {
         this.cDs = cDs;
     }
 
-    public Date getDataEsame() {
+    public String getDataEsame() {
         return dataEsame;
     }
 
-    public void setDataEsame(Date dataEsame) {
+    public void setDataEsame(String dataEsame) {
         this.dataEsame = dataEsame;
     }
 }

@@ -18,14 +18,16 @@ public class Progetto implements Parcelable {
     private String codiceEsame;
     private String dataCreazione;
     private ArrayList<String> idStudenti;
+    private boolean stato;
 
-    public Progetto(String id, String nome, String descrizione, String codiceEsame, String dataCreazione, ArrayList<String> idStudenti) {
+    public Progetto(String id, String nome, String descrizione, String codiceEsame, String dataCreazione, ArrayList<String> idStudenti, Boolean stato) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
         this.codiceEsame = codiceEsame;
         this.dataCreazione = dataCreazione;
         this.idStudenti = idStudenti;
+        this.stato = stato;
     }
 
     public Progetto(String nome) {
@@ -38,6 +40,7 @@ public class Progetto implements Parcelable {
         this.nome = nome;
         this.codiceEsame = codiceEsame;
         this.idStudenti = idStudenti;
+        this.stato = true;
     }
 
     public Progetto(String nome, String descrizione, String codiceEsame,
@@ -124,6 +127,14 @@ public class Progetto implements Parcelable {
         String key = progettRef.push().getKey();
 
         return key;
+    }
+
+    public boolean isClose() {
+        boolean risposta = false;
+        if(!stato) {
+            risposta = true;
+        }
+        return risposta;
     }
 
     @Override

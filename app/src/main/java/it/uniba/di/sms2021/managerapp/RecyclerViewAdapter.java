@@ -2,6 +2,7 @@ package it.uniba.di.sms2021.managerapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -33,7 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         viewHolder.projectTextView.setText(project.get(i).getNome());
-        viewHolder.examTextView.setText(project.get(i).getCodiceEsame());
+        getEsame(project.get(i).getCodiceEsame(), i, viewHolder);
         viewHolder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
@@ -53,6 +60,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return project.size();
+    }
+
+    private void getEsame(String codiceEsame, int i, ViewHolder viewHolder) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("esami").document(codiceEsame).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    String esame = "";
+
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        viewHolder.examTextView.setText(document.getString("nome"));
+                    }
+                }
+            }
+        });
+
     }
 
 

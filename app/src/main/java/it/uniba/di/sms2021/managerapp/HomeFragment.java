@@ -7,12 +7,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,10 +42,6 @@ public class HomeFragment extends Fragment {
 
     private View viewHome;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,9 +66,12 @@ public class HomeFragment extends Fragment {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Progetto progetto = new Progetto(document.getString("id"), document.getString("nome"), document.getString("descrizione"),
                                 document.getString("codiceEsame"), document.getString("dataCreazione"),
-                                (ArrayList<String>) document.get("idStudenti"));
-                        inProgressProject.add(progetto);
-                        closedProject.add(progetto);
+                                (ArrayList<String>) document.get("idStudenti"), document.getBoolean("stato"));
+                        if(progetto.isClose()) {
+                            closedProject.add(progetto);
+                        } else {
+                            inProgressProject.add(progetto);
+                        }
 
                         inProgressRecyclerView = viewHome.findViewById(R.id.inProgressRecyclerView);
                         inProgressRecyclerView.setHasFixedSize(true);
@@ -85,6 +86,15 @@ public class HomeFragment extends Fragment {
                         inProgressRecyclerView.setAdapter(inProgressAdapter);
                         closedAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), closedProject);
                         closedRecyclerView.setAdapter(closedAdapter);
+                    }
+
+                    if (closedProject.isEmpty()) {
+                        RelativeLayout relativeLayout = viewHome.findViewById(R.id.closedContainer);
+                        relativeLayout.setVisibility(View.INVISIBLE);
+                    }
+                    if (inProgressProject.isEmpty()) {
+                        RelativeLayout relativeLayout = viewHome.findViewById(R.id.inProgressContainer);
+                        relativeLayout.setVisibility(View.INVISIBLE);
                     }
                 }
             }

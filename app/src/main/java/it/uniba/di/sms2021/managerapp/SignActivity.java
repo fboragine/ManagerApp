@@ -73,7 +73,8 @@ public class SignActivity extends AppCompatActivity{
 
         EditText pw = (EditText) findViewById(R.id.password);
 
-        Studente aux = new Studente(mat.getText().toString(),
+        Studente aux = new Studente("",
+                mat.getText().toString(),
                 nome.getText().toString(),
                 cognome.getText().toString(),
                 email.getText().toString(),

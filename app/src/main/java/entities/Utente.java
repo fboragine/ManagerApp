@@ -5,6 +5,7 @@ import java.io.Serializable;
 public abstract class Utente  implements Serializable {
     private static final long serialVersionUID = 160L;
 
+    private String id;
     private String matricola;
     private String nome;
     private String cognome;
@@ -13,7 +14,8 @@ public abstract class Utente  implements Serializable {
     public Utente() {
 
     }
-    public Utente(String matricola, String nome, String cognome, String email) {
+    public Utente(String id, String matricola, String nome, String cognome, String email) {
+        this.id = id;
         this.matricola = matricola;
         this.nome = nome;
         this.cognome = cognome;
@@ -50,5 +52,13 @@ public abstract class Utente  implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
