@@ -1,6 +1,5 @@
-package it.uniba.di.sms2021.managerapp;
+package it.uniba.di.sms2021.managerapp.loggedUser;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,27 +8,20 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import javax.security.auth.callback.Callback;
-
-import entities.Studente;
+import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
+import it.uniba.di.sms2021.managerapp.loggedUser.ProfileFragmentDirections;
+import it.uniba.di.sms2021.managerapp.R;
 
 public class ProfileFragment extends Fragment {
 

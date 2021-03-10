@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp;
+package it.uniba.di.sms2021.managerapp.service;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentTransaction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import it.uniba.di.sms2021.managerapp.R;
 
 public class ListViewAdapter extends BaseAdapter {
 

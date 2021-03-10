@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp;
+package it.uniba.di.sms2021.managerapp.service;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,6 +14,8 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import it.uniba.di.sms2021.managerapp.R;
 
 public class FileListAdapter extends BaseAdapter {
 

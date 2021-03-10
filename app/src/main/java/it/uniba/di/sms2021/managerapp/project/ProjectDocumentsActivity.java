@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp;
+package it.uniba.di.sms2021.managerapp.project;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -30,7 +29,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import entities.Progetto;
+import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Progetto;
+import it.uniba.di.sms2021.managerapp.service.FileListAdapter;
 
 @RequiresApi(api = Build.VERSION_CODES.R)
 public class ProjectDocumentsActivity extends AppCompatActivity {

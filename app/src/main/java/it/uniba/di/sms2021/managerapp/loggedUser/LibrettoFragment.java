@@ -1,11 +1,10 @@
-package it.uniba.di.sms2021.managerapp;
+package it.uniba.di.sms2021.managerapp.loggedUser;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,12 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SignUpFragment#newInstance} factory method to
+ * Use the {@link LibrettoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignUpFragment extends Fragment {
+public class LibrettoFragment extends Fragment {
+
+    private static final String TAG = "SimpleToolbarTest";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,8 +34,9 @@ public class SignUpFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Activity activity;
 
-    public SignUpFragment() {
+    public LibrettoFragment() {
         // Required empty public constructor
     }
 
@@ -41,11 +46,11 @@ public class SignUpFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SignUpFragment.
+     * @return A new instance of fragment LibrettoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SignUpFragment newInstance(String param1, String param2) {
-        SignUpFragment fragment = new SignUpFragment();
+    public static LibrettoFragment newInstance(String param1, String param2) {
+        LibrettoFragment fragment = new LibrettoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -68,7 +73,7 @@ public class SignUpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false);
+        return inflater.inflate(R.layout.fragment_libretto, container, false);
     }
 
     @Override
@@ -85,65 +90,31 @@ public class SignUpFragment extends Fragment {
             return true;
         }
 
-        if (id == android.R.id.home) {
-            NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
-            Navigation.findNavController(getActivity(),R.id.fragment).navigate(action);
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
 
-        // Add Save Menu Item
-        int saveId = StudentActivity.SAVE_ITEM_ID;
-        if (menu.findItem(saveId) == null) {
+        // Add Filter Menu Item
+        int filterId = StudentActivity.FILTER_ITEM_ID;
+        if (menu.findItem(filterId) == null) {
             // If it not exists then add the menu item to menu
-            MenuItem save = menu.add(
+            MenuItem filter = menu.add(
                     Menu.NONE,
-                    saveId,
-                    1,
-                    getString(R.string.save)
-            );
-
-            // Set an icon for the new menu item
-            save.setIcon(R.drawable.ic_save);
-
-            // Set the show as action flags for new menu item
-            save.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            // Set a click listener for the new menu item
-            save.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
-
-        }
-
-        // Add Cancel Menu Item
-        int cancelId = StudentActivity.CANCEL_ITEM_ID;
-        if (menu.findItem(cancelId) == null) {
-            // If it not exists then add the menu item to menu
-            MenuItem cancel = menu.add(
-                    Menu.NONE,
-                    cancelId,
+                    filterId,
                     2,
-                    getString(R.string.cancel)
+                    getString(R.string.action_filter)
             );
 
             // Set an icon for the new menu item
-            cancel.setIcon(R.drawable.ic_edit_off);
+            filter.setIcon(R.drawable.ic_baseline_filter_alt_24);
 
             // Set the show as action flags for new menu item
-            cancel.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            filter.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
-            cancel.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            filter.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();

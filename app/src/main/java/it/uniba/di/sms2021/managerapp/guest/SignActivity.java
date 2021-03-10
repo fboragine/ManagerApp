@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp;
+package it.uniba.di.sms2021.managerapp.guest;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,12 +8,10 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,12 +20,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import entities.Studente;
+import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Studente;
 
 public class SignActivity extends AppCompatActivity{
 
@@ -106,7 +104,7 @@ public class SignActivity extends AppCompatActivity{
                 DocumentReference documentReference = collectionReference.document(mAuth.getCurrentUser().getUid());
                 documentReference.set(user);
 
-                //TODO entrare nella activity da loggato
+                // entrare nella activity da loggato
                 finish();
             }
         });

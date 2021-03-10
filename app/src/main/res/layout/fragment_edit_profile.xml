@@ -6,7 +6,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="60dp"
         android:layout_height="match_parent"
-        tools:context=".EditProfileFragment">
+        tools:context=".loggedUser.EditProfileFragment">
 
         <ScrollView
             android:id="@+id/ScrollViewID"

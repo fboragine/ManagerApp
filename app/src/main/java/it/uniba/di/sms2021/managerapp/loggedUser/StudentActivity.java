@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp;
+package it.uniba.di.sms2021.managerapp.loggedUser;
 
 import android.content.Intent;
 import android.os.Build;
@@ -19,19 +19,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Set;
 
-import entities.Docente;
-import entities.Progetto;
-import entities.Studente;
-import entities.Utente;
+import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
+import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Docente;
+import it.uniba.di.sms2021.managerapp.entities.Progetto;
+import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.entities.Utente;
 
 public class StudentActivity extends AppCompatActivity {
 
@@ -39,6 +38,7 @@ public class StudentActivity extends AppCompatActivity {
     protected static final int SAVE_ITEM_ID = View.generateViewId();
     protected static final int CANCEL_ITEM_ID = View.generateViewId();
     protected static final int LOGOUT_ITEM_ID = View.generateViewId();
+    protected static final int FILTER_ITEM_ID = View.generateViewId();
     protected static Utente loggedUser;
     protected static File loginFile;
     protected static Studente loggedStudent;

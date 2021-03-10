@@ -1,4 +1,4 @@
-package entities;
+package it.uniba.di.sms2021.managerapp.entities;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -6,9 +6,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.text.DateFormat;
-import java.util.Date;
 
 public class Progetto implements Parcelable {
 
