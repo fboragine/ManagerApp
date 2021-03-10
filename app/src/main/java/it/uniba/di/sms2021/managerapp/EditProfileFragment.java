@@ -163,7 +163,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     modificaFile();
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
                     NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
                     Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                     return true;
@@ -287,7 +286,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
              @Override
              public void onComplete(@NonNull Task<Void> task) {
                  if (task.isSuccessful()) {
-                     Log.d(TAG, "User email address updated.");
+                     Toast.makeText(getActivity().getApplicationContext(), R.string.email_changed, Toast.LENGTH_LONG).show();
                  }else
                  {
                      Toast.makeText(getActivity().getApplicationContext(), R.string.reauth_msg_email, Toast.LENGTH_LONG).show();
@@ -302,7 +301,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "User email address updated.");
+                        Toast.makeText(getActivity().getApplicationContext(), R.string.password_changed, Toast.LENGTH_LONG).show();
                     }else
                     {
                         Toast.makeText(getActivity().getApplicationContext(), R.string.weak_password, Toast.LENGTH_LONG).show();
@@ -320,13 +319,13 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "DocumentSnapshot successfully updated!");
+                Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
             }
         })
         .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error updating document", e);
+                Toast.makeText(getActivity().getApplicationContext(), R.string.error_save, Toast.LENGTH_SHORT).show();
             }
         });
     }
