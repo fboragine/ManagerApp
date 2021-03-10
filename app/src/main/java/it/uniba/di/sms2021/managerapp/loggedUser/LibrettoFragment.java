@@ -1,24 +1,21 @@
-package it.uniba.di.sms2021.managerapp;
+package it.uniba.di.sms2021.managerapp.loggedUser;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import javax.security.auth.callback.Callback;
+import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,36 +96,8 @@ public class LibrettoFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
 
-        // Add Search Menu Item
-        int searchId = GuestActivity.SEARCH_ITEM_ID;
-        if (menu.findItem(searchId) == null) {
-            // If it not exists then add the menu item to menu
-            MenuItem search = menu.add(
-                    Menu.NONE,
-                    searchId,
-                    1,
-                    getString(R.string.search)
-            );
-
-            // Set an icon for the new menu item
-            search.setIcon(R.drawable.ic_search);
-
-            // Set the show as action flags for new menu item
-            search.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            // Set a click listener for the new menu item
-            search.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
-
-        }
-
         // Add Filter Menu Item
-        int filterId = GuestActivity.FILTER_ITEM_ID;
+        int filterId = StudentActivity.FILTER_ITEM_ID;
         if (menu.findItem(filterId) == null) {
             // If it not exists then add the menu item to menu
             MenuItem filter = menu.add(

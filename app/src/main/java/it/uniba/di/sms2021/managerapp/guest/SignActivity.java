@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp;
+package it.uniba.di.sms2021.managerapp.guest;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -21,12 +24,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-import entities.Studente;
+import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Studente;
 
 public class SignActivity extends AppCompatActivity{
 
     private FirebaseAuth mAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,17 +67,17 @@ public class SignActivity extends AppCompatActivity{
 
     private void register() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
-        EditText mat = (EditText) findViewById(R.id.serial_number);
         EditText nome = (EditText) findViewById(R.id.name);
         EditText cognome = (EditText) findViewById(R.id.surname);
-        EditText email = (EditText) findViewById(R.id.email);
+        EditText matricola = (EditText) findViewById(R.id.serial_number);
         EditText cDs = (EditText) findViewById(R.id.course);
-
+        EditText email = (EditText) findViewById(R.id.email);
         EditText pw = (EditText) findViewById(R.id.password);
 
         Studente aux = new Studente("",
-                mat.getText().toString(),
+                matricola.getText().toString(),
                 nome.getText().toString(),
                 cognome.getText().toString(),
                 email.getText().toString(),
@@ -88,19 +91,22 @@ public class SignActivity extends AppCompatActivity{
         user.put("cDs",aux.getcDs());
         user.put("percorsoImg", "");
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.createUserWithEmailAndPassword(aux.getEmail(), pw.getText().toString());
-
-        user.put("id", mAuth.getUid());
-
-        //Getting Reference to "users" collection
-        //REMEMBER: at this point, no collection will be created
+        //Getting Reference to "studenti" collection
         CollectionReference collectionReference = db.collection("studenti");
 
-        //Getting reference to "new doc" document
-        //REMEMBER: at this point, no document will be created either
+        //crea l'autentication e inserisce l'utente nel firebase
 
-        DocumentReference documentReference = collectionReference.document(mAuth.getUid());
-        documentReference.set(user);
+        mAuth.createUserWithEmailAndPassword(email.getText().toString(), pw.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                user.put("id", mAuth.getCurrentUser().getUid());
+
+                DocumentReference documentReference = collectionReference.document(mAuth.getCurrentUser().getUid());
+                documentReference.set(user);
+
+                // entrare nella activity da loggato
+                finish();
+            }
+        });
     }
 }

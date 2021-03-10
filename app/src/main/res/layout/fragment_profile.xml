@@ -6,7 +6,7 @@
     android:layout_marginTop="?attr/actionBarSize"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".loggedUser.ProfileFragment">
 
     <ScrollView
         android:id="@+id/ScrollViewID"

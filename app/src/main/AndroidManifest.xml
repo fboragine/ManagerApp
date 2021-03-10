@@ -11,11 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ProjectDocumentsActivity"></activity>
-        <activity android:name=".ProjectActivity"></activity>
-        <activity android:name=".SignActivity" />
-        <activity android:name=".StudentActivity" />
-        <activity android:name=".GuestActivity">
+        <activity android:name=".project.ProjectDocumentsActivity"></activity>
+        <activity android:name=".project.ProjectActivity"></activity>
+        <activity android:name=".guest.SignActivity" />
+        <activity android:name=".loggedUser.StudentActivity" />
+        <activity android:name=".guest.GuestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

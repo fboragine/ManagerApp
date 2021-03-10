@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp;
+package it.uniba.di.sms2021.managerapp.guest;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,8 +28,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import entities.Docente;
-import entities.Studente;
+import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Docente;
+import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
