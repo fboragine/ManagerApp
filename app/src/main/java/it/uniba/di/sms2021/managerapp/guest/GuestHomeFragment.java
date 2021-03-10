@@ -38,15 +38,7 @@ public class GuestHomeFragment extends Fragment {
     private View viewGuestHome;
     private ListView listView;
     private ListViewAdapter adapter;
-    String[] title;
-    String[] description;
-    private  ArrayList<Model> arrayList = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
-    public GuestHomeFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,19 +71,18 @@ public class GuestHomeFragment extends Fragment {
 
                     //bind the adapter to the listview
                     listView.setAdapter(adapter);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            ExamListFragment examListFragment = new ExamListFragment();
+                            FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment, examListFragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        }
+                    });
                 }
-            }
-        });
-        //bind the adapter to the listview
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ExamListFragment examListFragment = new ExamListFragment();
-                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment, examListFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
             }
         });
 
