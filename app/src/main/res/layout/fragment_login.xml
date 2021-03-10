@@ -45,7 +45,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <RadioGroup
                     android:id="@+id/loginType"
                     android:layout_width="match_parent"
@@ -59,13 +58,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        android:text="Student" />
+                        android:text="Student"
+                        android:buttonTint="@color/blue_700" />
 
                     <RadioButton
                         android:id="@+id/radio_teacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Teacher" />
+                        android:text="Teacher"
+                        android:buttonTint="@color/blue_700" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -89,12 +90,12 @@
                     android:id="@+id/emailTxt"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:autofillHints="E-mail"
-                    android:hint="@string/e_mail"
-                    android:inputType="textEmailAddress"
                     android:paddingStart="20dp"
                     android:textSize="18sp"
-                    tools:ignore="RtlSymmetry" />
+                    tools:ignore="RtlSymmetry"
+                    android:autofillHints="E-mail"
+                    android:hint="@string/e_mail"
+                    android:inputType="textEmailAddress" />
             </LinearLayout>
 
             <LinearLayout
@@ -122,7 +123,8 @@
                     android:inputType="textPassword"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:backgroundTint="@color/blue_700" />
             </LinearLayout>
 
             <LinearLayout
@@ -142,8 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/login"
-                    android:background="@color/deep_orange_500"
-                    android:onClick="fakeLogin"/>
+                    android:background="@color/deep_orange_500" />
 
                 <Button
                     android:id="@+id/btn_reset_password"

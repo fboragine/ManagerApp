@@ -102,34 +102,6 @@ public class GuestHomeFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-
-        // Add Filter Menu Item
-        int filterId = GuestActivity.FILTER_ITEM_ID;
-        if (menu.findItem(filterId) == null) {
-            // If it not exists then add the menu item to menu
-            MenuItem filter = menu.add(
-                    Menu.NONE,
-                    filterId,
-                    2,
-                    getString(R.string.action_filter)
-            );
-
-            // Set an icon for the new menu item
-            filter.setIcon(R.drawable.ic_baseline_filter_alt_24);
-
-            // Set the show as action flags for new menu item
-            filter.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            // Set a click listener for the new menu item
-            filter.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
-        }
-
         super.onPrepareOptionsMenu(menu);
     }
 }
