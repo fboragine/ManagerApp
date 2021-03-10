@@ -157,21 +157,23 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (document.exists()) {
                         if(collectionPath.toString().matches("studenti")){
                             Studente risultato;
-                            risultato = new Studente((String) document.get("matricola"),
+                            risultato = new Studente(
+                                    (String) document.get("id"),
+                                    (String) document.get("matricola"),
                                     (String) document.get("nome"),
                                     (String) document.get("cognome"),
                                     (String) document.get("email"),
-                                    (String) document.get("cDs"),
-                                    (String) document.get("id"));
+                                    (String) document.get("cDs"));
                             salvaSessione((Object)risultato, collectionPath);
 
                         } else if(collectionPath.toString().matches("docenti")){
                             Docente risultato;
-                            risultato = new Docente((String) document.get("matricola"),
+                            risultato = new Docente(
+                                    (String) document.get("id"),
+                                    (String) document.get("matricola"),
                                     (String) document.get("nome"),
                                     (String) document.get("cognome"),
-                                    (String) document.get("email"),
-                                    (String) document.get("id"));
+                                    (String) document.get("email"));
                             salvaSessione((Object)risultato, collectionPath);
                         }
 

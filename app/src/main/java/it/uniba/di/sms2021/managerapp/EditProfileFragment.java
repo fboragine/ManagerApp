@@ -245,12 +245,12 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         if(StudentActivity.loginFile.getName().matches("studenti.srl")) {
 
-            StudentActivity.loggedStudent = new Studente(StudentActivity.loggedUser.getMatricola(),
+            StudentActivity.loggedStudent = new Studente(mAuth.getCurrentUser().getUid(),
+                                                         StudentActivity.loggedUser.getMatricola(),
                                                          StudentActivity.loggedUser.getNome(),
                                                          StudentActivity.loggedUser.getCognome(),
                                                          StudentActivity.loggedUser.getEmail(),
-                                                         course,
-                                                         mAuth.getCurrentUser().getUid());
+                                                         course);
 
             userModify.put("cDs",course);
 
@@ -262,11 +262,12 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         }else if(StudentActivity.loginFile.getName().matches("docenti.srl")) {
 
-            StudentActivity.loggedDocent = new Docente(StudentActivity.loggedUser.getMatricola(),
+            StudentActivity.loggedDocent = new Docente(
+                    mAuth.getCurrentUser().getUid(),
+                    StudentActivity.loggedUser.getMatricola(),
                     StudentActivity.loggedUser.getNome(),
                     StudentActivity.loggedUser.getCognome(),
-                    StudentActivity.loggedUser.getEmail(),
-                    mAuth.getCurrentUser().getUid());
+                    StudentActivity.loggedUser.getEmail());
 
             StudentActivity.loginFile.delete();
             saveFile("docenti.srl", StudentActivity.loggedDocent);
