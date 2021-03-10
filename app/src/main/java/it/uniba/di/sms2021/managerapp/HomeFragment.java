@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -39,6 +40,9 @@ public class HomeFragment extends Fragment {
     private RecyclerView.LayoutManager closedLayoutManager;
     private RecyclerView.Adapter inProgressAdapter;
     private RecyclerView.Adapter closedAdapter;
+
+    private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private View viewHome;
 
@@ -63,14 +67,37 @@ public class HomeFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {
+                    mAuth = FirebaseAuth.getInstance();
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Progetto progetto = new Progetto(document.getString("id"), document.getString("nome"), document.getString("descrizione"),
                                 document.getString("codiceEsame"), document.getString("dataCreazione"),
                                 (ArrayList<String>) document.get("idStudenti"), document.getBoolean("stato"));
+
+                        // sezione di assegnamento dei progetti chiusi
                         if(progetto.isClose()) {
-                            closedProject.add(progetto);
-                        } else {
-                            inProgressProject.add(progetto);
+                            ArrayList<String> idStudenti = progetto.getIdStudenti();
+                            int count = 0;
+                            boolean flag = false;
+
+                            do {
+                                if (idStudenti.get(count).equals(mAuth.getCurrentUser().getUid())) {
+                                    closedProject.add(progetto);
+                                    flag = true;
+                                }
+                                count++;
+                            }while(count < idStudenti.size() && !flag);
+                        } else { // sezione di assegnamento dei progetti aperti
+                            ArrayList<String> idStudenti = progetto.getIdStudenti();
+                            int count = 0;
+                            boolean flag = false;
+
+                            do {
+                                if (idStudenti.get(count).equals(mAuth.getCurrentUser().getUid())) {
+                                    inProgressProject.add(progetto);
+                                    flag = true;
+                                }
+                                count++;
+                            }while(count < idStudenti.size() && !flag);
                         }
 
                         inProgressRecyclerView = viewHome.findViewById(R.id.inProgressRecyclerView);
