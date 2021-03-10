@@ -49,4 +49,7 @@
     <string name="doc_not_found">User not found</string>
     <string name="reauth_msg_password">For another password change, you must logout and re-authenticate in Manager App</string>
     <string name="weak_password">Weak Password: Password should be at least 6 characters</string>
+    <string name="email_changed">Email address updated</string>
+    <string name="password_changed">Password updated</string>
+    <string name="error_save">Edit error! Something was wrong</string>
 </resources>
