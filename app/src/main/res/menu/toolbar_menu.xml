@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/action_search"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:title="@string/action_search"
         app:showAsAction="always"
         app:actionViewClass="android.widget.SearchView"/>

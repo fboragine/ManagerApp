@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 import it.uniba.di.sms2021.managerapp.service.ListViewAdapter;
 import it.uniba.di.sms2021.managerapp.service.Model;
 
@@ -120,5 +121,14 @@ public class ExamListFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
+    }
+
+    /**
+     * Changes the icon of the drawer to back
+     */
+    public void showBackButton() {
+        if (getActivity() instanceof GuestActivity) {
+            ((GuestActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 }
