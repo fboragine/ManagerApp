@@ -6,6 +6,8 @@ public class CorsoDiStudio {
     private String nome;
     private String descrizione;
 
+    public CorsoDiStudio() {}
+
     public CorsoDiStudio(String idCorsoDiStudio, String nome, String descrizione) {
         this.idCorsoDiStudio = idCorsoDiStudio;
         this.nome = nome;
