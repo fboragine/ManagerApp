@@ -5,51 +5,74 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.app.NavUtils;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
+import java.util.HashMap;
+import java.util.Map;
+
+import entities.Docente;
+import entities.Studente;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link EditProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditProfileFragment extends Fragment {
+public class EditProfileFragment extends Fragment implements View.OnClickListener{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    View vistaModifica;
+    EditText editName;
+    EditText editSurname;
+    EditText editMatricola;
+    EditText editEmail;
+    EditText editPassword;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    Button btnEdit;
 
-    public EditProfileFragment() {
-        // Required empty public constructor
-    }
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private String course;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static EditProfileFragment newInstance(String param1, String param2) {
         EditProfileFragment fragment = new EditProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,11 +80,10 @@ public class EditProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
+        if(StudentActivity.loginFile.getName().matches("studenti.srl")){
+            course = StudentActivity.loggedStudent.getcDs();
+        }
         setHasOptionsMenu(true);
     }
 
@@ -69,7 +91,30 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        vistaModifica = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+
+        editName = (EditText) vistaModifica.findViewById(R.id.name);
+        editName.setText(StudentActivity.loggedUser.getNome());
+
+        editSurname = (EditText) vistaModifica.findViewById(R.id.surname);
+        editSurname.setText(StudentActivity.loggedUser.getCognome());
+
+        editMatricola = (EditText) vistaModifica.findViewById(R.id.serial_number);
+        editMatricola.setText(StudentActivity.loggedUser.getMatricola());
+
+        editPassword = (EditText) vistaModifica.findViewById(R.id.pw_txt);
+
+
+        editEmail = (EditText) vistaModifica.findViewById(R.id.email_txt);
+        editEmail.setText(StudentActivity.loggedUser.getEmail());
+
+        btnEdit = (Button) vistaModifica.findViewById(R.id.btn_edit);
+        btnEdit.setOnClickListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        return vistaModifica;
     }
 
     @Override
@@ -117,7 +162,8 @@ public class EditProfileFragment extends Fragment {
             save.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                    modificaFile();
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
                     NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
                     Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                     return true;
@@ -147,7 +193,7 @@ public class EditProfileFragment extends Fragment {
             cancel.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.undone_save, Toast.LENGTH_SHORT).show();
                     NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
                     Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                     return true;
@@ -156,5 +202,141 @@ public class EditProfileFragment extends Fragment {
         }
 
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void saveFile(String FILE_NAME, Object oggetto) {
+
+        ObjectOutput out = null;
+
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(new File(getContext().getExternalFilesDir(null), FILE_NAME)));
+            out.writeObject(oggetto);
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void modificaFile() {
+
+        StudentActivity.loggedUser.setNome(editName.getText().toString());
+        StudentActivity.loggedUser.setCognome(editSurname.getText().toString());
+        StudentActivity.loggedUser.setMatricola(editMatricola.getText().toString());
+
+        if( !StudentActivity.loggedUser.getEmail().matches(editEmail.getText().toString()) ) {
+            modificaAuth(true,editEmail.getText().toString(), StudentActivity.loggedUser.getEmail());
+            StudentActivity.loggedUser.setEmail(editEmail.getText().toString());
+
+        }
+        if( !editPassword.getText().toString().matches("") ) {
+            modificaAuth(false, editPassword.getText().toString(),null);
+        }
+
+        Map<String ,Object> userModify = new HashMap<>();
+
+        userModify.put("cognome",StudentActivity.loggedUser.getCognome());
+        userModify.put("email",StudentActivity.loggedUser.getEmail());
+        userModify.put("id",mAuth.getCurrentUser().getUid());
+        userModify.put("matricola",StudentActivity.loggedUser.getMatricola());
+        userModify.put("nome",StudentActivity.loggedUser.getNome());
+        userModify.put("percorsoImg", "");
+
+        if(StudentActivity.loginFile.getName().matches("studenti.srl")) {
+
+            StudentActivity.loggedStudent = new Studente(StudentActivity.loggedUser.getMatricola(),
+                                                         StudentActivity.loggedUser.getNome(),
+                                                         StudentActivity.loggedUser.getCognome(),
+                                                         StudentActivity.loggedUser.getEmail(),
+                                                         course,
+                                                         mAuth.getCurrentUser().getUid());
+
+            userModify.put("cDs",course);
+
+            StudentActivity.loginFile.delete();
+            saveFile("studenti.srl", StudentActivity.loggedStudent);
+
+            DocumentReference docUpdate = db.collection("studenti").document(StudentActivity.loggedUser.getId());
+            modifyFirebase(docUpdate, userModify);
+
+        }else if(StudentActivity.loginFile.getName().matches("docenti.srl")) {
+
+            StudentActivity.loggedDocent = new Docente(StudentActivity.loggedUser.getMatricola(),
+                    StudentActivity.loggedUser.getNome(),
+                    StudentActivity.loggedUser.getCognome(),
+                    StudentActivity.loggedUser.getEmail(),
+                    mAuth.getCurrentUser().getUid());
+
+            StudentActivity.loginFile.delete();
+            saveFile("docenti.srl", StudentActivity.loggedDocent);
+
+            DocumentReference docUpdate = db.collection("docenti").document(mAuth.getCurrentUser().getUid());
+            modifyFirebase(docUpdate, userModify);
+        }
+
+    }
+
+    private void modificaAuth( boolean flag, String replace, String originalMail) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(flag) {   //Modifica l'email
+            user.updateEmail(replace)
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+             @Override
+             public void onComplete(@NonNull Task<Void> task) {
+                 if (task.isSuccessful()) {
+                     Log.d(TAG, "User email address updated.");
+                 }else
+                 {
+                     Toast.makeText(getActivity().getApplicationContext(), R.string.reauth_msg_email, Toast.LENGTH_LONG).show();
+                     StudentActivity.loggedUser.setEmail(originalMail);
+                 }
+             }
+            });
+
+        }else {
+            user.updatePassword(replace)
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "User email address updated.");
+                    }else
+                    {
+                        Toast.makeText(getActivity().getApplicationContext(), R.string.weak_password, Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+        }
+    }
+
+    private void modifyFirebase(DocumentReference docUpdate, Map<String, Object> userModify) {
+
+        docUpdate
+        .update(userModify)
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "DocumentSnapshot successfully updated!");
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error updating document", e);
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btn_edit){
+            modificaFile();
+            Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
+            NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
+            Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+        }
     }
 }

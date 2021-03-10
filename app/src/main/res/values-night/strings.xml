@@ -31,7 +31,7 @@
     <string name="edit_image">Edit Image</string>
     <string name="in_progress">In Progress</string>
     <string name="closed">Closed</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Logout successful</string>
     <string name="serial_number">705624</string>
     <string name="description">Description</string>
     <string name="search_a_course">Search a Course</string>

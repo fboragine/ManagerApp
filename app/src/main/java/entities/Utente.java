@@ -11,9 +11,8 @@ public abstract class Utente  implements Serializable {
     private String cognome;
     private String email;
 
-    public Utente() {
+    public Utente() {}
 
-    }
     public Utente(String id, String matricola, String nome, String cognome, String email) {
         this.id = id;
         this.matricola = matricola;

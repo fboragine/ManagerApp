@@ -1,5 +1,11 @@
 package it.uniba.di.sms2021.managerapp;
 
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -8,21 +14,16 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Set;
@@ -31,8 +32,6 @@ import entities.Docente;
 import entities.Progetto;
 import entities.Studente;
 import entities.Utente;
-
-import static android.content.ContentValues.TAG;
 
 public class StudentActivity extends AppCompatActivity {
 
@@ -77,19 +76,14 @@ public class StudentActivity extends AppCompatActivity {
             if(loginFile.exists()) {
                 readFile("docenti.srl");
             }else {
-                Intent intent = new Intent(getApplicationContext(), GuestActivity.class);;
+                Intent intent = new Intent(getApplicationContext(), GuestActivity.class);
                 startActivity(intent);
                 finish();
             }
         }
-
-       /* Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra("MyClass", obj);*/
-
     }
 
-    public void readFile(String filename){
+    protected void readFile(String filename){
         ObjectInputStream input;
 
         try {
@@ -102,6 +96,8 @@ public class StudentActivity extends AppCompatActivity {
             }else if(filename.toString().matches("docenti.srl")) {
                 loggedUser = new Docente();
                 loggedUser = (Docente) input.readObject();
+
+                loggedDocent = (Docente) loggedUser;
             }
             input.close();
             Toast.makeText(getApplicationContext(), String.format("%s %s %s", getString(R.string.welcome_msg), loggedUser.getNome(), loggedUser.getCognome()),Toast.LENGTH_LONG).show();
@@ -117,9 +113,4 @@ public class StudentActivity extends AppCompatActivity {
 
     }
 
-    public void logout(){
-        FirebaseAuth.getInstance().signOut();
-        Toast.makeText(StudentActivity.this,R.string.logout, Toast.LENGTH_SHORT).show();
-        //Richiama l'activity ospite.
-    }
 }

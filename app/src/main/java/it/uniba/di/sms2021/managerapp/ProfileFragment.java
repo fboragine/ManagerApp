@@ -16,9 +16,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,11 +33,10 @@ import entities.Studente;
 
 public class ProfileFragment extends Fragment {
 
+    private View vistaProfilo;
     private GuestActivity callback;
-    private FirebaseDatabase db;
-    private DatabaseReference userRef;
 
-    private static final String TAG = "SimpleToolbarTest";
+    TextView label;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -46,44 +47,39 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-
-        Log.d(TAG, "Profilo");
-
-        Intent intent = getActivity().getIntent();
-        String matricola = intent.getStringExtra("matricola");
-
-        TextView fullname = getActivity().findViewById(R.id.full_name);
-        TextView email = getActivity().findViewById(R.id.profile_email);
-
-        db = FirebaseDatabase.getInstance();
-        userRef = db.getReference("Studenti");
-
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Log.d(TAG, "Arrivoooooo");
-                    if(ds.child("Matricola").equals("1")) {
-                        fullname.setText(ds.child("Nome" + " " + "Cognome").getValue(String.class));
-                        email.setText(ds.child("Email").getValue(String.class));
-                        Log.d(TAG, "Risultatooooooo");
-                        Log.d(TAG, fullname.toString());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        label = (TextView) vistaProfilo.findViewById(R.id.name);
+        label.setText(StudentActivity.loggedUser.getNome());
+
+        label = (TextView) vistaProfilo.findViewById(R.id.surname);
+        label.setText(StudentActivity.loggedUser.getCognome());
+
+        label = (TextView) vistaProfilo.findViewById(R.id.serial_number);
+        label.setText(StudentActivity.loggedUser.getMatricola());
+
+        label = (TextView) vistaProfilo.findViewById(R.id.profile_email);
+        label.setText(StudentActivity.loggedUser.getEmail());
+
+        if(StudentActivity.loginFile.getName().matches("studenti.srl")){
+            vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.VISIBLE);
+            vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.VISIBLE);
+
+            label = (TextView) vistaProfilo.findViewById(R.id.profile_course);
+            label.setText(StudentActivity.loggedStudent.getcDs());
+        }else {
+
+            vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.INVISIBLE);
+            vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.INVISIBLE);
+
+        }
+        return vistaProfilo;
     }
 
     @Override
@@ -129,7 +125,6 @@ public class ProfileFragment extends Fragment {
             edit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
                     NavDirections action = ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment();
                     Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                     return true;
@@ -158,7 +153,7 @@ public class ProfileFragment extends Fragment {
             logout.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                    logout();
                     Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
                     startActivity(intent);
                     getActivity().finish();
@@ -168,5 +163,11 @@ public class ProfileFragment extends Fragment {
         }
 
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void logout(){
+        FirebaseAuth.getInstance().signOut();
+        StudentActivity.loginFile.delete();
+        Toast.makeText(getContext(),R.string.logout, Toast.LENGTH_SHORT).show();
     }
 }
