@@ -14,22 +14,25 @@ import java.util.List;
 import java.util.Locale;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
+
+import static java.util.Collections.addAll;
 
 public class ListViewAdapter extends BaseAdapter {
 
     //variables
     Context mContext;
     LayoutInflater inflater;
-    List<Model> modellist;
-    ArrayList<Model> arrayList;
+    ArrayList<CorsoDiStudio> corsiDiStudio;
+    ArrayList<CorsoDiStudio> corsiDiStudioRicerca;
 
     //constructor
-    public ListViewAdapter(Context context, List<Model> modellist) {
+    public ListViewAdapter(Context context, ArrayList<CorsoDiStudio> corsiDiStudio) {
         mContext = context;
-        this.modellist = modellist;
+        this.corsiDiStudio = corsiDiStudio;
         inflater = LayoutInflater.from(mContext);
-        this.arrayList = new ArrayList<>();
-        this.arrayList.addAll(modellist);
+        corsiDiStudioRicerca = new ArrayList<>();
+        this.corsiDiStudioRicerca.addAll(this.corsiDiStudio);
     }
 
     public static class ViewHolder{
@@ -38,12 +41,12 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return modellist.size();
+        return corsiDiStudio.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return modellist.get(i);
+        return corsiDiStudio.get(i);
     }
 
     @Override
@@ -68,23 +71,23 @@ public class ListViewAdapter extends BaseAdapter {
             holder = (ViewHolder)view.getTag();
         }
         //set the results into textviews
-        holder.mTitleTv.setText(modellist.get(position).getTitle());
-        holder.mDescTv.setText(modellist.get(position).getDesc());
+        holder.mTitleTv.setText(corsiDiStudio.get(position).getNome());
+        holder.mDescTv.setText(corsiDiStudio.get(position).getDescrizione());
 
         return view;
     }
 
     public void filter(String charText){
         charText = charText.toLowerCase(Locale.getDefault());
-        modellist.clear();
+        corsiDiStudio.clear();
         if (charText.length() == 0) {
-            modellist.addAll(arrayList);
+            corsiDiStudio.addAll(corsiDiStudioRicerca);
         }
         else {
-            for (Model model : arrayList) {
-                if (model.getTitle().toLowerCase(Locale.getDefault())
+            for (CorsoDiStudio corsi : corsiDiStudioRicerca) {
+                if (corsi.getNome().toLowerCase(Locale.getDefault())
                     .contains(charText)) {
-                    modellist.add(model);
+                    corsiDiStudio.add(corsi);
                 }
             }
         }

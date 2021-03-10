@@ -39,7 +39,7 @@ public class ProjectActivity extends AppCompatActivity {
     private TextView textViewNome;
     private TextView textDescEsame;
     private ListView listViewStudenti;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
