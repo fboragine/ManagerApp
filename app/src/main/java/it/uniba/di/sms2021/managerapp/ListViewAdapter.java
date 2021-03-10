@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentTransaction;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -67,13 +69,6 @@ public class ListViewAdapter extends BaseAdapter {
         holder.mTitleTv.setText(modellist.get(position).getTitle());
         holder.mDescTv.setText(modellist.get(position).getDesc());
 
-        //listview item clicks
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //code later
-            }
-        });
         return view;
     }
 

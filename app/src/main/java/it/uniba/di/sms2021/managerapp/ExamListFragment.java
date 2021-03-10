@@ -20,17 +20,17 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class GuestHomeFragment extends Fragment {
+public class ExamListFragment extends Fragment {
 
-    View viewGuestHome;
+
+    View viewExamList;
     ListView listView;
     ListViewAdapter adapter;
     String[] title;
     String[] description;
     ArrayList<Model> arrayList = new ArrayList<>();
 
-
-    public GuestHomeFragment() {
+    public ExamListFragment() {
         // Required empty public constructor
     }
 
@@ -41,12 +41,13 @@ public class GuestHomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        viewGuestHome = inflater.inflate(R.layout.fragment_guest_home, container, false);
-        title = new String[]{"Informatica", "Lingue", "Medicina", "Matematica", "Lettere", "Informatica", "Lingue", "Medicina", "Matematica", "Lettere"};
-        description = new String[]{"Informatica description", "Lingue description", "Medicina description", "Matematica description", "Lettere description", "Informatica description", "Lingue description", "Medicina description", "Matematica description", "Lettere description"};
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        viewExamList = inflater.inflate(R.layout.fragment_guest_home, container, false);
+        title = new String[]{"Analisi", "Laboratorio", "Mobile", "Modelli", "Discreta", "Programmazione I", "Programmazione II", "Linguaggi"};
+        description = new String[]{"Analisi description", "Laboratorio description", "Mobile description", "Modelli description", "Discreta description", "Programmazione I description", "Programmazione II description", "Linguaggi description"};
 
-        listView = viewGuestHome.findViewById(R.id.listView);
+        listView = viewExamList.findViewById(R.id.listView);
 
         for (int i = 0; i<title.length; i++) {
             Model model = new Model(title[i], description[i]);
@@ -71,7 +72,7 @@ public class GuestHomeFragment extends Fragment {
         });
 
         // Inflate the layout for this fragment
-        return viewGuestHome;
+        return viewExamList;
     }
 
     @Override
