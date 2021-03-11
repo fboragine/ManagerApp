@@ -156,11 +156,12 @@ public class ExamActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    public void go_to_documents(View view) {
-        Intent intent = new Intent(getApplicationContext(), ProjectDocumentsActivity.class);
-        intent.putExtra("progetto",progetto);
-        startActivity(intent);
     }*/
+
+    public void go_to_projects(View view) {
+
+        Intent intent = new Intent(getApplicationContext(), ExamProjectActivity.class);
+        intent.putExtra("esame",esame);
+        startActivity(intent);
+    }
 }

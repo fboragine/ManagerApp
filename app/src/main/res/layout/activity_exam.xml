@@ -105,7 +105,7 @@
                     android:drawablePadding="10dp"
                     android:layout_centerInParent="true"
                     android:backgroundTint="@color/deep_orange_500"
-                    android:onClick="go_to_documents"/>
+                    android:onClick="go_to_projects"/>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
