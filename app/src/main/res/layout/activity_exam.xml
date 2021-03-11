@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".project.ExamActivity">
+    tools:context=".exam.ExamActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_toolbar"
@@ -50,7 +50,7 @@
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/bungee"
                     android:includeFontPadding="false"
-                    android:text="Progetto 1"
+                    android:text="@string/exam_name"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
@@ -84,14 +84,13 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:contentDescription="@string/students"
+                    android:contentDescription="@string/teachers"
                     android:src="@drawable/ic_people" />
 
                 <ListView
                     android:id="@+id/exam_teachers"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </ListView>
+                    android:layout_height="match_parent"></ListView>
             </LinearLayout>
 
             <RelativeLayout
@@ -101,7 +100,7 @@
                     android:id="@+id/project_files"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DOCUMENTS"
+                    android:text="PROJECTS"
                     android:drawableLeft="@drawable/ic_folder"
                     android:drawablePadding="10dp"
                     android:layout_centerInParent="true"
