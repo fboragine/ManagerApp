@@ -49,19 +49,19 @@ public class ExamActivity extends AppCompatActivity {
 
         final Intent src = getIntent();
         if(src != null) {
-            progetto = src.getParcelableExtra("progetto");
+            esame = src.getParcelableExtra("esame");
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
-        getSupportActionBar().setTitle(progetto.getNome());
+        getSupportActionBar().setTitle(esame.getNome());
 
         textViewNome = findViewById(R.id.project_name);
-        textViewNome.setText(progetto.getNome());
+        textViewNome.setText(esame.getNome());
 
         textDescEsame = findViewById(R.id.project_description);
-        textDescEsame.setText(progetto.getDescrizione());
+        textDescEsame.setText(esame.getDescrizione());
 
         getDisplayName();
         getEsame();
