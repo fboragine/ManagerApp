@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
+import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 import it.uniba.di.sms2021.managerapp.guest.SignActivity;
 import it.uniba.di.sms2021.managerapp.exam.ExamActivity;
 import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
@@ -64,6 +65,8 @@ public class ExamListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         viewExamList = inflater.inflate(R.layout.fragment_guest_home, container, false);
+
+        ((GuestActivity)getActivity()).enableBackArrow();
 
         db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

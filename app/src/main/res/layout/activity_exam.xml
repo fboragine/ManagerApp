@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".project.ExamActivity">
+    tools:context=".exam.ExamActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_toolbar"
@@ -44,19 +44,19 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/project_name"
+                    android:id="@+id/exam_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/bungee"
                     android:includeFontPadding="false"
-                    android:text="Progetto 1"
+                    android:text="@string/exam_name"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/project_description"
+                android:id="@+id/exam_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -64,31 +64,6 @@
                 android:paddingEnd="20dp"
                 android:text="@string/lorem"
                 android:textSize="18sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:paddingStart="55dp"
-                android:paddingEnd="10dp"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:contentDescription="@string/exam"
-                    android:src="@drawable/ic_baseline_collections_bookmark_24" />
-
-                <TextView
-                    android:id="@+id/project_exam"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:text="@string/informatica"
-                    android:textSize="18sp" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,14 +75,13 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:contentDescription="@string/students"
+                    android:contentDescription="@string/teachers"
                     android:src="@drawable/ic_people" />
 
                 <ListView
-                    android:id="@+id/project_students"
+                    android:id="@+id/teachers_list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </ListView>
+                    android:layout_height="match_parent"></ListView>
             </LinearLayout>
 
             <RelativeLayout
@@ -117,7 +91,7 @@
                     android:id="@+id/project_files"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DOCUMENTS"
+                    android:text="PROJECTS"
                     android:drawableLeft="@drawable/ic_folder"
                     android:drawablePadding="10dp"
                     android:layout_centerInParent="true"
