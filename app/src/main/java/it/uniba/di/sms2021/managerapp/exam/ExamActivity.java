@@ -53,17 +53,18 @@ public class ExamActivity extends AppCompatActivity {
             esame = src.getParcelableExtra("esame");
         }
 
-
-        Log.d("NOME", esame.getNome());
-        Log.d("NOME", esame.getId());
-        Log.d("OOOOOOOOOOOOOOO", esame.getCommento());
-        //Log.d("EEEEEEEEEEEEEEEEE", esame.getDescrizione());
-        Log.d("IIIIIIIIIIIIIIII", "" + esame.getIdDocenti().size());
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setTitle(esame.getNome());
+
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         textViewNome = findViewById(R.id.exam_name);
         textViewNome.setText(esame.getNome());
@@ -99,7 +100,6 @@ public class ExamActivity extends AppCompatActivity {
         ArrayList<String> idDocentiPart = new ArrayList<>();
                idDocentiPart.addAll(esame.getIdDocenti());
 
-        Log.d("PPPPPPPPPPPPPPPP", esame.getIdDocenti().get(0));
         ArrayList<Docente> docenti = new ArrayList<>();
         ArrayList<String> displayNameDocenti = new ArrayList<>();
 
