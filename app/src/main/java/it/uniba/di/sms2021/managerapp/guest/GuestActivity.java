@@ -3,11 +3,14 @@ package it.uniba.di.sms2021.managerapp.guest;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
+import it.uniba.di.sms2021.managerapp.loggedUser.ExamListFragment;
 import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
 
 public class GuestActivity extends AppCompatActivity {
@@ -43,6 +47,14 @@ public class GuestActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             toolbar.setLogo(R.mipmap.ic_launcher);
             toolbar.setTitle("Home");
+            toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
+
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goBackFragment(view, 0);
+                }
+            });
 
             BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
             NavController navController = Navigation.findNavController(findViewById(R.id.fragment));
@@ -67,5 +79,22 @@ public class GuestActivity extends AppCompatActivity {
         intent.putParcelableArrayListExtra("progetti", progetti);
         startActivity(intent);
         finish();
+    }
+
+    public void goBackFragment(View view, int position){
+        Fragment fragment;
+        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
+        switch(position) {
+            default:
+            case 0:
+                fragment = new GuestHomeFragment();
+                break;
+            case 1:
+                fragment = new ExamListFragment();
+                break;
+        }
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment, fragment)
+                .commit();
     }
 }
