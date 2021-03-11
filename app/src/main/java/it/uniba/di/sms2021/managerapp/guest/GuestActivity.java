@@ -35,8 +35,6 @@ public class GuestActivity extends AppCompatActivity {
     protected static final int SAVE_ITEM_ID = View.generateViewId();
     protected static final int CANCEL_ITEM_ID = View.generateViewId();
 
-    private static final String TAG_FRAGMENT = "TAG_FRAGMENT";
-
     private ArrayList<Progetto> progetti;
 
     private Toolbar toolbar;
@@ -106,9 +104,5 @@ public class GuestActivity extends AppCompatActivity {
                 goBackFragment();
             }
         });
-    }
-
-    public Toolbar getToolbar() {
-        return toolbar;
     }
 }
