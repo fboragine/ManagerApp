@@ -1,9 +1,11 @@
 package it.uniba.di.sms2021.managerapp.loggedUser;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -28,6 +31,8 @@ import java.util.ArrayList;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
+import it.uniba.di.sms2021.managerapp.guest.SignActivity;
+import it.uniba.di.sms2021.managerapp.exam.ExamActivity;
 import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
 import it.uniba.di.sms2021.managerapp.service.ListViewAdapter;
 import it.uniba.di.sms2021.managerapp.service.Model;
@@ -89,6 +94,15 @@ public class ExamListFragment extends Fragment {
                     adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
                     //bind the adapter to the listview
                     listView.setAdapter(adapterEsami);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            //passa dati
+                            Intent intent = new Intent(getActivity().getApplicationContext(), ExamActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                 }
             }
         });

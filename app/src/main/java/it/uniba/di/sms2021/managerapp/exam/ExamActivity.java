@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.project;
+package it.uniba.di.sms2021.managerapp.exam;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +30,7 @@ import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 
 public class ExamActivity extends AppCompatActivity {
-
+/*
     protected static final int EDIT_ITEM_ID = View.generateViewId();
     protected static final int SAVE_ITEM_ID = View.generateViewId();
     protected static final int CANCEL_ITEM_ID = View.generateViewId();
@@ -151,5 +151,5 @@ public class ExamActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), ProjectDocumentsActivity.class);
         intent.putExtra("progetto",progetto);
         startActivity(intent);
-    }
+    }*/
 }
