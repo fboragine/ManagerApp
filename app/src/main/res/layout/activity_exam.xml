@@ -67,6 +67,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:paddingStart="55dp"
+                android:paddingEnd="10dp"
+                app:layout_constraintTop_toTopOf="parent">
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginTop="10dp"
                 android:paddingStart="55dp"
@@ -79,7 +88,7 @@
                     android:src="@drawable/ic_people" />
 
                 <ListView
-                    android:id="@+id/teachers_list"
+                    android:id="@+id/exam_teachers"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"></ListView>
             </LinearLayout>

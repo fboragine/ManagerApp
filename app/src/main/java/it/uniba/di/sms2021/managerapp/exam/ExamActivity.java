@@ -25,12 +25,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 
 public class ExamActivity extends AppCompatActivity {
-/*
+
     protected static final int EDIT_ITEM_ID = View.generateViewId();
     protected static final int SAVE_ITEM_ID = View.generateViewId();
     protected static final int CANCEL_ITEM_ID = View.generateViewId();
@@ -49,22 +50,29 @@ public class ExamActivity extends AppCompatActivity {
 
         final Intent src = getIntent();
         if(src != null) {
-            progetto = src.getParcelableExtra("progetto");
+            esame = src.getParcelableExtra("esame");
         }
+
+
+        Log.d("NOME", esame.getNome());
+        Log.d("NOME", esame.getId());
+        Log.d("OOOOOOOOOOOOOOO", esame.getCommento());
+        //Log.d("EEEEEEEEEEEEEEEEE", esame.getDescrizione());
+        Log.d("IIIIIIIIIIIIIIII", "" + esame.getIdDocenti().size());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
-        getSupportActionBar().setTitle(progetto.getNome());
+        getSupportActionBar().setTitle(esame.getNome());
 
-        textViewNome = findViewById(R.id.project_name);
-        textViewNome.setText(progetto.getNome());
+        textViewNome = findViewById(R.id.exam_name);
+        textViewNome.setText(esame.getNome());
 
-        textDescEsame = findViewById(R.id.project_description);
-        textDescEsame.setText(progetto.getDescrizione());
+        textDescEsame = findViewById(R.id.exam_description);
+        textDescEsame.setText(esame.getDescrizione());
 
         getDisplayName();
-        getEsame();
+        //getEsame();
     }
 
     @Override
@@ -88,11 +96,14 @@ public class ExamActivity extends AppCompatActivity {
     }
 
     public void getDisplayName() {
-        ArrayList<String> idStudentiPart = progetto.getIdStudenti();
-        ArrayList<Studente> studenti = new ArrayList<Studente>();
-        ArrayList<String> displayNameStudenti = new ArrayList<String>();
+        ArrayList<String> idDocentiPart = new ArrayList<>();
+               idDocentiPart.addAll(esame.getIdDocenti());
 
-        db.collection("studenti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Log.d("PPPPPPPPPPPPPPPP", esame.getIdDocenti().get(0));
+        ArrayList<Docente> docenti = new ArrayList<>();
+        ArrayList<String> displayNameDocenti = new ArrayList<>();
+
+        db.collection("docenti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {
@@ -102,30 +113,30 @@ public class ExamActivity extends AppCompatActivity {
 
                         do {
                             flag = false;
-                            if(idStudentiPart.get(count).equals(document.getString("id"))) {
-                                Studente studente = new Studente(document.getString("id"),
+
+                            if(idDocentiPart.get(count).equals(document.getString("id"))) {
+                                Docente docente = new Docente(document.getString("id"),
                                         document.getString("matricola"),
                                         document.getString("nome"),
                                         document.getString("cognome"),
-                                        document.getString("email"),
-                                        document.getString("cDs"));
-                                studenti.add(studente);
+                                        document.getString("email"));
+                                docenti.add(docente);
 
-                                displayNameStudenti.add(studente.getNome() + " " + studente.getCognome());
+                                    displayNameDocenti.add(docente.getNome() + " " + docente.getCognome());
                             }
                             count ++;
-                        }while(!flag  && count < idStudentiPart.size());
+                        }while(!flag  && count < idDocentiPart.size());
                     }
 
-                    listViewStudenti = findViewById(R.id.project_students);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, displayNameStudenti);
-                    listViewStudenti.setAdapter(adapter);
+                    listViewEsami = findViewById(R.id.exam_teachers);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, displayNameDocenti);
+                    listViewEsami.setAdapter(adapter);
                 }
             }
         });
     }
 
-    private void getEsame() {
+    /*private void getEsame() {
 
         db.collection("esami").document(progetto.getCodiceEsame()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
