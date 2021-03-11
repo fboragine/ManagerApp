@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.entities;
+package it.uniba.di.sms2021.managerapp.segreteria;
 
 public class Segreteria {
 
