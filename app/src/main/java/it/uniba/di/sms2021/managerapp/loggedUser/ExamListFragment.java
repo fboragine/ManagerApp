@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp.loggedUser;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -33,6 +34,7 @@ import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.guest.SignActivity;
 import it.uniba.di.sms2021.managerapp.exam.ExamActivity;
+import it.uniba.di.sms2021.managerapp.project.ProjectActivity;
 import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
 import it.uniba.di.sms2021.managerapp.service.ListViewAdapter;
 import it.uniba.di.sms2021.managerapp.service.Model;
@@ -44,13 +46,14 @@ public class ExamListFragment extends Fragment {
     private ListView listView;
     private ExamListAdapter adapterEsami;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ArrayList<String> idEsami = new ArrayList<>();
+    private String idCdS;
     private ArrayList<Esame> esami = new ArrayList<>();
+    private Context context;
 
     public ExamListFragment() {}
 
-    public ExamListFragment(ArrayList<String> idEsami) {
-        this.idEsami = idEsami;
+    public ExamListFragment(String idCdS) {
+        this.idCdS = idCdS;
     }
 
     @Override
@@ -68,26 +71,19 @@ public class ExamListFragment extends Fragment {
         db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                context = getActivity().getApplicationContext();
                 if(task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        boolean flag;
-                        int count = 0;
-
-                        do {
-                            flag = false;
-                            if(idEsami.get(count).equals(document.getString("id"))) {
-                                Esame esame = new Esame(document.getString("id"),
-                                        document.getString("nome"),
-                                        document.getString("cDs"),
-                                        document.getString("dataEsame"),
-                                        (ArrayList<String>) document.get("idDocenti"));
-                                esami.add(esame);
-                            }
-                            count ++;
-                        }while(!flag  && count < idEsami.size());
+                        if(idCdS.equals(document.getString("cDs"))) {
+                            Esame esame = new Esame(document.getString("id"),
+                                    document.getString("nome"),
+                                    document.getString("commento"),
+                                    document.getString("desrizione"),
+                                    document.getString("cDs"),
+                                    (ArrayList<String>) document.get("idDocenti"));
+                            esami.add(esame);
+                        }
                     }
-
-
 
                     listView = viewExamList.findViewById(R.id.listView);
                     //pass results to listViewAdapter class
@@ -98,8 +94,8 @@ public class ExamListFragment extends Fragment {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            //passa dati
                             Intent intent = new Intent(getActivity().getApplicationContext(), ExamActivity.class);
+                            intent.putExtra("esame",esami.get(i));
                             startActivity(intent);
                         }
                     });

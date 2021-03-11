@@ -75,7 +75,7 @@ public class GuestHomeFragment extends Fragment {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            ExamListFragment examListFragment = new ExamListFragment(corsiDiStudio.get(i).getIdEsami());
+                            ExamListFragment examListFragment = new ExamListFragment(corsiDiStudio.get(i).getIdCorsoDiStudio());
                             FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                             fragmentTransaction.replace(R.id.fragment, examListFragment);
                             fragmentTransaction.addToBackStack(null);

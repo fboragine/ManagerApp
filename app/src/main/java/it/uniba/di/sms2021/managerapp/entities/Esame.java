@@ -1,24 +1,49 @@
 package it.uniba.di.sms2021.managerapp.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Esame {
+public class Esame implements Parcelable {
 
     private String id;
     private String nome;
     private String commento;
+    private String descrizione;
     private String cDs;
-    private String dataEsame;
     private ArrayList<String> idDocenti;
 
-    public Esame(String id, String nome, String cDs, String dataEsame, ArrayList<String> idDocenti) {
+    public Esame(String id, String nome, String commento, String descrizione, String cDs, ArrayList<String> idDocenti) {
         this.id = id;
         this.nome = nome;
+        this.commento = commento;
+        this.descrizione = descrizione;
         this.cDs = cDs;
-        this.dataEsame = dataEsame;
         this.idDocenti = idDocenti;
     }
+
+    protected Esame(Parcel in) {
+        id = in.readString();
+        nome = in.readString();
+        commento = in.readString();
+        descrizione = in.readString();
+        cDs = in.readString();
+        idDocenti = in.createStringArrayList();
+    }
+
+    public static final Creator<Esame> CREATOR = new Creator<Esame>() {
+        @Override
+        public Esame createFromParcel(Parcel in) {
+            return new Esame(in);
+        }
+
+        @Override
+        public Esame[] newArray(int size) {
+            return new Esame[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -44,6 +69,14 @@ public class Esame {
         this.commento = commento;
     }
 
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
     public String getcDs() {
         return cDs;
     }
@@ -52,11 +85,28 @@ public class Esame {
         this.cDs = cDs;
     }
 
-    public String getDataEsame() {
-        return dataEsame;
+    public ArrayList<String> getIdDocenti() {
+        return idDocenti;
     }
 
-    public void setDataEsame(String dataEsame) {
-        this.dataEsame = dataEsame;
+    public void setIdDocenti(ArrayList<String> idDocenti) {
+        this.idDocenti = idDocenti;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(id);
+        dest.writeString(nome);
+        dest.writeString(commento);
+        dest.writeString(descrizione);
+        dest.writeString(cDs);
+        dest.writeStringList(idDocenti);
     }
 }
