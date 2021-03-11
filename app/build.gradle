@@ -6,6 +6,14 @@ plugins {
 apply plugin: "androidx.navigation.safeargs"
 
 android {
+    signingConfigs {
+        SegreteriaSigningConfig {
+            storeFile file('C:\\Users\\fishe\\mykeystore\\ManagerAppKey.jks')
+            storePassword 'pippo123'
+            keyAlias 'ManagerAppKey'
+            keyPassword 'pippo123'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
@@ -23,6 +31,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        segreteria {
+            applicationIdSuffix '.segreteria'
+            versionNameSuffix '-segreteria'
+            debuggable true
+            signingConfig signingConfigs.SegreteriaSigningConfig
         }
     }
     compileOptions {

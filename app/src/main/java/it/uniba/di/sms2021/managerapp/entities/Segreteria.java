@@ -5,7 +5,7 @@ public class Segreteria {
     private String id;
     private String email;
 
-    public Segreteria(String email, String password, String id) {
+    public Segreteria(String id, String email) {
         this.email = email;
         this.id = id;
     }
