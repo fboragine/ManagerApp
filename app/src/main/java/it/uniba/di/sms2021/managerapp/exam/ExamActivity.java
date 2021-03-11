@@ -25,26 +25,27 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 
-public class ProjectActivity extends AppCompatActivity {
+public class ExamActivity extends AppCompatActivity {
 
     protected static final int EDIT_ITEM_ID = View.generateViewId();
     protected static final int SAVE_ITEM_ID = View.generateViewId();
     protected static final int CANCEL_ITEM_ID = View.generateViewId();
-    private static final String TAG = "ProjectActivityLog";
+    private static final String TAG = "ExamActivityLog";
 
-    private Progetto progetto;
+    private Esame esame;
     private TextView textViewNome;
     private TextView textDescEsame;
-    private ListView listViewStudenti;
+    private ListView listViewEsami;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project);
+        setContentView(R.layout.activity_exam);
 
         final Intent src = getIntent();
         if(src != null) {
@@ -103,11 +104,11 @@ public class ProjectActivity extends AppCompatActivity {
                             flag = false;
                             if(idStudentiPart.get(count).equals(document.getString("id"))) {
                                 Studente studente = new Studente(document.getString("id"),
-                                                                 document.getString("matricola"),
-                                                                 document.getString("nome"),
-                                                                 document.getString("cognome"),
-                                                                 document.getString("email"),
-                                                                 document.getString("cDs"));
+                                        document.getString("matricola"),
+                                        document.getString("nome"),
+                                        document.getString("cognome"),
+                                        document.getString("email"),
+                                        document.getString("cDs"));
                                 studenti.add(studente);
 
                                 displayNameStudenti.add(studente.getNome() + " " + studente.getCognome());

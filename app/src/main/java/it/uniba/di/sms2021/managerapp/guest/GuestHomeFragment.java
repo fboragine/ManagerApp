@@ -59,8 +59,8 @@ public class GuestHomeFragment extends Fragment {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         CorsoDiStudio corsoDiStudio = new CorsoDiStudio(document.getString("id"),
                                                                         document.getString("nome"),
-                                                                        document.getString("descrizione"));
-
+                                                                        document.getString("descrizione"),
+                                                                        (ArrayList<String>) document.get("idEsami"));
                         corsiDiStudio.add(corsoDiStudio);
                     }
 
@@ -75,7 +75,7 @@ public class GuestHomeFragment extends Fragment {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            ExamListFragment examListFragment = new ExamListFragment();
+                            ExamListFragment examListFragment = new ExamListFragment(corsiDiStudio.get(i).getIdEsami());
                             FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                             fragmentTransaction.replace(R.id.fragment, examListFragment);
                             fragmentTransaction.addToBackStack(null);

@@ -4,40 +4,48 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
-import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
+import it.uniba.di.sms2021.managerapp.entities.Esame;
+import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
 import it.uniba.di.sms2021.managerapp.service.ListViewAdapter;
 import it.uniba.di.sms2021.managerapp.service.Model;
 
 public class ExamListFragment extends Fragment {
 
 
-    View viewExamList;
-    ListView listView;
-    ListViewAdapter adapter;
-    String[] title;
-    String[] description;
-    ArrayList<Model> arrayList = new ArrayList<>();
+    private  View viewExamList;
+    private ListView listView;
+    private ExamListAdapter adapterEsami;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ArrayList<String> idEsami = new ArrayList<>();
+    private ArrayList<Esame> esami = new ArrayList<>();
 
-    public ExamListFragment() {
-        // Required empty public constructor
+    public ExamListFragment() {}
+
+    public ExamListFragment(ArrayList<String> idEsami) {
+        this.idEsami = idEsami;
     }
 
     @Override
@@ -49,34 +57,39 @@ public class ExamListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         viewExamList = inflater.inflate(R.layout.fragment_guest_home, container, false);
-        title = new String[]{"Analisi", "Laboratorio", "Mobile", "Modelli", "Discreta", "Programmazione I", "Programmazione II", "Linguaggi"};
-        description = new String[]{"Analisi description", "Laboratorio description", "Mobile description", "Modelli description", "Discreta description", "Programmazione I description", "Programmazione II description", "Linguaggi description"};
 
-        listView = viewExamList.findViewById(R.id.listView);
-
-        for (int i = 0; i<title.length; i++) {
-            Model model = new Model(title[i], description[i]);
-            //bind all strings in an array
-            arrayList.add(model);
-        }
-
-        //TODO PROVVISORio
-        ArrayList<CorsoDiStudio> corsi = new ArrayList<>();
-
-        //pass results to listViewAdapter class
-        adapter = new ListViewAdapter(getActivity().getApplicationContext(), corsi);
-
-        //bind the adapter to the listview
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ExamListFragment examListFragment = new ExamListFragment();
-                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment, examListFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        boolean flag;
+                        int count = 0;
+
+                        do {
+                            flag = false;
+                            if(idEsami.get(count).equals(document.getString("id"))) {
+                                Esame esame = new Esame(document.getString("id"),
+                                        document.getString("nome"),
+                                        document.getString("cDs"),
+                                        document.getString("dataEsame"),
+                                        (ArrayList<String>) document.get("idDocenti"));
+                                esami.add(esame);
+                            }
+                            count ++;
+                        }while(!flag  && count < idEsami.size());
+                    }
+
+
+
+                    listView = viewExamList.findViewById(R.id.listView);
+                    //pass results to listViewAdapter class
+                    adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
+                    //bind the adapter to the listview
+                    listView.setAdapter(adapterEsami);
+                }
             }
         });
 
@@ -100,11 +113,11 @@ public class ExamListFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 if(TextUtils.isEmpty(s)) {
-                    adapter.filter("");
+                    adapterEsami.filter("");
                     listView.clearTextFilter();
                 }
                 else {
-                    adapter.filter(s);
+                    adapterEsami.filter(s);
                 }
                 return true;
             }
