@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -16,28 +17,48 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InlineSuggestionsRequest;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
+import it.uniba.di.sms2021.managerapp.entities.SpecsFile;
 import it.uniba.di.sms2021.managerapp.service.FileListAdapter;
+
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 @RequiresApi(api = Build.VERSION_CODES.R)
 public class ProjectDocumentsActivity extends AppCompatActivity {
 
     private Progetto progetto;
-    private ListView listViewFiles;
+    private ArrayList<SpecsFile> files;
+    FirebaseStorage storage;
+    private static final String TAG = "ProjectDocumentActivityLog";
+
+    /*  private ListView listViewFiles;
     private List<String> item;
     private List<String> path;
     private List<String> files;
@@ -45,7 +66,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private String currentDir;
     private String root = Environment.getStorageDirectory().getPath();
     private FileListAdapter fileListAdapter;
-    private String text;
+    private String text;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,24 +83,29 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         toolbar.setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setTitle(progetto.getNome());
 
+        // Get the default bucket from a custom FirebaseApp
+        storage = FirebaseStorage.getInstance();
+        files = new ArrayList<>();
+
+        getFileList(1);
+        /*
         ArrayList<String> files = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             files.add("File " + (i+1));
-        }
+        }*/
 
-        listViewFiles = findViewById(R.id.project_files);
-        /*
+        /*listViewFiles = findViewById(R.id.project_files);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, files);
         listViewFiles.setAdapter(adapter);
 
-         */
-        getDirFromRoot(root);
+
+        getDirFromRoot(root);*/
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-
         return true;
     }
 
@@ -95,7 +121,67 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Get directories and files from selected path
+    @SuppressLint("LongLogTag")
+    private void getFileList(int numberRelease) {
+
+        StorageReference storageRef = storage.getReference();
+        // Get reference to the file
+        StorageReference forestRef = storageRef.child("progetti/" + progetto.getId());
+
+        forestRef.listAll()
+                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                    @Override
+                    public void onSuccess(ListResult listResult) {
+                        for (StorageReference prefix : listResult.getPrefixes()) {
+                            // All the prefixes under listRef.
+                            // You may call listAll() recursively on them.
+                            Log.d(TAG, "PREFIX");
+                            Log.d(TAG, prefix.getMetadata().toString());
+                        }
+
+                        for (StorageReference item : listResult.getItems()) {
+                            // All the items under listRef.
+                            getMetadataFile(item.getName());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "errore",e);
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    @SuppressLint("LongLogTag")
+    private void getMetadataFile(String nomeFile) {
+        // Create a storage reference from our app
+        StorageReference storageRef = storage.getReference();
+
+        // Get reference to the file
+        StorageReference forestRef = storageRef.child("progetti/"+progetto.getId()+"/"+nomeFile);
+
+        forestRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+            @Override
+            public void onSuccess(StorageMetadata storageMetadata) {
+                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+                files.add(new SpecsFile(storageMetadata.getMd5Hash(),
+                                        storageMetadata.getName(),
+                                        formatter.format(new Date(storageMetadata.getUpdatedTimeMillis())),
+                                        (storageMetadata.getSizeBytes()/1024),
+                                        storageMetadata.getContentType() ));
+                Log.d(TAG, storageMetadata.getName());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+   /* // Get directories and files from selected path
     public void getDirFromRoot(String rootPath) {
         item = new ArrayList<>();
         Boolean isRoot = true;
@@ -145,8 +231,8 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
+    }*/
+/*
     //Method to delete selected files
     void deleteFile() {
         for (int deleteItem : fileListAdapter.selectedItem) {
@@ -206,7 +292,8 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
 
         builder.setView(editInput);
         builder.show();
-    }
+    }*/
+
 }
 
 //https://www.youtube.com/watch?v=ZmgncLHk_s4&t=104s

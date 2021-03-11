@@ -36,7 +36,6 @@
     <string name="action_search">Search</string>
     <string name="login_error_msg">Authentication error</string>
     <string name="welcome_msg">Welcome</string>
-    <string name="firebase_studente_error">\"get failed with \"</string>
     <string name="in_progress">In Progress</string>
     <string name="closed">Closed</string>
     <string name="logout">Logout</string>
@@ -52,4 +51,5 @@
     <string name="email_changed">Email address updated</string>
     <string name="password_changed">Password updated</string>
     <string name="error_save">Edit error! Something was wrong</string>
+    <string name="register_field_void">You must complete all the field</string>
 </resources>

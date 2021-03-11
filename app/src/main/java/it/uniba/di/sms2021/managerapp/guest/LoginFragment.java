@@ -180,10 +180,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         }
 
                     } else {
-                        Toast.makeText(getActivity().getApplicationContext(), R.string.doc_not_found, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity().getApplicationContext(), R.string.doc_not_found, Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Log.d(TAG, getString(R.string.firebase_studente_error), task.getException());
+                    Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }
