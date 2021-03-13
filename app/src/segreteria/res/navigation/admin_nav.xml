@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_nav"
+    app:startDestination="@id/homeAdminFragment">
+
+    <fragment
+        android:id="@+id/homeAdminFragment"
+        android:name="it.uniba.di.sms2021.managerapp.segreteria.HomeAdminFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home_admin" />
+    <fragment
+        android:id="@+id/profileAdminFragment"
+        android:name="it.uniba.di.sms2021.managerapp.segreteria.ProfileAdminFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile_admin" >
+        <action
+            android:id="@+id/action_profileAdminFragment_to_editProfileAdminFragment"
+            app:destination="@id/editProfileAdminFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileAdminFragment"
+        android:name="it.uniba.di.sms2021.managerapp.segreteria.EditProfileAdminFragment"
+        android:label="@string/edit"
+        tools:layout="@layout/fragment_edit_profile_admin" >
+        <action
+            android:id="@+id/action_editProfileAdminFragment_to_profileAdminFragment"
+            app:destination="@id/profileAdminFragment" />
+    </fragment>
+</navigation>

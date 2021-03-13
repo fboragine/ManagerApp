@@ -54,4 +54,6 @@
     <string name="error_save">Edit error! Something was wrong</string>
     <string name="exam_name">Esame 1</string>
     <string name="teachers">Teachers</string>
+    <string name="secretariat">Secretariat</string>
+    <string name="courses">Courses</string>
 </resources>

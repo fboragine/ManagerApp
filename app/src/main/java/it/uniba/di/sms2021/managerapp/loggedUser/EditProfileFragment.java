@@ -35,16 +35,10 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.uniba.di.sms2021.managerapp.loggedUser.EditProfileFragmentDirections;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EditProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class EditProfileFragment extends Fragment implements View.OnClickListener{
 
     View vistaModifica;
@@ -59,13 +53,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String course;
-
-    public static EditProfileFragment newInstance(String param1, String param2) {
-        EditProfileFragment fragment = new EditProfileFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,7 +81,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         editPassword = (EditText) vistaModifica.findViewById(R.id.pw_txt);
 
-
         editEmail = (EditText) vistaModifica.findViewById(R.id.email_txt);
         editEmail.setText(StudentActivity.loggedUser.getEmail());
 
@@ -120,8 +106,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
-                NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
-                Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+                Navigation.findNavController(getActivity(), R.id.fragment).navigate(R.id.action_editProfileFragment_to_profileFragment);
                 return true;
         }
 
@@ -153,8 +138,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     modificaFile();
-                    NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
-                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(R.id.action_editProfileFragment_to_profileFragment);
                     return true;
                 }
             });
@@ -183,8 +167,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     Toast.makeText(getActivity().getApplicationContext(), R.string.undone_save, Toast.LENGTH_SHORT).show();
-                    NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
-                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(R.id.action_editProfileFragment_to_profileFragment);
                     return true;
                 }
             });
@@ -325,8 +308,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         if(v.getId() == R.id.btn_edit){
             modificaFile();
             Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
-            NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
-            Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+            Navigation.findNavController(getActivity(), R.id.fragment).navigate(R.id.action_editProfileFragment_to_profileFragment);
         }
     }
 }

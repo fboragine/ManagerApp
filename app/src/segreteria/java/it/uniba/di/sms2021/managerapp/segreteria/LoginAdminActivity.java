@@ -2,6 +2,7 @@ package it.uniba.di.sms2021.managerapp.segreteria;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +21,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
 
 import static android.content.ContentValues.TAG;
 
@@ -38,27 +41,33 @@ public class LoginAdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_admin);
 
-        Button btnLogin = findViewById(R.id.buttonLogin);
-        Button btnResetPsw = findViewById(R.id.btn_reset_password);
+        if(Objects.requireNonNull(getExternalFilesDir(null).listFiles()).length == 0) {
+            Button btnLogin = findViewById(R.id.buttonLogin);
+            Button btnResetPsw = findViewById(R.id.btn_reset_password);
 
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+            mAuth = FirebaseAuth.getInstance();
+            db = FirebaseFirestore.getInstance();
 
-        View.OnClickListener listener = v -> {
-            if (v.getId() == R.id.buttonLogin) {
-                email = findViewById(R.id.emailTxt);
-                password = findViewById(R.id.passwordTxt);
-                if (!email.getText().toString().matches("") &&
-                        !password.getText().toString().matches("")) {
-                    login(email.getText().toString(), password.getText().toString());
+            View.OnClickListener listener = v -> {
+                if (v.getId() == R.id.buttonLogin) {
+                    email = findViewById(R.id.emailTxt);
+                    password = findViewById(R.id.passwordTxt);
+                    if (!email.getText().toString().matches("") &&
+                            !password.getText().toString().matches("")) {
+                        login(email.getText().toString(), password.getText().toString());
+                    }
+                } else if (v.getId() == R.id.btn_reset_password) {
+                    // TODO implementare il reset della password
                 }
-            } else if (v.getId() == R.id.btn_reset_password) {
-                // TODO implementare il reset della password
-            }
-        };
+            };
 
-        btnLogin.setOnClickListener(listener);
-        btnResetPsw.setOnClickListener(listener);
+            btnLogin.setOnClickListener(listener);
+            btnResetPsw.setOnClickListener(listener);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), HomeAdminActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     /**
@@ -136,12 +145,8 @@ public class LoginAdminActivity extends AppCompatActivity {
     }
 
     public void trasferisciIstanza() {
-        // TODO implementare una volta aggiunta la nuova Activity
-        /*
-        Intent intent = new Intent(getActivity().getApplicationContext(), StudentActivity.class);
+        Intent intent = new Intent(getApplicationContext(), HomeAdminActivity.class);
         startActivity(intent);
-        getActivity().finish();
-
-         */
+        finish();
     }
 }

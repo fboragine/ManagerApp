@@ -19,11 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".project.ProjectDocumentsActivity" />
         <activity android:name=".project.ProjectActivity" />
-        <activity android:name=".guest.SignActivity" />
-        <activity android:name=".loggedUser.StudentActivity" />
-        <activity android:name=".guest.GuestActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

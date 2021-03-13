@@ -1,11 +1,10 @@
-package it.uniba.di.sms2021.managerapp.loggedUser;
+package it.uniba.di.sms2021.managerapp.segreteria;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -19,17 +18,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 import it.uniba.di.sms2021.managerapp.R;
 
-public class ProfileFragment extends Fragment {
+public class ProfileAdminFragment extends Fragment {
 
-    private View vistaProfilo;
-    private GuestActivity callback;
-
-    TextView label;
-
-    public ProfileFragment() {
+    public ProfileAdminFragment() {
         // Required empty public constructor
     }
 
@@ -44,32 +37,11 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
+        View vistaProfilo = inflater.inflate(R.layout.fragment_profile_admin, container, false);
 
-        label = (TextView) vistaProfilo.findViewById(R.id.name);
-        label.setText(StudentActivity.loggedUser.getNome());
+        TextView label = vistaProfilo.findViewById(R.id.profile_email);
+        label.setText(HomeAdminActivity.getLoggedAdmin().getEmail());
 
-        label = (TextView) vistaProfilo.findViewById(R.id.surname);
-        label.setText(StudentActivity.loggedUser.getCognome());
-
-        label = (TextView) vistaProfilo.findViewById(R.id.serial_number);
-        label.setText(StudentActivity.loggedUser.getMatricola());
-
-        label = (TextView) vistaProfilo.findViewById(R.id.profile_email);
-        label.setText(StudentActivity.loggedUser.getEmail());
-
-        if(StudentActivity.loginFile.getName().matches("studenti.srl")){
-            vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.VISIBLE);
-            vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.VISIBLE);
-
-            label = (TextView) vistaProfilo.findViewById(R.id.profile_course);
-            label.setText(StudentActivity.loggedStudent.getcDs());
-        }else {
-
-            vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.INVISIBLE);
-            vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.INVISIBLE);
-
-        }
         return vistaProfilo;
     }
 
@@ -85,7 +57,7 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -94,9 +66,10 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
 
         // Add Edit Menu Item
-        int editId = StudentActivity.EDIT_ITEM_ID;
+        int editId = HomeAdminActivity.EDIT_ITEM_ID;
         if (menu.findItem(editId) == null) {
             // If it not exists then add the menu item to menu
             MenuItem edit = menu.add(
@@ -113,17 +86,14 @@ public class ProfileFragment extends Fragment {
             edit.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
-            edit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(R.id.action_profileFragment_to_editProfileFragment);
-                    return true;
-                }
+            edit.setOnMenuItemClickListener(item -> {
+                Navigation.findNavController(requireActivity(), R.id.fragment).navigate(R.id.action_profileAdminFragment_to_editProfileAdminFragment);
+                return true;
             });
         }
 
         // Add Logout Menu Item
-        int logoutId = StudentActivity.LOGOUT_ITEM_ID;
+        int logoutId = HomeAdminActivity.LOGOUT_ITEM_ID;
         if (menu.findItem(logoutId) == null) {
             // If it not exists then add the menu item to menu
             MenuItem logout = menu.add(
@@ -140,24 +110,19 @@ public class ProfileFragment extends Fragment {
             logout.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
-            logout.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    logout();
-                    Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
-                    return true;
-                }
+            logout.setOnMenuItemClickListener(item -> {
+                logout();
+                return true;
             });
         }
-
-        super.onPrepareOptionsMenu(menu);
     }
 
     public void logout(){
         FirebaseAuth.getInstance().signOut();
-        StudentActivity.loginFile.delete();
+        HomeAdminActivity.getLoginFile().delete();
         Toast.makeText(getContext(),R.string.logout, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(requireActivity().getApplicationContext(), LoginAdminActivity.class);
+        startActivity(intent);
+        requireActivity().finish();
     }
 }

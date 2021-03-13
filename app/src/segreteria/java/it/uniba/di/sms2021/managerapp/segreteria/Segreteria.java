@@ -1,6 +1,9 @@
 package it.uniba.di.sms2021.managerapp.segreteria;
 
-public class Segreteria {
+import java.io.Serializable;
+
+public class Segreteria implements Serializable {
+    private static final long serialVersionUID = 160L;
 
     private String id;
     private String email;
