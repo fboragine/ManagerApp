@@ -52,4 +52,6 @@
     <string name="email_changed">Email address updated</string>
     <string name="password_changed">Password updated</string>
     <string name="error_save">Edit error! Something was wrong</string>
+    <string name="exam_name">Esame 1</string>
+    <string name="teachers">Teachers</string>
 </resources>

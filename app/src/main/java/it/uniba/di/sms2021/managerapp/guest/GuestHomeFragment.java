@@ -50,17 +50,20 @@ public class GuestHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewGuestHome = inflater.inflate(R.layout.fragment_guest_home, container, false);
 
+        ((GuestActivity)getActivity()).disableBackArrow();
+
         ArrayList<CorsoDiStudio> corsiDiStudio = new ArrayList<CorsoDiStudio>();
 
         db.collection("corsiDiStudio").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
                 if(task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         CorsoDiStudio corsoDiStudio = new CorsoDiStudio(document.getString("id"),
                                                                         document.getString("nome"),
-                                                                        document.getString("descrizione"));
-
+                                                                        document.getString("descrizione"),
+                                                                        (ArrayList<String>) document.get("idEsami"));
                         corsiDiStudio.add(corsoDiStudio);
                     }
 
@@ -75,7 +78,7 @@ public class GuestHomeFragment extends Fragment {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            ExamListFragment examListFragment = new ExamListFragment();
+                            ExamListFragment examListFragment = new ExamListFragment(corsiDiStudio.get(i).getIdCorsoDiStudio());
                             FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                             fragmentTransaction.replace(R.id.fragment, examListFragment);
                             fragmentTransaction.addToBackStack(null);
@@ -119,6 +122,7 @@ public class GuestHomeFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();

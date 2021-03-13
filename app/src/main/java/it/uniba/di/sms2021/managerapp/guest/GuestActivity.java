@@ -5,15 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -36,6 +37,8 @@ public class GuestActivity extends AppCompatActivity {
 
     private ArrayList<Progetto> progetti;
 
+    private Toolbar toolbar;
+
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +46,15 @@ public class GuestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_guest);
 
         if(getApplicationContext().getExternalFilesDir(null).listFiles().length == 0){
-            Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
+            toolbar = (Toolbar) findViewById(R.id.top_toolbar);
             setSupportActionBar(toolbar);
             toolbar.setLogo(R.mipmap.ic_launcher);
             toolbar.setTitle("Home");
             toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
-
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goBackFragment(view, 0);
+                    goBackFragment();
                 }
             });
 
@@ -81,20 +83,26 @@ public class GuestActivity extends AppCompatActivity {
         finish();
     }
 
-    public void goBackFragment(View view, int position){
-        Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
-        switch(position) {
-            default:
-            case 0:
-                fragment = new GuestHomeFragment();
-                break;
-            case 1:
-                fragment = new ExamListFragment();
-                break;
+    public void goBackFragment() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
         }
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment, fragment)
-                .commit();
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    public void disableBackArrow() {
+        toolbar.setNavigationIcon(null);
+    }
+
+    public void enableBackArrow() {
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goBackFragment();
+            }
+        });
     }
 }
