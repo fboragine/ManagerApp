@@ -2,71 +2,73 @@ package it.uniba.di.sms2021.managerapp.project;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.InputType;
-import android.util.Log;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InlineSuggestionsRequest;
-import android.widget.AdapterView;
-import android.widget.EditText;
+import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
-import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.entities.SpecsFile;
 import it.uniba.di.sms2021.managerapp.service.FileListAdapter;
 
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
-
 @RequiresApi(api = Build.VERSION_CODES.R)
 public class ProjectDocumentsActivity extends AppCompatActivity {
 
-    private Progetto progetto;
-    private ArrayList<SpecsFile> files;
-    FirebaseStorage storage;
-    private static final String TAG = "ProjectDocumentActivityLog";
+    interface SpecsCallback {
+        void onCallback(SpecsFile specsFile, boolean flag);
+    }
 
-    /*  private ListView listViewFiles;
-    private List<String> item;
-    private List<String> path;
-    private List<String> files;
-    private List<String> filesPath;
-    private String currentDir;
-    private String root = Environment.getStorageDirectory().getPath();
-    private FileListAdapter fileListAdapter;
-    private String text;*/
+    FirebaseStorage storage;
+    private Progetto progetto;
+    private ListView listViewFiles;
+    private static List<SpecsFile> files;
+
+    Button btnDownload, btnUploadFile, btnSelectFile;
+    Switch switchUpload;
+    TextView selectedFileLab;
+
+    //track Choosing Image Intent
+    private static final int CHOOSING_IMAGE_REQUEST = 1234;
+    private Uri fileUri;
+    private Bitmap bitmap;
+    private ProgressDialog progressDialog;
+    private StorageReference fileReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,21 +88,182 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         // Get the default bucket from a custom FirebaseApp
         storage = FirebaseStorage.getInstance();
         files = new ArrayList<>();
+        progressDialog = new ProgressDialog(this);
 
-        getFileList(1);
-        /*
-        ArrayList<String> files = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            files.add("File " + (i+1));
-        }*/
+        btnDownload = (Button) findViewById(R.id.button_download);
+        btnUploadFile = (Button) findViewById(R.id.button_add_file);
+        btnSelectFile = (Button) findViewById(R.id.button_select_file);
+        switchUpload = (Switch) findViewById(R.id.switch_upload);
+        selectedFileLab = (TextView) findViewById(R.id.selected_file);
 
-        /*listViewFiles = findViewById(R.id.project_files);
+        selectedFileLab.setVisibility(View.INVISIBLE);
+        createExplorerFile();
+    }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, files);
-        listViewFiles.setAdapter(adapter);
+    private void createExplorerFile() {
+        getFileList(1,new SpecsCallback() {
+            @Override
+            public synchronized void onCallback(SpecsFile specsFile, boolean flag) {
+                files.add(specsFile);
+                if(flag) {
+                    listViewFiles = findViewById(R.id.project_files);
+                    FileListAdapter adapter = new FileListAdapter(getApplicationContext(), files);
+                    listViewFiles.setAdapter(adapter);
 
+                    btnDownload.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(adapter.selectedItem.size() == 0) {
+                                Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
+                            }else {
+                                for(int i = 0; i< adapter.selectedItem.size(); i++) {
+                                    downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
+                                                         adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
+                                }
+                            }
+                        }
+                    });
 
-        getDirFromRoot(root);*/
+                    btnSelectFile.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showChoosingFile();
+
+                        }
+                    });
+
+                    btnUploadFile.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            uploadFile(fileUri);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void showChoosingFile() {
+        Intent intent = new Intent();
+        if(switchUpload.isChecked()) {
+            intent.setType("image/*");
+        }else {
+            intent.setType("application/*");
+        }
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSING_IMAGE_REQUEST);
+    }
+
+    public void downloadFile(String nomeFile, String percorso) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference islandRef = storageRef.child(percorso);
+
+        File localFile = new File(getExternalFilesDir(null), nomeFile);
+
+        Toast.makeText(getApplicationContext(), getString(R.string.download_select) + ": " + nomeFile, Toast.LENGTH_LONG).show();
+
+        islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getApplicationContext(), getString(R.string.download_succ) + ": " + nomeFile, Toast.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(), getString(R.string.download_error) + ": " + exception.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void uploadFile(Uri fileUrl) {
+        if (fileUrl != null) {
+            String fileName = fileUrl.getPath().substring(fileUrl.getPath().lastIndexOf("/")+1, fileUrl.getPath().lastIndexOf("."));
+
+            if (!validateInputFileName(fileName)) {
+                return;
+            }
+            progressDialog.setTitle(getString(R.string.upload_label));
+            progressDialog.show();
+
+            fileReference = FirebaseStorage.getInstance().getReference().child("progetti/" + progetto.getId());
+            StorageReference fileRef = fileReference.child(fileName + "." + getFileExtension(fileUrl));
+
+            fileRef.putFile(fileUrl)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), getString(R.string.file_upload), Toast.LENGTH_LONG).show();
+                            finish();
+                            startActivity(getIntent());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            // progress percentage
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                            // percentage in progress dialog
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                        }
+                    })
+                    .addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                            System.out.println("Upload is paused!");
+                        }
+                    });
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.no_file_upload), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean validateInputFileName(String fileName) {
+
+        if (TextUtils.isEmpty(fileName)) {
+            Toast.makeText(getApplicationContext(), "Enter file name!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (bitmap != null) {
+            bitmap.recycle();
+        }
+
+        if (requestCode == CHOOSING_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            this.fileUri = data.getData();
+            try {
+                if(switchUpload.isChecked()) {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            selectedFileLab.setText(fileUri.getPath().substring(fileUri.getPath().lastIndexOf("/")+1));
+            selectedFileLab.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -121,180 +284,50 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint("LongLogTag")
-    private void getFileList(int numberRelease) {
+    private synchronized void getFileList(int numberRelease, SpecsCallback myCallback) {
 
         StorageReference storageRef = storage.getReference();
         // Get reference to the file
         StorageReference forestRef = storageRef.child("progetti/" + progetto.getId());
 
         forestRef.listAll()
-                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
-                    @Override
-                    public void onSuccess(ListResult listResult) {
-                        for (StorageReference prefix : listResult.getPrefixes()) {
-                            // All the prefixes under listRef.
-                            // You may call listAll() recursively on them.
-                            Log.d(TAG, "PREFIX");
-                            Log.d(TAG, prefix.getMetadata().toString());
-                        }
+        .addOnSuccessListener(listResult -> {
+            for (StorageReference prefix : listResult.getPrefixes()) {
+                // All the prefixes under listRef.
+                // You may call listAll() recursively on them.
+            }
 
-                        for (StorageReference item : listResult.getItems()) {
-                            // All the items under listRef.
-                            getMetadataFile(item.getName());
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "errore",e);
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
+            AtomicInteger i = new AtomicInteger();
 
-    @SuppressLint("LongLogTag")
-    private void getMetadataFile(String nomeFile) {
-        // Create a storage reference from our app
-        StorageReference storageRef = storage.getReference();
-
-        // Get reference to the file
-        StorageReference forestRef = storageRef.child("progetti/"+progetto.getId()+"/"+nomeFile);
-
-        forestRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-            @Override
-            public void onSuccess(StorageMetadata storageMetadata) {
+            for (StorageReference item : listResult.getItems()) {
+                // All the items under listRef.
+                String percorso = "progetti/" + progetto.getId() + "/" + item.getName();
+                StorageReference forestRefFile = storageRef.child(percorso);
                 DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-                files.add(new SpecsFile(storageMetadata.getMd5Hash(),
-                                        storageMetadata.getName(),
-                                        formatter.format(new Date(storageMetadata.getUpdatedTimeMillis())),
-                                        (storageMetadata.getSizeBytes()/1024),
-                                        storageMetadata.getContentType() ));
-                Log.d(TAG, storageMetadata.getName());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-   /* // Get directories and files from selected path
-    public void getDirFromRoot(String rootPath) {
-        item = new ArrayList<>();
-        Boolean isRoot = true;
-        path = new ArrayList<>();
-        files = new ArrayList<>();
-        filesPath = new ArrayList<>();
+                synchronized (this) {
+                    forestRefFile.getMetadata().addOnSuccessListener((storageMetadata) -> {
+                        SpecsFile auxFile = new SpecsFile(storageMetadata.getMd5Hash(),
+                                storageMetadata.getName(),
+                                formatter.format(new Date(storageMetadata.getUpdatedTimeMillis())),
+                                (storageMetadata.getSizeBytes() / 1024),
+                                storageMetadata.getContentType(),
+                                percorso
+                                );
 
-        File file = new File(rootPath);
-        File[] filesArray = file.listFiles();
-        if(rootPath.equals(root)) {
-            item.add("../");
-            path.add(file.getParent());
-            isRoot = false;
-        }
-        currentDir = rootPath;
-
-        //sorting file list in alphabetic order
-        Arrays.sort(filesArray);
-        for(int i = 0; i < filesArray.length; i++) {
-            File fileAux = filesArray[i];
-            if(fileAux.isDirectory()) {
-                item.add(fileAux.getName());
-                path.add(fileAux.getPath());
-            } else {
-                files.add(fileAux.getName());
-                filesPath.add(fileAux.getPath());
-            }
-        }
-
-        for(String addFile : files) {
-            item.add(addFile);
-        }
-        for (String addPath : filesPath) {
-            path.add(addPath);
-        }
-
-        fileListAdapter = new FileListAdapter(this, item, path, isRoot);
-        listViewFiles.setAdapter(fileListAdapter);
-        listViewFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                File isFile = new File(path.get(position));
-                if (isFile.isDirectory()) {
-                    getDirFromRoot(isFile.toString());
-                } else {
-                    Toast.makeText(ProjectDocumentsActivity.this, "This is File", Toast.LENGTH_SHORT).show();
+                        if(i.get() < listResult.getItems().size()-1) {
+                            myCallback.onCallback(auxFile, false);
+                        }else {
+                            myCallback.onCallback(auxFile, true);
+                        }
+                        i.getAndIncrement();
+                    });
                 }
             }
+        })
+        .addOnFailureListener(e -> {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         });
-    }*/
-/*
-    //Method to delete selected files
-    void deleteFile() {
-        for (int deleteItem : fileListAdapter.selectedItem) {
-            File deleteFIle = new File(path.get(deleteItem));
-            Log.d("FILE", path.get(deleteItem));
-            Boolean isDeleted = deleteFIle.delete();
-            Toast.makeText(ProjectDocumentsActivity.this, "File(s) Deleted", Toast.LENGTH_SHORT).show();
-            getDirFromRoot(currentDir);
-        }
     }
-
-    //Create file or directory in the directory in which we are present currently
-    void createNewFolder(final int opt) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Title");
-
-        // Set up the input
-        final EditText editInput = new EditText(this);
-        // Specify the type of the input expected
-        editInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                text = editInput.getText().toString();
-                if(opt == 1) {
-                    File newPath = new File(currentDir, text);
-                    Log.d("CURRENT DIR", currentDir);
-                    if(!newPath.exists()) {
-                        newPath.mkdirs();
-                    }
-                } else {
-                    try {
-                        FileOutputStream outputStream = new FileOutputStream((currentDir+File.separator+text), false);
-                        outputStream.close();
-                        //  <!--<intent-filter>
-                        //  <action android:name="android.intent.action.SEARCH" />
-                        //  </intent-filter>
-                        //  <meta-data android:name="android.app.searchable"
-                        //  android:resource="@xml/searchable"/>-->
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                getDirFromRoot(currentDir);
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.setView(editInput);
-        builder.show();
-    }*/
 
 }
-
-//https://www.youtube.com/watch?v=ZmgncLHk_s4&t=104s
-//https://www.technetexperts.com/mobile/custom-file-explorer-in-android-application-development/

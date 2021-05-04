@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
@@ -9,20 +8,23 @@
         android:id="@+id/file_cb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_alignBaseline="@id/file_icon"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:focusable="false"/>
+        android:focusable="false" />
 
     <ImageView
         android:id="@+id/file_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/file_cb"
-        android:src="@mipmap/ic_launcher"
         android:clickable="false"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:src="@mipmap/ic_launcher"
+        />
 
     <TextView
         android:id="@+id/file_name"
@@ -30,9 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/file_icon"
-        android:text="TextView"
         android:clickable="false"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:text="Name" />
 
     <TextView
         android:id="@+id/file_date"
@@ -41,8 +43,19 @@
         android:layout_below="@id/file_name"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/file_icon"
-        android:text="TextView"
+        android:clickable="false"
         android:focusable="false"
-        android:clickable="false"/>
+        android:text="Date" />
+
+    <TextView
+        android:id="@+id/file_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/file_date"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/file_icon"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="Size" />
 
 </RelativeLayout>

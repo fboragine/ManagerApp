@@ -52,4 +52,15 @@
     <string name="password_changed">Password updated</string>
     <string name="error_save">Edit error! Something was wrong</string>
     <string name="register_field_void">You must complete all the field</string>
+    <string name="download_bt_doc">Download</string>
+    <string name="download_succ">File downloaded successfully</string>
+    <string name="download_error">Download failed</string>
+    <string name="no_selection_file">No file selected! Please select one or more file to download</string>
+    <string name="download_select">Download selected file in progress</string>
+    <string name="add_file">Add new file</string>
+    <string name="upload_error">Upload error!</string>
+    <string name="upload_image">Upload an image</string>
+    <string name="no_file_upload">No File selected for uploading!</string>
+    <string name="upload_label">Uploading file...</string>
+    <string name="file_upload">File was be uploaded</string>
 </resources>

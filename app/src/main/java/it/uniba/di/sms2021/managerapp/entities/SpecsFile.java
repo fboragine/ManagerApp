@@ -5,14 +5,18 @@ public class SpecsFile {
     private String nome;
     private String data;
     private long dimensione;
+    String percorso;
     private String formato;
 
-    public SpecsFile(String id, String nome, String data, long dimensione, String formato) {
+
+
+    public SpecsFile(String id, String nome, String data, long dimensione, String formato, String percorso) {
         this.id = id;
         this.nome = nome;
         this.data = data;
         this.dimensione = dimensione;
         this.formato = formato;
+        this.percorso = percorso;
     }
 
     public String getId() {
@@ -47,4 +51,19 @@ public class SpecsFile {
         this.dimensione = dimensione;
     }
 
+    public String getFormato() {
+        return formato;
+    }
+
+    public void setFormato(String formato) {
+        this.formato = formato;
+    }
+
+    public String getPercorso() {
+        return percorso;
+    }
+
+    public void setPercorso(String percorso) {
+        this.percorso = percorso;
+    }
 }
