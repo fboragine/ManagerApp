@@ -63,4 +63,8 @@
     <string name="no_file_upload">No File selected for uploading!</string>
     <string name="upload_label">Uploading file...</string>
     <string name="file_upload">File was be uploaded</string>
+    <string name="email_sent">Email sent! Check your mailbox!</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="msg_reset">Insert email that need of password reset</string>
+    <string name="error_email_sent">Mail address cannot be empty!</string>
 </resources>
