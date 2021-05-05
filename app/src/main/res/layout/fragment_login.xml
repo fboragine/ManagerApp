@@ -109,6 +109,7 @@
                 tools:layout_editor_absoluteX="2dp">
 
                 <ImageView
+                    android:id="@+id/passwordIcon"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:contentDescription="@string/course"

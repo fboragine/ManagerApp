@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     EditText email;
     EditText password;
     RadioButton studenteLogin;
+    ImageView passwordIco;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -82,6 +84,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         password = (EditText)vistaLogin.findViewById(R.id.passwordTxt);
         studenteLogin = (RadioButton) vistaLogin.findViewById(R.id.radio_student);
         btnConfirmResetPw = (Button) vistaLogin.findViewById(R.id.reset_password_btn);
+        passwordIco = (ImageView) vistaLogin.findViewById(R.id.passwordIcon);
 
         btnLogin.setOnClickListener(this);
         btnResetPw.setOnClickListener(this);
@@ -107,20 +110,23 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         else if(view.getId() == R.id.btn_reset_password)    //Click sul pulsante di reset della pw
         {
             if(btnConfirmResetPw.getVisibility() == View.GONE){
-                password.setEnabled(false);
-                password.setText(" ");
+                password.setVisibility(View.INVISIBLE);
+                passwordIco.setVisibility(View.INVISIBLE);
 
                 btnConfirmResetPw.setVisibility(View.VISIBLE);
                 btnLogin.setVisibility(View.GONE);
 
+                btnResetPw.setText(R.string.btn_goto_login);
+
                 Toast.makeText(getActivity().getApplicationContext(),getString(R.string.msg_reset), Toast.LENGTH_LONG).show();
             }else {
-                password.setText("");
-                password.setEnabled(true);
+                password.setVisibility(View.VISIBLE);
+                passwordIco.setVisibility(View.VISIBLE);
 
                 btnConfirmResetPw.setVisibility(View.GONE);
                 btnLogin.setVisibility(View.VISIBLE);
 
+                btnResetPw.setText(R.string.btn_forgot_password);
             }
         }else if(view.getId() == R.id.reset_password_btn) {
             String emailAddress = email.getText().toString();

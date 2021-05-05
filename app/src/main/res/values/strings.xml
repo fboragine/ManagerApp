@@ -69,4 +69,5 @@
     <string name="error_email_sent">Mail address cannot be empty!</string>
     <string name="donwload_stop">Download is paused!</string>
     <string name="upload_stop">Upload is paused!</string>
+    <string name="btn_goto_login">Back to the login</string>
 </resources>
