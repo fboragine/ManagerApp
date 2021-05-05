@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -38,7 +39,14 @@ public class GuestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest);
 
-        if(getApplicationContext().getExternalFilesDir(null).listFiles().length == 0){
+        String pathStudente = getExternalFilesDir(null).getPath() + "/studenti.srl";
+        String pathDocente = getExternalFilesDir(null).getPath() + "/docenti.srl";
+        File loggedStudente = new File(pathStudente);
+        File loggedDocente = new File(pathDocente);
+
+        if(getApplicationContext().getExternalFilesDir(null).listFiles().length == 0 ||
+            !loggedStudente.exists() ||
+            !loggedDocente.exists()){
             Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
             setSupportActionBar(toolbar);
             toolbar.setLogo(R.mipmap.ic_launcher);
