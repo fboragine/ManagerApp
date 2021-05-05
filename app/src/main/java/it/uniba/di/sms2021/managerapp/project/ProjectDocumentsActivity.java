@@ -40,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import it.uniba.di.sms2021.managerapp.R;
@@ -89,6 +90,10 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         files = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
+
+        String path = getExternalFilesDir(null).getPath() + "/projects files/";
+        File f1 = new File(path);
+        f1.mkdir();
 
         btnDownload = (Button) findViewById(R.id.button_download);
         btnUploadFile = (Button) findViewById(R.id.button_add_file);
@@ -154,16 +159,21 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSING_IMAGE_REQUEST);
     }
 
+    private void createProjectDir() {
+        String path = getExternalFilesDir(null).getPath() + "/projects files/" + progetto.getNome();
+        File f1 = new File(path);
+        f1.mkdir();
+    }
+
     public void downloadFile(String nomeFile, String percorso) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference islandRef = storageRef.child(percorso);
 
-        File localFile = new File(getExternalFilesDir(null), nomeFile);
-/*
-        if(!localFile.exists()) {
-            localFile.mkdir();
-        }*/
+        File localFile = new File(getExternalFilesDir(null) + "/projects files/" + progetto.getNome(), nomeFile);
+
+        createProjectDir();
+
         progressDialog.setTitle(getString(R.string.download_select));
         progressDialog.show();
 
