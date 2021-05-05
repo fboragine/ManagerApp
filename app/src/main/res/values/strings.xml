@@ -67,4 +67,6 @@
     <string name="reset_password">Reset Password</string>
     <string name="msg_reset">Insert email that need of password reset</string>
     <string name="error_email_sent">Mail address cannot be empty!</string>
+    <string name="donwload_stop">Download is paused!</string>
+    <string name="upload_stop">Upload is paused!</string>
 </resources>

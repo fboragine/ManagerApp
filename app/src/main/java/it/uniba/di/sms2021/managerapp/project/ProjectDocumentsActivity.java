@@ -160,18 +160,37 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         StorageReference islandRef = storageRef.child(percorso);
 
         File localFile = new File(getExternalFilesDir(null), nomeFile);
-
-        Toast.makeText(getApplicationContext(), getString(R.string.download_select) + ": " + nomeFile, Toast.LENGTH_LONG).show();
+/*
+        if(!localFile.exists()) {
+            localFile.mkdir();
+        }*/
+        progressDialog.setTitle(getString(R.string.download_select));
+        progressDialog.show();
 
         islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(), getString(R.string.download_succ) + ": " + nomeFile, Toast.LENGTH_LONG).show();
+            }
+        }).addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                // progress percentage
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                // percentage in progress dialog
+                progressDialog.setMessage("Downloaded " + ((int) progress) + "%...");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(), getString(R.string.download_error) + ": " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
+        }).addOnPausedListener(new OnPausedListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onPaused(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getApplicationContext(), getString(R.string.donwload_stop), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -219,7 +238,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                     .addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                            System.out.println("Upload is paused!");
+                            Toast.makeText(getApplicationContext(), getString(R.string.upload_stop), Toast.LENGTH_LONG).show();
                         }
                     });
         } else {
