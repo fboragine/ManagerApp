@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.project;
+package it.uniba.di.sms2021.managerapp.exam;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,45 +25,55 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Docente;
+import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 
-public class ProjectActivity extends AppCompatActivity {
+public class ExamActivity extends AppCompatActivity {
 
     protected static final int EDIT_ITEM_ID = View.generateViewId();
     protected static final int SAVE_ITEM_ID = View.generateViewId();
     protected static final int CANCEL_ITEM_ID = View.generateViewId();
-    private static final String TAG = "ProjectActivityLog";
+    private static final String TAG = "ExamActivityLog";
 
-    private Progetto progetto;
+    private Esame esame;
     private TextView textViewNome;
     private TextView textDescEsame;
-    private ListView listViewStudenti;
+    private ListView listViewEsami;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project);
+        setContentView(R.layout.activity_exam);
 
         final Intent src = getIntent();
         if(src != null) {
-            progetto = src.getParcelableExtra("progetto");
+            esame = src.getParcelableExtra("esame");
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
-        getSupportActionBar().setTitle(progetto.getNome());
+        getSupportActionBar().setTitle(esame.getNome());
 
-        textViewNome = findViewById(R.id.project_name);
-        textViewNome.setText(progetto.getNome());
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
-        textDescEsame = findViewById(R.id.project_description);
-        textDescEsame.setText(progetto.getDescrizione());
+        textViewNome = findViewById(R.id.exam_name);
+        textViewNome.setText(esame.getNome());
+
+        textDescEsame = findViewById(R.id.exam_description);
+        textDescEsame.setText(esame.getDescrizione());
 
         getDisplayName();
-        getEsame();
+        //getEsame();
     }
 
     @Override
@@ -87,11 +97,13 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
     public void getDisplayName() {
-        ArrayList<String> idStudentiPart = progetto.getIdStudenti();
-        ArrayList<Studente> studenti = new ArrayList<Studente>();
-        ArrayList<String> displayNameStudenti = new ArrayList<String>();
+        ArrayList<String> idDocentiPart = new ArrayList<>();
+               idDocentiPart.addAll(esame.getIdDocenti());
 
-        db.collection("studenti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        ArrayList<Docente> docenti = new ArrayList<>();
+        ArrayList<String> displayNameDocenti = new ArrayList<>();
+
+        db.collection("docenti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {
@@ -101,30 +113,30 @@ public class ProjectActivity extends AppCompatActivity {
 
                         do {
                             flag = false;
-                            if(idStudentiPart.get(count).equals(document.getString("id"))) {
-                                Studente studente = new Studente(document.getString("id"),
-                                                                 document.getString("matricola"),
-                                                                 document.getString("nome"),
-                                                                 document.getString("cognome"),
-                                                                 document.getString("email"),
-                                                                 document.getString("cDs"));
-                                studenti.add(studente);
 
-                                displayNameStudenti.add(studente.getNome() + " " + studente.getCognome());
+                            if(idDocentiPart.get(count).equals(document.getString("id"))) {
+                                Docente docente = new Docente(document.getString("id"),
+                                        document.getString("matricola"),
+                                        document.getString("nome"),
+                                        document.getString("cognome"),
+                                        document.getString("email"));
+                                docenti.add(docente);
+
+                                    displayNameDocenti.add(docente.getNome() + " " + docente.getCognome());
                             }
                             count ++;
-                        }while(!flag  && count < idStudentiPart.size());
+                        }while(!flag  && count < idDocentiPart.size());
                     }
 
-                    listViewStudenti = findViewById(R.id.project_students);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, displayNameStudenti);
-                    listViewStudenti.setAdapter(adapter);
+                    listViewEsami = findViewById(R.id.exam_teachers);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, displayNameDocenti);
+                    listViewEsami.setAdapter(adapter);
                 }
             }
         });
     }
 
-    private void getEsame() {
+    /*private void getEsame() {
 
         db.collection("esami").document(progetto.getCodiceEsame()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -144,11 +156,12 @@ public class ProjectActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
-    public void go_to_documents(View view) {
-        Intent intent = new Intent(getApplicationContext(), ProjectDocumentsActivity.class);
-        intent.putExtra("progetto",progetto);
+    public void go_to_projects(View view) {
+
+        Intent intent = new Intent(getApplicationContext(), ExamProjectActivity.class);
+        intent.putExtra("esame",esame);
         startActivity(intent);
     }
 }

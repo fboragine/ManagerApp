@@ -1,12 +1,14 @@
 package it.uniba.di.sms2021.managerapp.entities;
 
+import java.util.ArrayList;
+
 public class CorsoDiStudio {
 
     private String idCorsoDiStudio;
     private String nome;
     private String descrizione;
 
-    public CorsoDiStudio(String idCorsoDiStudio, String nome, String descrizione) {
+    public CorsoDiStudio(String idCorsoDiStudio, String nome, String descrizione, ArrayList<String> idEsami) {
         this.idCorsoDiStudio = idCorsoDiStudio;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -35,4 +37,5 @@ public class CorsoDiStudio {
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
+
 }

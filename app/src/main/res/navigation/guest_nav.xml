@@ -15,4 +15,9 @@
         android:name="it.uniba.di.sms2021.managerapp.guest.LoginFragment"
         android:label="@string/login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/examListFragment"
+        android:name="it.uniba.di.sms2021.managerapp.loggedUser.ExamListFragment"
+        android:label="ExamListFragment"
+        tools:layout="@layout/fragment_exam_list"/>
 </navigation>

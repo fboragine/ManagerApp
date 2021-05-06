@@ -1,38 +1,42 @@
 package it.uniba.di.sms2021.managerapp.service;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.SearchView;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentTransaction;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
+import it.uniba.di.sms2021.managerapp.entities.Esame;
 
 import static java.util.Collections.addAll;
 
-public class ListViewAdapter extends BaseAdapter {
+public class ExamListAdapter extends  BaseAdapter{
 
-    //variables
-    Context mContext;
-    LayoutInflater inflater;
-    ArrayList<CorsoDiStudio> corsiDiStudio;
-    ArrayList<CorsoDiStudio> corsiDiStudioRicerca;
+    private Context mContext;
+    private LayoutInflater inflater;
+    private ArrayList<Esame> esami;
+    private ArrayList<Esame> esamiRicerca;
 
     //constructor
-    public ListViewAdapter(Context context, ArrayList<CorsoDiStudio> corsiDiStudio) {
+    public ExamListAdapter(Context context, ArrayList<Esame> esami) {
         mContext = context;
-        this.corsiDiStudio = corsiDiStudio;
+        this.esami = esami;
         inflater = LayoutInflater.from(mContext);
-        corsiDiStudioRicerca = new ArrayList<>();
-        this.corsiDiStudioRicerca.addAll(this.corsiDiStudio);
+        esamiRicerca = new ArrayList<>();
+        esamiRicerca.addAll(esami);
     }
 
     public static class ViewHolder{
@@ -41,12 +45,12 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return corsiDiStudio.size();
+        return esami.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return corsiDiStudio.get(i);
+        return esami.get(i);
     }
 
     @Override
@@ -56,38 +60,40 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        ViewHolder holder;
+        it.uniba.di.sms2021.managerapp.service.ExamListAdapter.ViewHolder holder;
         if(view == null) {
-            holder = new ViewHolder();
+            holder = new it.uniba.di.sms2021.managerapp.service.ExamListAdapter.ViewHolder();
             view = inflater.inflate(R.layout.row, null);
 
             //locate the views in row.xml
             holder.mTitleTv = view.findViewById(R.id.mainTitle);
+
             holder.mDescTv = view.findViewById(R.id.mainDesc);
+            holder.mDescTv.setVisibility(View.INVISIBLE);
+
 
             view.setTag(holder);
         }
         else {
-            holder = (ViewHolder)view.getTag();
+            holder = (it.uniba.di.sms2021.managerapp.service.ExamListAdapter.ViewHolder)view.getTag();
         }
         //set the results into textviews
-        holder.mTitleTv.setText(corsiDiStudio.get(position).getNome());
-        holder.mDescTv.setText(corsiDiStudio.get(position).getDescrizione());
+        holder.mTitleTv.setText(esami.get(position).getNome());
 
         return view;
     }
 
     public void filter(String charText){
         charText = charText.toLowerCase(Locale.getDefault());
-        corsiDiStudio.clear();
+        esami.clear();
         if (charText.length() == 0) {
-            corsiDiStudio.addAll(corsiDiStudioRicerca);
+            esami.addAll(esamiRicerca);
         }
         else {
-            for (CorsoDiStudio corsi : corsiDiStudioRicerca) {
-                if (corsi.getNome().toLowerCase(Locale.getDefault())
-                    .contains(charText)) {
-                    corsiDiStudio.add(corsi);
+            for (Esame esame : esamiRicerca) {
+                if (esame.getNome().toLowerCase(Locale.getDefault())
+                        .contains(charText)) {
+                    esami.add(esame);
                 }
             }
         }

@@ -36,4 +36,6 @@
     <string name="description">Description</string>
     <string name="search_a_course">Search a Course</string>
     <string name="action_search">Search</string>
+    <string name="exam_name">Esame 1</string>
+    <string name="teachers">Teachers</string>
 </resources>

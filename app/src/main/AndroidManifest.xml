@@ -11,8 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".project.ProjectDocumentsActivity"></activity>
-        <activity android:name=".project.ProjectActivity"></activity>
+        <activity android:name=".exam.ExamProjectActivity"></activity>
+        <activity android:name=".exam.ExamActivity" />
+        <activity android:name=".project.ProjectDocumentsActivity" />
+        <activity android:name=".project.ProjectActivity" />
         <activity android:name=".guest.SignActivity" />
         <activity android:name=".loggedUser.StudentActivity" />
         <activity android:name=".guest.GuestActivity">

@@ -36,6 +36,7 @@
     <string name="action_search">Search</string>
     <string name="login_error_msg">Authentication error</string>
     <string name="welcome_msg">Welcome</string>
+    <string name="firebase_studente_error">\"get failed with \"</string>
     <string name="in_progress">In Progress</string>
     <string name="closed">Closed</string>
     <string name="logout">Logout</string>
@@ -70,4 +71,6 @@
     <string name="donwload_stop">Download is paused!</string>
     <string name="upload_stop">Upload is paused!</string>
     <string name="btn_goto_login">Back to the login</string>
+    <string name="exam_name">Esame 1</string>
+    <string name="teachers">Teachers</string>
 </resources>
