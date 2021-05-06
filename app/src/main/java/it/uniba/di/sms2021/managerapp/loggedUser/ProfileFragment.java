@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.os.FileUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.File;
 
 import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 import it.uniba.di.sms2021.managerapp.loggedUser.ProfileFragmentDirections;
@@ -160,6 +163,21 @@ public class ProfileFragment extends Fragment {
     public void logout(){
         FirebaseAuth.getInstance().signOut();
         StudentActivity.loginFile.delete();
+        File projectFile = new File(getContext().getApplicationContext().getExternalFilesDir(null).getPath());
+        deleteFolder(projectFile);
         Toast.makeText(getContext(),R.string.logout, Toast.LENGTH_SHORT).show();
+    }
+
+    /**La funzione pulisce la cartella di sistema eliminando la cartella dei media dei progetti e il file di log
+     * per evitare che un login diverso possa accedere a file appartenenti ad un altro utente*/
+    static void deleteFolder(File file){
+        for (File subFile : file.listFiles()) {
+            if(subFile.isDirectory()) {
+                deleteFolder(subFile);
+            } else {
+                subFile.delete();
+            }
+        }
+        file.delete();
     }
 }

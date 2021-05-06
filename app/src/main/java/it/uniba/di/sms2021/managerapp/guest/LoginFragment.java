@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -51,9 +52,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     View vistaLogin;
     Button btnLogin;
     Button btnResetPw;
+    Button btnConfirmResetPw;
     EditText email;
     EditText password;
     RadioButton studenteLogin;
+    ImageView passwordIco;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -77,11 +80,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         btnLogin = (Button) vistaLogin.findViewById(R.id.buttonLogin);
         btnResetPw = (Button) vistaLogin.findViewById(R.id.btn_reset_password);
-
+        email = (EditText)vistaLogin.findViewById(R.id.emailTxt);
+        password = (EditText)vistaLogin.findViewById(R.id.passwordTxt);
         studenteLogin = (RadioButton) vistaLogin.findViewById(R.id.radio_student);
+        btnConfirmResetPw = (Button) vistaLogin.findViewById(R.id.reset_password_btn);
+        passwordIco = (ImageView) vistaLogin.findViewById(R.id.passwordIcon);
 
         btnLogin.setOnClickListener(this);
         btnResetPw.setOnClickListener(this);
+        btnConfirmResetPw.setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -95,17 +102,52 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         if(view.getId() == R.id.buttonLogin)    //Click sul pulsante login
         {
-            email = (EditText)vistaLogin.findViewById(R.id.emailTxt);
-            password = (EditText)vistaLogin.findViewById(R.id.passwordTxt);
             if(!email.getText().toString().matches("") &&
                !password.getText().toString().matches("")){
-
                 login(email.getText().toString(), password.getText().toString());
             }
         }
         else if(view.getId() == R.id.btn_reset_password)    //Click sul pulsante di reset della pw
         {
-            //reset della password
+            if(btnConfirmResetPw.getVisibility() == View.GONE){
+                password.setVisibility(View.INVISIBLE);
+                passwordIco.setVisibility(View.INVISIBLE);
+
+                btnConfirmResetPw.setVisibility(View.VISIBLE);
+                btnLogin.setVisibility(View.GONE);
+
+                btnResetPw.setText(R.string.btn_goto_login);
+
+                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.msg_reset), Toast.LENGTH_LONG).show();
+            }else {
+                password.setVisibility(View.VISIBLE);
+                passwordIco.setVisibility(View.VISIBLE);
+
+                btnConfirmResetPw.setVisibility(View.GONE);
+                btnLogin.setVisibility(View.VISIBLE);
+
+                btnResetPw.setText(R.string.btn_forgot_password);
+            }
+        }else if(view.getId() == R.id.reset_password_btn) {
+            String emailAddress = email.getText().toString();
+
+            if(!emailAddress.matches("")) {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth.sendPasswordResetEmail(emailAddress)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.email_sent), Toast.LENGTH_LONG).show();
+                                    Log.d(TAG, "Email sent");
+                                } else {
+                                    Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        }else {
+            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.error_email_sent), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -180,10 +222,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         }
 
                     } else {
-                        Toast.makeText(getActivity().getApplicationContext(), R.string.doc_not_found, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity().getApplicationContext(), R.string.doc_not_found, Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Log.d(TAG, getString(R.string.firebase_studente_error), task.getException());
+                    Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }

@@ -110,6 +110,7 @@
                 tools:layout_editor_absoluteX="2dp">
 
                 <ImageView
+                    android:id="@+id/passwordIcon"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:contentDescription="@string/course"
@@ -131,7 +132,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="60dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
@@ -148,6 +148,14 @@
                     android:background="@color/deep_orange_500" />
 
                 <Button
+                    android:id="@+id/reset_password_btn"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reset_password"
+                    android:background="@color/deep_orange_500" />
+
+                <Button
                     android:id="@+id/btn_reset_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -161,7 +169,7 @@
                     android:id="@+id/btn_goto_register"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="20dip"
+                    android:layout_marginTop="5dp"
                     android:background="@null"
                     android:text="@string/btn_goto_register"
                     android:textAllCaps="false"
