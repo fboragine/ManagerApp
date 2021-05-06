@@ -88,12 +88,12 @@ public class StudentActivity extends AppCompatActivity {
 
         try {
             input = new ObjectInputStream(new FileInputStream(new File(getExternalFilesDir(null),filename)));
-            if(filename.toString().matches("studenti.srl")) {
+            if(filename.matches("studenti.srl")) {
                 loggedUser = new Studente();
                 loggedUser = (Studente) input.readObject();
 
                 loggedStudent = (Studente) loggedUser;
-            }else if(filename.toString().matches("docenti.srl")) {
+            }else if(filename.matches("docenti.srl")) {
                 loggedUser = new Docente();
                 loggedUser = (Docente) input.readObject();
 

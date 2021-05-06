@@ -2,6 +2,7 @@
 <resources>
     <color name="blue_200">#63A4FF</color>
     <color name="blue_500">#1976D2</color>
+    <color name="success_green">#4BB543</color>
     <color name="blue_700">#004BA0</color>
     <color name="deep_orange_500">#FF5722</color>
     <color name="deep_orange_700">#C41C00</color>
