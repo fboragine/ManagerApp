@@ -54,7 +54,7 @@ public class GuestActivity extends AppCompatActivity {
         if(getApplicationContext().getExternalFilesDir(null).listFiles().length == 0 ||
             !loggedStudente.exists() ||
             !loggedDocente.exists()){
-            Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
+            toolbar = (Toolbar) findViewById(R.id.top_toolbar);
             setSupportActionBar(toolbar);
             toolbar.setLogo(R.mipmap.ic_launcher);
             toolbar.setTitle("Home");
