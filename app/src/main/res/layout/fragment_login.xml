@@ -95,7 +95,8 @@
                     tools:ignore="RtlSymmetry"
                     android:autofillHints="E-mail"
                     android:hint="@string/e_mail"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:backgroundTint="@color/blue_700"/>
             </LinearLayout>
 
             <LinearLayout
