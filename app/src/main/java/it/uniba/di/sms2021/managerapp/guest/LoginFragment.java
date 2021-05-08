@@ -75,6 +75,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        ((GuestActivity)getActivity()).disableBackArrow();
+
         // Inflate the layout for this
         vistaLogin = inflater.inflate(R.layout.fragment_login, container, false);
 
@@ -263,6 +265,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
+
+        menu.findItem(R.id.action_search).setVisible(false);
     }
 
     @Override
