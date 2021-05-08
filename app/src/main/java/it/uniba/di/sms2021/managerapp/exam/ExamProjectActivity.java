@@ -69,7 +69,6 @@ public class ExamProjectActivity extends AppCompatActivity {
                                     (ArrayList<String>) document.get("idStudenti"),
                                     document.getBoolean("stato"));
                             progetti.add(progetto);
-                            Log.d("AAAAAAAAAAAAAAA", progetto.getId());
                         }
                     }
 
