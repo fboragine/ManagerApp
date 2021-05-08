@@ -114,6 +114,7 @@ public class SignActivity extends AppCompatActivity{
                         user.put("id", mAuth.getCurrentUser().getUid());
                         DocumentReference documentReference = collectionReference.document(mAuth.getCurrentUser().getUid());
                         documentReference.set(user);
+                        Toast.makeText(getApplicationContext(), "Registrazione effettuata", Toast.LENGTH_LONG).show();
                         // entrare nella activity da loggato
                         finish();
                     }else {
