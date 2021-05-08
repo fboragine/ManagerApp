@@ -38,7 +38,6 @@ public class ExamProjectActivity extends AppCompatActivity {
     private ProjectListAdapter adapterProgetti;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ListView listView;
-    private String esempio[] = {"Progetto1", "Progetto2", "Progetto3", "Progetto4", "Progetto5"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
