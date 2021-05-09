@@ -95,17 +95,31 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         File f1 = new File(path);
         f1.mkdir();
 
-        btnDownload = (Button) findViewById(R.id.button_download);
-        btnUploadFile = (Button) findViewById(R.id.button_add_file);
-        btnSelectFile = (Button) findViewById(R.id.button_select_file);
-        switchUpload = (Switch) findViewById(R.id.switch_upload);
-        selectedFileLab = (TextView) findViewById(R.id.selected_file);
+        btnDownload = findViewById(R.id.button_download);
+        btnUploadFile = findViewById(R.id.button_add_file);
+        btnSelectFile = findViewById(R.id.button_select_file);
+        switchUpload = findViewById(R.id.switch_upload);
+        selectedFileLab = findViewById(R.id.selected_file);
 
         selectedFileLab.setVisibility(View.INVISIBLE);
         createExplorerFile();
     }
 
     private void createExplorerFile() {
+        btnUploadFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadFile(fileUri);
+            }
+        });
+        btnSelectFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChoosingFile();
+
+            }
+        });
+
         getFileList(1,new SpecsCallback() {
             @Override
             public synchronized void onCallback(SpecsFile specsFile, boolean flag) {
@@ -128,24 +142,10 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                             }
                         }
                     });
-
-                    btnSelectFile.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            showChoosingFile();
-
-                        }
-                    });
-
-                    btnUploadFile.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            uploadFile(fileUri);
-                        }
-                    });
                 }
             }
         });
+
     }
 
     private void showChoosingFile() {
