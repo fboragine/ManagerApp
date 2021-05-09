@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp.loggedUser;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -26,10 +28,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.project.AddNewProjectActivity;
 import it.uniba.di.sms2021.managerapp.service.RecyclerViewAdapter;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = "SimpleToolbarTest";
 
@@ -41,6 +44,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView.LayoutManager closedLayoutManager;
     private RecyclerView.Adapter inProgressAdapter;
     private RecyclerView.Adapter closedAdapter;
+
+    private Button addProjectBtn;
 
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -62,6 +67,9 @@ public class HomeFragment extends Fragment {
 
         inProgressProject = new ArrayList<>();
         closedProject = new ArrayList<>();
+
+        addProjectBtn = (Button) viewHome.findViewById(R.id.add_project_btn);
+        addProjectBtn.setOnClickListener(this);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("progetti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -132,6 +140,15 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.add_project_btn) {
+            Intent intent = new Intent(getActivity().getApplicationContext(), AddNewProjectActivity.class);;
+            startActivity(intent);
+            getActivity().finish();
+        }
+    }
+
+    @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
@@ -169,12 +186,9 @@ public class HomeFragment extends Fragment {
             filter.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
-            filter.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+            filter.setOnMenuItemClickListener(item -> {
+                Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                return true;
             });
         }
 

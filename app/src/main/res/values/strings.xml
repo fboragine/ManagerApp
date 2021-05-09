@@ -73,4 +73,18 @@
     <string name="btn_goto_login">Back to the login</string>
     <string name="exam_name">Esame 1</string>
     <string name="teachers">Teachers</string>
+    <string name="add_new_project">Add new project</string>
+    <string name="closed_projects">Closed Projects</string>
+    <string name="in_progress_projects">In Progress Projects</string>
+    <string name="name_project">Name project</string>
+    <string name="description_project">Project description</string>
+    <string name="label_exams">Select the exam</string>
+    <string name="label_attendees">Select attendees</string>
+    <string name="submit">Submit</string>
+    <string name="add_exam">Add exam</string>
+    <string name="add_attendees">Add attendees</string>
+    <string name="exam_dialog_title">Choose an Exam</string>
+    <string name="attendees_dialog_title">Select project\'s attendees</string>
+    <string name="change_select_attendees">Change Selected Attendees</string>
+    <string name="change_select_exam">Change Selected Exam</string>
 </resources>

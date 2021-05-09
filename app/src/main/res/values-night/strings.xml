@@ -38,4 +38,8 @@
     <string name="action_search">Search</string>
     <string name="exam_name">Esame 1</string>
     <string name="teachers">Teachers</string>
+    <string name="name_project">Name project</string>
+    <string name="description_project">Project description</string>
+    <string name="label_exams">Select the exam</string>
+    <string name="label_attendees">Select attendees</string>
 </resources>

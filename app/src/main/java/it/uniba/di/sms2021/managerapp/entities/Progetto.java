@@ -70,6 +70,10 @@ public class Progetto implements Parcelable {
         }
     };
 
+    public Progetto() {
+
+    }
+
     public String getId() {
         return id;
     }
@@ -117,6 +121,10 @@ public class Progetto implements Parcelable {
     public void setIdStudenti(ArrayList<String> idStudenti) {
         this.idStudenti = idStudenti;
     }
+
+    public boolean getStato() { return stato; }
+
+    public void setStato(boolean stato) { this.stato = stato; }
 
     public String idGenerator() {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
