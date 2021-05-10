@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import it.uniba.di.sms2021.managerapp.R;
@@ -46,6 +48,11 @@ public class ProjectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
 
+        String pathStudente = getExternalFilesDir(null).getPath() + "/studenti.srl";
+        String pathDocente = getExternalFilesDir(null).getPath() + "/docenti.srl";
+        File loggedStudente = new File(pathStudente);
+        File loggedDocente = new File(pathDocente);
+
         final Intent src = getIntent();
         if(src != null) {
             progetto = src.getParcelableExtra("progetto");
@@ -63,6 +70,13 @@ public class ProjectActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        if(getApplicationContext().getExternalFilesDir(null).listFiles().length == 0 ||
+                !loggedStudente.exists() ||
+                !loggedDocente.exists()) {
+            Button docButton = (Button) findViewById(R.id.project_files);
+            docButton.setVisibility(View.GONE);
+        }
 
         textViewNome = findViewById(R.id.project_name);
         textViewNome.setText(progetto.getNome());
