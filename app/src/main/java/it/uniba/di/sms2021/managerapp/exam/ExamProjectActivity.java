@@ -97,7 +97,10 @@ public class ExamProjectActivity extends AppCompatActivity {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                            Intent intent = new Intent(getApplicationContext(), ProjectActivity.class);
+                            intent.putExtra("progetto", progetti.get(i));
+                            startActivity(intent);
+                            finish();
                         }
                     });
                 }
