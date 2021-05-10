@@ -141,13 +141,13 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
         String[] listItems = new String[attendeesList.size()];
         boolean[] selectedItems = new boolean[attendeesList.size()];
 
+
         //Ottengo i valori da visualizzare nella lista degli esami
         for (int i = 0; i < attendeesList.size(); i++) {
-            listItems[i] = attendeesList.get(i).getNome() + " " + attendeesList.get(i).getCognome();
-            selectedItems[i] = false;
+                listItems[i] = attendeesList.get(i).getNome() + " " + attendeesList.get(i).getCognome();
+                selectedItems[i] = false;
         }
 
-        final int[] cont = {0};
         //Avvia un alert dialog box impostandolo come scelta singola
         alertDialog.setMultiChoiceItems(listItems, selectedItems, new DialogInterface.OnMultiChoiceClickListener()  {
             @SuppressLint("SetTextI18n")
@@ -164,6 +164,8 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
             public void onClick(DialogInterface dialog, int which) {
                 ArrayList<String> idStudenti = new ArrayList<>();
                 ArrayList<String> studentiSelezionati = new ArrayList<>();
+
+                idStudenti.add(loggedStudent.getId());
 
                 // Do something when click positive button
                 Log.d(null, "Elementi selezionati: " + selectedItems.length);
@@ -274,7 +276,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
 
         EditText nomeProgetto = findViewById(R.id.name_new_project);
         EditText descrizioneProgetto = findViewById(R.id.project_description);
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
         //Controllo che l'utente non abbia lasciato valori nulli
         if( !nomeProgetto.getText().toString().matches("") &&
@@ -355,16 +357,19 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if(task.isSuccessful()) {
-                        ArrayList<Studente> displayPartecipanti = new ArrayList<Studente>();   //Preleva solo l'ID dell'esame corrispondente al CDS
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Studente newStudente = new Studente( document.getString("id"),
-                                    document.getString("matricola"),
-                                    document.getString("nome"),
-                                    document.getString("cognome"),
-                                    document.getString("email"),
-                                    document.getString("cDs"));
+                        ArrayList<Studente> displayPartecipanti = new ArrayList<Studente>();
 
-                            displayPartecipanti.add(newStudente);
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            if(!loggedStudent.getId().equals(document.getString("id"))) {
+                                Studente newStudente = new Studente( document.getString("id"),
+                                        document.getString("matricola"),
+                                        document.getString("nome"),
+                                        document.getString("cognome"),
+                                        document.getString("email"),
+                                        document.getString("cDs"));
+
+                                displayPartecipanti.add(newStudente);
+                            }
                         }
                         myCallback.onCallback(null,displayPartecipanti);
                     }
