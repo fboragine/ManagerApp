@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
@@ -63,6 +64,8 @@ public class ProjectActivity extends AppCompatActivity {
         toolbar.setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setTitle(progetto.getNome());
 
+        Button docButton = findViewById(R.id.project_files);
+
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,11 +74,12 @@ public class ProjectActivity extends AppCompatActivity {
             }
         });
 
-        if(getApplicationContext().getExternalFilesDir(null).listFiles().length == 0 ||
-                !loggedStudente.exists() ||
+        if(Objects.requireNonNull(getApplicationContext().getExternalFilesDir(null).listFiles()).length == 0 ||
+                !loggedStudente.exists() &&
                 !loggedDocente.exists()) {
-            Button docButton = (Button) findViewById(R.id.project_files);
             docButton.setVisibility(View.GONE);
+        }else {
+            docButton.setVisibility(View.VISIBLE);
         }
 
         textViewNome = findViewById(R.id.project_name);
