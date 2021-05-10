@@ -29,12 +29,15 @@ public class ProjectListAdapter extends  BaseAdapter{
     private Context mContext;
     private LayoutInflater inflater;
     private ArrayList<Progetto> progetti;
+    private ArrayList<Progetto> progettiRicerca;
 
     //constructor
     public ProjectListAdapter(Context context, ArrayList<Progetto> progetti) {
         mContext = context;
         this.progetti = progetti;
         inflater = LayoutInflater.from(mContext);
+        progettiRicerca = new ArrayList<>();
+        this.progettiRicerca.addAll(this.progetti);
     }
 
     public static class ViewHolder{
@@ -81,20 +84,20 @@ public class ProjectListAdapter extends  BaseAdapter{
         return view;
     }
 
-    /*public void filter(String charText){
+    public void filter(String charText){
         charText = charText.toLowerCase(Locale.getDefault());
-        esami.clear();
+        progetti.clear();
         if (charText.length() == 0) {
-            esami.addAll(esamiRicerca);
+            progetti.addAll(progettiRicerca);
         }
         else {
-            for (Esame esame : esamiRicerca) {
-                if (esame.getNome().toLowerCase(Locale.getDefault())
+            for (Progetto progetto : progettiRicerca) {
+                if (progetto.getNome().toLowerCase(Locale.getDefault())
                         .contains(charText)) {
-                    esami.add(esame);
+                    progetti.add(progetto);
                 }
             }
         }
         notifyDataSetChanged();
-    }*/
+    }
 }
