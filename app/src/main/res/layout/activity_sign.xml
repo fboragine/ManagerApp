@@ -60,7 +60,8 @@
                     android:layout_marginStart="100dp"
                     android:autofillHints="@string/name"
                     android:hint="@string/name"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:backgroundTint="@color/blue_700"/>
 
                 <EditText
                     android:id="@+id/surname"
@@ -70,7 +71,8 @@
                     android:layout_marginStart="100dp"
                     android:autofillHints="@string/surname"
                     android:hint="@string/surname"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:backgroundTint="@color/blue_700"/>
 
                 <EditText
 
@@ -81,7 +83,8 @@
                     android:layout_marginStart="100dp"
                     android:autofillHints="Matricola"
                     android:hint="@string/matricola_txtLabel"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:backgroundTint="@color/blue_700"/>
 
             </RelativeLayout>
 
@@ -156,7 +159,8 @@
                         tools:ignore="RtlSymmetry"
                         android:autofillHints="@string/e_mail"
                         android:hint="@string/e_mail"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:backgroundTint="@color/blue_700"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -183,7 +187,8 @@
                         android:textSize="18sp"
                         android:autofillHints="@string/password"
                         android:hint="@string/password"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"
+                        android:backgroundTint="@color/blue_700"/>
                 </LinearLayout>
             </RelativeLayout>
         </RelativeLayout>
