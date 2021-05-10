@@ -56,6 +56,14 @@ public class ProjectActivity extends AppCompatActivity {
         toolbar.setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setTitle(progetto.getNome());
 
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         textViewNome = findViewById(R.id.project_name);
         textViewNome.setText(progetto.getNome());
 

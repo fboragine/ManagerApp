@@ -21,6 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -184,15 +187,19 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             CollectionReference collectionReference = db.collection("studenti");
 
             //crea l'autentication e inserisce l'utente nel firebase
-            mAuth.createUserWithEmailAndPassword(email.getText().toString(), pw.getText().toString()).addOnCompleteListener(task -> {
-                if(task.isSuccessful()) {
-                    user.put("id", Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
-                    DocumentReference documentReference = collectionReference.document(mAuth.getCurrentUser().getUid());
-                    documentReference.set(user);
-                    // entrare nella activity da loggato
-                    finish();
-                }else {
-                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+            mAuth.createUserWithEmailAndPassword(email.getText().toString(), pw.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()) {
+                        user.put("id", mAuth.getCurrentUser().getUid());
+                        DocumentReference documentReference = collectionReference.document(mAuth.getCurrentUser().getUid());
+                        documentReference.set(user);
+                        Toast.makeText(getApplicationContext(), "Registrazione effettuata", Toast.LENGTH_LONG).show();
+                        // entrare nella activity da loggato
+                        finish();
+                    }else {
+                        Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }else {
