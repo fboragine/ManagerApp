@@ -61,7 +61,6 @@ import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
 
 public class AddNewProjectActivity extends AppCompatActivity implements View.OnClickListener{
 
-    protected String examID;
     interface SpecsCallback {
         void onCallback(ArrayList<Esame> examList, ArrayList<Studente> attendeesList);
     }
@@ -140,7 +139,6 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
     private synchronized void viewAttendeesList(ArrayList<Studente> attendeesList, AlertDialog.Builder alertDialog) {
         String[] listItems = new String[attendeesList.size()];
         boolean[] selectedItems = new boolean[attendeesList.size()];
-        int savePos[] =  new int[attendeesList.size()];
 
         //Ottengo i valori da visualizzare nella lista degli esami
         for (int i = 0; i < attendeesList.size(); i++) {
@@ -148,20 +146,14 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
             selectedItems[i] = false;
         }
 
-        final int[] i = {0};
+        final int[] cont = {0};
         //Avvia un alert dialog box impostandolo come scelta singola
         alertDialog.setMultiChoiceItems(listItems, selectedItems, new DialogInterface.OnMultiChoiceClickListener()  {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
                 //Salva la posizione dell'elemento selezionato anche nella prossima apertura del dialog box
                 selectedItems[which] = isChecked;
-
-                // Aggiorna la textView e seleziona l'id dell'esame scelto
-                savePos[i[0]] = which;
-                i[0]++;
-
             }
         });
 
@@ -173,11 +165,12 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
                 ArrayList<String> studentiSelezionati = new ArrayList<>();
 
                 // Do something when click positive button
+                Log.d(null, "Elementi selezionati: " + selectedItems.length);
                 for (int i = 0; i < selectedItems.length; i++) {
                     boolean checked = selectedItems[i];
                     if (checked) {
-                        idStudenti.add(attendeesList.get(savePos[i]).getId());
-                        studentiSelezionati.add(attendeesList.get(savePos[i]).getNome() + " " + attendeesList.get(savePos[i]).getCognome());
+                        idStudenti.add(attendeesList.get(i).getId());
+                        studentiSelezionati.add(attendeesList.get(i).getNome() + " " + attendeesList.get(i).getCognome());
                     }
                 }
 
@@ -350,24 +343,27 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
     }
 
     private void getPartecipanti() {
-        db.collection("studenti").whereEqualTo("cDs",loggedStudent.getcDs()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    ArrayList<Studente> displayPartecipanti = new ArrayList<Studente>();   //Preleva solo l'ID dell'esame corrispondente al CDS
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Studente newStudente = new Studente( document.getString("id"),
-                                document.getString("matricola"),
-                                document.getString("nome"),
-                                document.getString("cognome"),
-                                document.getString("email"),
-                                document.getString("cDs"));
+        if(!addAttendees.getText().toString().matches(String.valueOf(R.string.change_select_attendees))) {
+            db.collection("studenti").whereEqualTo("cDs",loggedStudent.getcDs()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()) {
+                        ArrayList<Studente> displayPartecipanti = new ArrayList<Studente>();   //Preleva solo l'ID dell'esame corrispondente al CDS
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Studente newStudente = new Studente( document.getString("id"),
+                                    document.getString("matricola"),
+                                    document.getString("nome"),
+                                    document.getString("cognome"),
+                                    document.getString("email"),
+                                    document.getString("cDs"));
 
-                        displayPartecipanti.add(newStudente);
+                            displayPartecipanti.add(newStudente);
+                        }
+                        myCallback.onCallback(null,displayPartecipanti);
                     }
-                    myCallback.onCallback(null,displayPartecipanti);
                 }
-            }
-        });
+            });
+        }
+
     }
 }
