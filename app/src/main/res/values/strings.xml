@@ -92,4 +92,5 @@
     <string name="cds_dialog_title">Select course</string>
     <string name="matricola_txtLabel">Matricola</string>
     <string name="todo">TODO</string>
+    <string name="change_select_course">Change selected course</string>
 </resources>

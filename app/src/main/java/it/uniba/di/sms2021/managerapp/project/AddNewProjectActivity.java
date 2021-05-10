@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -185,6 +186,8 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
                 // Chiude il dialog box e modifica il testo nel bottone
                 dialog.dismiss();
                 addAttendees.setText(R.string.change_select_attendees);
+                int color = Color.parseColor("#63A4FF");
+                addAttendees.setBackgroundColor(color);
             }
         });
 
@@ -222,7 +225,11 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
 
                 // Chiude il dialog box e modifica il testo nel bottone
                 dialog.dismiss();
+
                 addExam.setText(R.string.change_select_exam);
+                int color = Color.parseColor("#63A4FF");
+                addExam.setBackgroundColor(color);
+
                 selectedExam.setVisibility(View.VISIBLE);
 
             }
@@ -267,7 +274,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
 
         EditText nomeProgetto = findViewById(R.id.name_new_project);
         EditText descrizioneProgetto = findViewById(R.id.project_description);
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         //Controllo che l'utente non abbia lasciato valori nulli
         if( !nomeProgetto.getText().toString().matches("") &&

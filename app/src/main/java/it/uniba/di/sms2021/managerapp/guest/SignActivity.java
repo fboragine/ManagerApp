@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -127,7 +128,10 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
             // Chiude il dialog box e modifica il testo nel bottone
             dialog.dismiss();
-            addCourse.setText(R.string.change_select_exam);
+            addCourse.setText(R.string.change_select_course);
+            int color = Color.parseColor("#63A4FF");
+            addCourse.setBackgroundColor(color);
+
             selectedCds.setVisibility(View.VISIBLE);
 
         });
