@@ -2,105 +2,185 @@ package it.uniba.di.sms2021.managerapp.guest;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 
 import static android.content.ContentValues.TAG;
 
-public class SignActivity extends AppCompatActivity{
+public class SignActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private Studente newStudent;
+    Button addCourse;
+    CdsCallback myCallback;
+    TextView selectedCds;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.top_register_toolbar);
+        Toolbar toolbar = findViewById(R.id.top_register_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Registration");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Registration");
+
+        db = FirebaseFirestore.getInstance();
+
+        newStudent = new Studente();
+
+        addCourse = findViewById(R.id.add_course);
+        addCourse.setOnClickListener(this);
+
+        selectedCds = findViewById(R.id.course);
+
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-        return super.onCreateView(parent, name, context, attrs);
+    interface CdsCallback {
+        void onCallback(ArrayList<CorsoDiStudio> cDsList);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_register_menu, menu);
-        return true;
-    }
+    public void onClick(View v) {
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.do_registration:
-                register();
-                break;
-            case R.id.cancel_registration:
-                finish();
-                break;
+        if (v.getId() == R.id.add_course) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(SignActivity.this);
+            alertDialog.setTitle(R.string.cds_dialog_title);
+
+            getCdS();
+
+            myCallback = new CdsCallback() {
+                @Override
+                public synchronized void onCallback(ArrayList<CorsoDiStudio> cDsList) {
+                    viewCdsList(cDsList, alertDialog);
+                }
+            };
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private void getCdS() {
+        db.collection("corsiDiStudio").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ArrayList<CorsoDiStudio> displayCds = new ArrayList<>();
+                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+
+                    CorsoDiStudio newCorso = new CorsoDiStudio( document.getString("id"),
+                            document.getString("nome"),
+                            document.getString("descrizione"),
+                            null);
+
+                    displayCds.add(newCorso);
+                }
+                myCallback.onCallback(displayCds);
+            } else {
+                Log.d(TAG, "Error getting documents: ", task.getException());
+            }
+        });
+    }
+
+    private synchronized void viewCdsList(ArrayList<CorsoDiStudio> cDsList, AlertDialog.Builder alertDialog) {
+        String[] listItems = new String[cDsList.size()];
+        final int[] checkedItem = {-1};
+
+        //Ottengo i valori da visualizzare nella lista degli esami
+        for (int i = 0; i < cDsList.size(); i++)
+            listItems[i] = cDsList.get(i).getNome();
+
+        //Avvia un alert dialog box impostandolo come scelta singola
+        alertDialog.setSingleChoiceItems(listItems, checkedItem[0], (dialog, which) -> {
+
+            //Salva la posizione dell'elemento selezionato anche nella prossima apertura del dialog box
+            checkedItem[0] = which;
+
+            // Aggiorna la textView e seleziona l'id dell'esame scelto
+            selectedCds.setText(listItems[which]);
+            newStudent.setcDs(cDsList.get(which).getIdCorsoDiStudio());
+
+            // Chiude il dialog box e modifica il testo nel bottone
+            dialog.dismiss();
+            addCourse.setText(R.string.change_select_course);
+            int color = Color.parseColor("#63A4FF");
+            addCourse.setBackgroundColor(color);
+
+            selectedCds.setVisibility(View.VISIBLE);
+
+        });
+
+        // Imposta un'eventuale azione in caso di click su pulsante negativo quindi cancel
+        alertDialog.setNegativeButton("Cancel", (dialog, which) -> {
+
+        });
+
+        // Crea il customAlertDialog
+        AlertDialog customAlertDialog = alertDialog.create();
+
+        // Mostra il dialog box
+        customAlertDialog.show();
     }
 
     private void register() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-        EditText nome = (EditText) findViewById(R.id.name);
-        EditText cognome = (EditText) findViewById(R.id.surname);
-        EditText matricola = (EditText) findViewById(R.id.serial_number);
-        EditText cDs = (EditText) findViewById(R.id.course);
-        EditText email = (EditText) findViewById(R.id.email);
-        EditText pw = (EditText) findViewById(R.id.password);
+        EditText nome = findViewById(R.id.name);
+        EditText cognome = findViewById(R.id.surname);
+        EditText matricola = findViewById(R.id.serial_number);
+        EditText email = findViewById(R.id.email);
+        EditText pw =  findViewById(R.id.password);
 
         if( !matricola.getText().toString().matches("") &&
-            !nome.getText().toString().matches("") &&
-            !cognome.getText().toString().matches("") &&
-            !email.getText().toString().matches("") &&
-            !cDs.getText().toString().matches("") &&
-            !email.getText().toString().matches("") &&
-            !pw.getText().toString().matches("")) {
+                !nome.getText().toString().matches("") &&
+                !cognome.getText().toString().matches("") &&
+                !email.getText().toString().matches("") &&
+                !selectedCds.toString().matches("Select Course") &&
+                !email.getText().toString().matches("") &&
+                !pw.getText().toString().matches("")) {
 
-            Studente aux = new Studente("",
-                    matricola.getText().toString(),
-                    nome.getText().toString(),
-                    cognome.getText().toString(),
-                    email.getText().toString(),
-                    cDs.getText().toString());
+            newStudent.setId("");
+            newStudent.setMatricola(matricola.getText().toString());
+            newStudent.setNome(nome.getText().toString());
+            newStudent.setCognome(cognome.getText().toString());
+            newStudent.setEmail(email.getText().toString());
 
             Map<String ,String> user = new HashMap<>();
-            user.put("nome",aux.getNome());
-            user.put("cognome",aux.getCognome());
-            user.put("email",aux.getEmail());
-            user.put("matricola",aux.getMatricola());
-            user.put("cDs",aux.getcDs());
+            user.put("nome", newStudent.getNome());
+            user.put("cognome", newStudent.getCognome());
+            user.put("email", newStudent.getEmail());
+            user.put("matricola", newStudent.getMatricola());
+            user.put("cDs", newStudent.getcDs());
             user.put("percorsoImg", "");
 
             //Getting Reference to "studenti" collection
@@ -126,4 +206,32 @@ public class SignActivity extends AppCompatActivity{
             Toast.makeText(getApplicationContext(), R.string.register_field_void, Toast.LENGTH_LONG).show();
         }
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+        return super.onCreateView(parent, name, context, attrs);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_register_menu, menu);
+        return true;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.do_registration:
+                register();
+                break;
+            case R.id.cancel_registration:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

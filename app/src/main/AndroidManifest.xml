@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".exam.ExamProjectActivity"></activity>
+        <activity android:name=".project.AddNewProjectActivity"></activity>
         <activity android:name=".exam.ExamActivity" />
         <activity android:name=".project.ProjectDocumentsActivity" />
         <activity android:name=".project.ProjectActivity" />

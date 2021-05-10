@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import android.os.FileUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,18 +17,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 
 import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
-import it.uniba.di.sms2021.managerapp.loggedUser.ProfileFragmentDirections;
 import it.uniba.di.sms2021.managerapp.R;
+
+import static it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity.loggedStudent;
 
 public class ProfileFragment extends Fragment {
 
     private View vistaProfilo;
     private GuestActivity callback;
+    private FirebaseFirestore db;
 
     TextView label;
 
@@ -41,6 +45,8 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        db = FirebaseFirestore.getInstance();
+
         setHasOptionsMenu(true);
     }
 
@@ -50,24 +56,30 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        label = (TextView) vistaProfilo.findViewById(R.id.name);
+        label = vistaProfilo.findViewById(R.id.name);
         label.setText(StudentActivity.loggedUser.getNome());
 
-        label = (TextView) vistaProfilo.findViewById(R.id.surname);
+        label = vistaProfilo.findViewById(R.id.surname);
         label.setText(StudentActivity.loggedUser.getCognome());
 
-        label = (TextView) vistaProfilo.findViewById(R.id.serial_number);
+        label = vistaProfilo.findViewById(R.id.serial_number);
         label.setText(StudentActivity.loggedUser.getMatricola());
 
-        label = (TextView) vistaProfilo.findViewById(R.id.profile_email);
+        label = vistaProfilo.findViewById(R.id.profile_email);
         label.setText(StudentActivity.loggedUser.getEmail());
 
         if(StudentActivity.loginFile.getName().matches("studenti.srl")){
             vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.VISIBLE);
             vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.VISIBLE);
 
-            label = (TextView) vistaProfilo.findViewById(R.id.profile_course);
-            label.setText(StudentActivity.loggedStudent.getcDs());
+            label = vistaProfilo.findViewById(R.id.profile_course);
+
+            db.collection("corsiDiStudio").document(loggedStudent.getcDs()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    label.setText(documentSnapshot.getData().get("nome").toString());
+                }
+            });
         }else {
 
             vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.INVISIBLE);
