@@ -42,4 +42,5 @@
     <string name="description_project">Project description</string>
     <string name="label_exams">Select the exam</string>
     <string name="label_attendees">Select attendees</string>
+    <string name="matricola_txtLabel">Matricola</string>
 </resources>

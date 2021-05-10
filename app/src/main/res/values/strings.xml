@@ -87,4 +87,9 @@
     <string name="attendees_dialog_title">Select project\'s attendees</string>
     <string name="change_select_attendees">Change Selected Attendees</string>
     <string name="change_select_exam">Change Selected Exam</string>
+    <string name="label_cDs">Select Course</string>
+    <string name="add_course">Add course</string>
+    <string name="cds_dialog_title">Select course</string>
+    <string name="matricola_txtLabel">Matricola</string>
+    <string name="todo">TODO</string>
 </resources>
