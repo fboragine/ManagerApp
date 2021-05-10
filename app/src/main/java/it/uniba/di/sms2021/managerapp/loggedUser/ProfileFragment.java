@@ -1,6 +1,7 @@
 package it.uniba.di.sms2021.managerapp.loggedUser;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,10 +34,10 @@ import static it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity.loggedSt
 public class ProfileFragment extends Fragment {
 
     private View vistaProfilo;
-    private GuestActivity callback;
     private FirebaseFirestore db;
-
+    ImageView profileImg;
     TextView label;
+    private final String defaultImgProfile = "imgProfile.png";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -46,8 +48,14 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         db = FirebaseFirestore.getInstance();
-
         setHasOptionsMenu(true);
+    }
+
+    private void viewImgProfile() {
+        File localFile = new File(getActivity().getExternalFilesDir(null) + "/user media", defaultImgProfile);
+        if(localFile.exists()) {
+            profileImg.setImageURI(Uri.parse(localFile.getPath()));
+        }
     }
 
     @Override
@@ -67,6 +75,9 @@ public class ProfileFragment extends Fragment {
 
         label = vistaProfilo.findViewById(R.id.profile_email);
         label.setText(StudentActivity.loggedUser.getEmail());
+
+        profileImg = vistaProfilo.findViewById(R.id.ic_action_name);
+        viewImgProfile();
 
         if(StudentActivity.loginFile.getName().matches("studenti.srl")){
             vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.VISIBLE);
@@ -93,8 +104,12 @@ public class ProfileFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
+
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
+
+        menuItem = menu.findItem(R.id.action_logout);
+        menuItem.setVisible(true);
     }
 
     @Override
@@ -102,6 +117,14 @@ public class ProfileFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        if (id == R.id.action_logout) {
+            logout();
+            Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
+            startActivity(intent);
+            getActivity().finish();
             return true;
         }
 
@@ -134,36 +157,6 @@ public class ProfileFragment extends Fragment {
                 public boolean onMenuItemClick(MenuItem item) {
                     NavDirections action = ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment();
                     Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
-                    return true;
-                }
-            });
-        }
-
-        // Add Logout Menu Item
-        int logoutId = StudentActivity.LOGOUT_ITEM_ID;
-        if (menu.findItem(logoutId) == null) {
-            // If it not exists then add the menu item to menu
-            MenuItem logout = menu.add(
-                    Menu.NONE,
-                    logoutId,
-                    2,
-                    getString(R.string.logout)
-            );
-
-            // Set an icon for the new menu item
-            logout.setIcon(R.drawable.ic_logout);
-
-            // Set the show as action flags for new menu item
-            logout.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            // Set a click listener for the new menu item
-            logout.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    logout();
-                    Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
                     return true;
                 }
             });

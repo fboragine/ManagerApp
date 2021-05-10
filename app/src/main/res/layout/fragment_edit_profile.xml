@@ -40,13 +40,14 @@
                         android:src="@drawable/ic_action_name" />
 
                     <Button
-                        android:id="@+id/button2"
-                        android:layout_marginTop="120dp"
-                        android:layout_marginStart="5dp"
+                        android:id="@+id/edit_img_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="135dp"
+                        android:background="@color/blue_500"
                         android:text="@string/edit_image"
-                        android:background="@color/deep_orange_500"/>
+                        android:textColor="@color/white" />
 
                     <EditText
                         android:id="@+id/name"
@@ -150,22 +151,6 @@
                         android:textSize="18sp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:paddingStart="55dp"
-                    android:paddingEnd="55dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="2dp">
-
-                    <Button
-                        android:id="@+id/btn_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/save"
-                        android:background="@color/deep_orange_500"/>
-                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

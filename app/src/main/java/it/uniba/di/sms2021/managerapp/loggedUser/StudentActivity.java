@@ -71,16 +71,24 @@ public class StudentActivity extends AppCompatActivity {
         loginFile = new File(getApplicationContext().getExternalFilesDir(null), "studenti.srl");
         if(loginFile.exists()) {
             readFile("studenti.srl");
+            createUserMediaDir();
         }else {
             loginFile = new File(getApplicationContext().getExternalFilesDir(null), "docenti.srl");
             if(loginFile.exists()) {
                 readFile("docenti.srl");
+                createUserMediaDir();
             }else {
                 Intent intent = new Intent(getApplicationContext(), GuestActivity.class);
                 startActivity(intent);
                 finish();
             }
         }
+    }
+
+    private void createUserMediaDir() {
+        String path = getExternalFilesDir(null).getPath() + "/user media/";
+        File f1 = new File(path);
+        f1.mkdir();
     }
 
     protected void readFile(String filename){
