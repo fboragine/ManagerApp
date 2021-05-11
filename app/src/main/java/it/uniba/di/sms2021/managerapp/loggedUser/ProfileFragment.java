@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,10 +20,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 
@@ -55,6 +62,8 @@ public class ProfileFragment extends Fragment {
         File localFile = new File(getActivity().getExternalFilesDir(null) + "/user media", defaultImgProfile);
         if(localFile.exists()) {
             profileImg.setImageURI(Uri.parse(localFile.getPath()));
+        }else {
+            downloadFile(defaultImgProfile, "file user/" + StudentActivity.loggedUser.getId());
         }
     }
 
@@ -98,6 +107,29 @@ public class ProfileFragment extends Fragment {
 
         }
         return vistaProfilo;
+    }
+
+    public void downloadFile(String nomeFile, String percorso) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference islandRef = storageRef.child(percorso + "/" + nomeFile);
+
+        File localFile = new File(getActivity().getExternalFilesDir(null) + "/user media", nomeFile);
+
+        islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                profileImg.setImageURI(Uri.parse(localFile.getPath()));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        }).addOnPausedListener(new OnPausedListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onPaused(FileDownloadTask.TaskSnapshot taskSnapshot) {
+            }
+        });
     }
 
     @Override
