@@ -195,18 +195,22 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 public boolean onMenuItemClick(MenuItem item) {
                     if(changedImgProfile) {
                         downloadFile(defaultImgProfile, "file user/" + StudentActivity.loggedUser.getId());
-                        String path = getActivity().getExternalFilesDir(null).getPath() +"/"+ fileUri.getPath().substring(fileUri.getPath().lastIndexOf("/")+1);
-                        File deleteFileImg= new File(path);
 
-                        deleteFileImg.delete();
-                        if(deleteFileImg.exists()){
-                            try {
-                                deleteFileImg.getCanonicalFile().delete();
-                                if(deleteFileImg.exists()){
-                                    getActivity().getApplicationContext().deleteFile(deleteFileImg.getName());
+                        String path = getActivity().getExternalFilesDir(null).getPath() +"/"+ fileUri.getPath().substring(fileUri.getPath().lastIndexOf("/")+1);
+
+                        if(!path.contains(getActivity().getExternalFilesDir(null) + "/user media")) {
+                            File deleteFileImg= new File(path);
+                            deleteFileImg.delete();
+
+                            if(deleteFileImg.exists()){
+                                try {
+                                    deleteFileImg.getCanonicalFile().delete();
+                                    if(deleteFileImg.exists()){
+                                        getActivity().getApplicationContext().deleteFile(deleteFileImg.getName());
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
                         }
                     }
