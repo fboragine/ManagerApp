@@ -206,8 +206,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                         DocumentReference documentReference = collectionReference.document(mAuth.getCurrentUser().getUid());
                         documentReference.set(user);
 
-                        takeExam();
-                        insertData(mAuth.getCurrentUser().getUid());
+                        insertData();
 
                         Toast.makeText(getApplicationContext(), R.string.signin_success, Toast.LENGTH_LONG).show();
                         // entrare nella activity da loggato
@@ -220,11 +219,13 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         }else {
             Toast.makeText(getApplicationContext(), R.string.register_field_void, Toast.LENGTH_LONG).show();
         }
+
     }
 
-    private void takeExam() {
+    /*private void takeExam() {
         EsameStudente esameStudente;
         final String[] esame = new String[1];
+
 
         db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -238,23 +239,33 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
-    }
+    }*/
 
-    private void insertData(String uid) {
-        for(int i = 0; i < idEsami.size(); i++) {
-            Map<String, Object> link = new HashMap<>();
-            link.put("id", "");
-            link.put("idEsame", idEsami.get(i));
-            link.put("idStudente", uid);
-            link.put("stato", false);
+    private void insertData() {
+        db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (cds.equals(document.getString("cDs"))) {
 
-            db.collection("esamiStudente").add(link).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    documentReference.update("id", documentReference.getId());
+                            Map<String, Object> link = new HashMap<>();
+                            link.put("id", "");
+                            link.put("idEsame", document.get("id"));
+                            link.put("idStudente", mAuth.getCurrentUser().getUid());
+                            link.put("stato", false);
+
+                            db.collection("esamiStudente").add(link).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    documentReference.update("id", documentReference.getId());
+                                }
+                            });
+                        }
+                    }
                 }
-            });
-        }
+            }
+        });
     }
 
 

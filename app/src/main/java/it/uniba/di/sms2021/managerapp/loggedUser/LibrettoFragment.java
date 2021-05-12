@@ -56,6 +56,8 @@ public class LibrettoFragment extends Fragment {
 
         cds = StudentActivity.loggedStudent.getcDs();
         uid = StudentActivity.loggedStudent.getId();
+
+        riempiArray();
     }
 
     @Override
@@ -131,7 +133,7 @@ public class LibrettoFragment extends Fragment {
         super.onPrepareOptionsMenu(menu);
     }
 
-    public void riempiArray() {
+    public synchronized void riempiArray() {
         esami = new ArrayList<>();
         db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
