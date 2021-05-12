@@ -196,20 +196,21 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                     if(changedImgProfile) {
                         downloadFile(defaultImgProfile, "file user/" + StudentActivity.loggedUser.getId());
 
-                        String path = getActivity().getExternalFilesDir(null).getPath() +"/"+ fileUri.getPath().substring(fileUri.getPath().lastIndexOf("/")+1);
+                        if(fileUri != null) {
+                            String path = getActivity().getExternalFilesDir(null).getPath() +"/"+ fileUri.getPath().substring(fileUri.getPath().lastIndexOf("/")+1);
+                            if (!path.contains(getActivity().getExternalFilesDir(null) + "/user media")) {
+                                File deleteFileImg = new File(path);
+                                deleteFileImg.delete();
 
-                        if(!path.contains(getActivity().getExternalFilesDir(null) + "/user media")) {
-                            File deleteFileImg= new File(path);
-                            deleteFileImg.delete();
-
-                            if(deleteFileImg.exists()){
-                                try {
-                                    deleteFileImg.getCanonicalFile().delete();
-                                    if(deleteFileImg.exists()){
-                                        getActivity().getApplicationContext().deleteFile(deleteFileImg.getName());
+                                if (deleteFileImg.exists()) {
+                                    try {
+                                        deleteFileImg.getCanonicalFile().delete();
+                                        if (deleteFileImg.exists()) {
+                                            getActivity().getApplicationContext().deleteFile(deleteFileImg.getName());
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                                 }
                             }
                         }
@@ -424,7 +425,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         userModify.put("matricola",StudentActivity.loggedUser.getMatricola());
         userModify.put("nome",StudentActivity.loggedUser.getNome());
         if(changedImgProfile) {
-            userModify.put("percorsoImg", fileUri.getPath());
+            if(fileUri != null)
+                userModify.put("percorsoImg", fileUri.getPath());
         }else {
             userModify.put("percorsoImg", "");
         }
