@@ -93,7 +93,6 @@ public class Esame implements Parcelable {
         this.idDocenti = idDocenti;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -101,7 +100,6 @@ public class Esame implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
         dest.writeString(id);
         dest.writeString(nome);
         dest.writeString(commento);
