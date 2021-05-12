@@ -46,4 +46,5 @@
     <string name="change_select_course">Change selected course</string>
     <string name="signin_success">Registration successfully completed</string>
     <string name="img_upload">Image uploaded</string>
+    <string name="imgProfile_msg">Insert the profile image, inside to ManagerApp folder, located in the following path: \nAndroid/data/it.uniba.sms.2021.managerapp/files</string>
 </resources>
