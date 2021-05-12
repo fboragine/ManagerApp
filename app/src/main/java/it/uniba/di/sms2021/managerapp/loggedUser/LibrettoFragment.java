@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,14 +45,17 @@ public class LibrettoFragment extends Fragment {
     private ExamListAdapter adapterEsami;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String idCdS;
-    private ArrayList<Esame> esami = new ArrayList<>();
+    private String uid;
+    private ArrayList<Esame> esami;
     private Context context;
+    private RadioButton passato;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         cds = StudentActivity.loggedStudent.getcDs();
+        uid = StudentActivity.loggedStudent.getId();
     }
 
     @Override
@@ -59,44 +66,19 @@ public class LibrettoFragment extends Fragment {
 
         //((StudentActivity)getActivity()).enableBackArrow();
 
-        db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        passato = (RadioButton) viewExamList.findViewById(R.id.passed);
+
+        passato.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                context = getActivity().getApplicationContext();
-                if(task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        if(cds.equals(document.getString("cDs"))) {
-                            Esame esame = new Esame(document.getString("id"),
-                                    document.getString("nome"),
-                                    document.getString("commento"),
-                                    document.getString("desrizione"),
-                                    document.getString("cDs"),
-                                    (ArrayList<String>) document.get("idDocenti"));
-                            esami.add(esame);
-                        }
-                    }
-
-                    listView = viewExamList.findViewById(R.id.listLibretto);
-                    //pass results to listViewAdapter class
-                    adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
-                    //bind the adapter to the listview
-                    listView.setAdapter(adapterEsami);
-
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            Intent intent = new Intent(getActivity().getApplicationContext(), ExamActivity.class);
-                            intent.putExtra("esame",esami.get(i));
-                            startActivity(intent);
-                        }
-                    });
-                }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                riempiArray();
             }
         });
-
         // Inflate the layout for this fragment
         return viewExamList;
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -147,5 +129,61 @@ public class LibrettoFragment extends Fragment {
         }
 
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void riempiArray() {
+        esami = new ArrayList<>();
+        db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                context = getActivity().getApplicationContext();
+                if(task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(cds.equals(document.getString("cDs"))) {
+                            Esame esame = new Esame(document.getString("id"),
+                                    document.getString("nome"),
+                                    document.getString("commento"),
+                                    document.getString("desrizione"),
+                                    document.getString("cDs"),
+                                    (ArrayList<String>) document.get("idDocenti"));
+
+                            db.collection("esamiStudente").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    context = getActivity().getApplicationContext();
+                                    if(task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            if(passato.isChecked()) {
+                                                if((esame.getId().equals(document.getString("idEsame")) && (uid.equals(document.getString("idStudente")))  && document.getBoolean("stato"))) {
+                                                    esami.add(esame);
+                                                }
+                                            } else {
+                                                if((esame.getId().equals(document.getString("idEsame")) && (uid.equals(document.getString("idStudente")))  && !document.getBoolean("stato"))) {
+                                                    esami.add(esame);
+                                                }
+                                            }
+                                        }
+                                        listView = viewExamList.findViewById(R.id.listLibretto);
+                                        //pass results to listViewAdapter class
+                                        adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
+                                        //bind the adapter to the listview
+                                        listView.setAdapter(adapterEsami);
+
+                                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                                Intent intent = new Intent(getActivity().getApplicationContext(), ExamActivity.class);
+                                                intent.putExtra("esame",esami.get(i));
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
     }
 }
