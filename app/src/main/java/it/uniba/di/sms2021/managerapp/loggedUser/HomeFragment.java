@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,8 +45,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private RecyclerView closedRecyclerView;
     private RecyclerView.LayoutManager inProgressLayoutManager;
     private RecyclerView.LayoutManager closedLayoutManager;
-    private RecyclerView.Adapter inProgressAdapter;
-    private RecyclerView.Adapter closedAdapter;
+    private RecyclerViewAdapter inProgressAdapter;
+    private RecyclerViewAdapter closedAdapter;
 
     private Button addProjectBtn;
 
@@ -260,8 +262,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        //ricerca
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                inProgressAdapter.filter(s);
+                closedAdapter.filter(s);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -275,33 +294,4 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-
-        // Add Filter Menu Item
-        int filterId = StudentActivity.FILTER_ITEM_ID;
-        if (menu.findItem(filterId) == null) {
-            // If it not exists then add the menu item to menu
-            MenuItem filter = menu.add(
-                    Menu.NONE,
-                    filterId,
-                    2,
-                    getString(R.string.action_filter)
-            );
-
-            // Set an icon for the new menu item
-            filter.setIcon(R.drawable.ic_baseline_filter_alt_24);
-
-            // Set the show as action flags for new menu item
-            filter.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            // Set a click listener for the new menu item
-            filter.setOnMenuItemClickListener(item -> {
-                Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-                return true;
-            });
-        }
-
-        super.onPrepareOptionsMenu(menu);
-    }
 }

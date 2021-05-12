@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -20,6 +21,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +31,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +40,10 @@ import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
+import it.uniba.di.sms2021.managerapp.entities.Esame;
+import it.uniba.di.sms2021.managerapp.entities.EsameStudente;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
 
 import static android.content.ContentValues.TAG;
 
@@ -48,6 +55,8 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     Button addCourse;
     CdsCallback myCallback;
     TextView selectedCds;
+    private String cds;
+    private ArrayList<String> idEsami =  new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +192,8 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             user.put("cDs", newStudent.getcDs());
             user.put("percorsoImg", "");
 
+            cds = newStudent.getcDs();
+
             //Getting Reference to "studenti" collection
             CollectionReference collectionReference = db.collection("studenti");
 
@@ -194,6 +205,10 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                         user.put("id", mAuth.getCurrentUser().getUid());
                         DocumentReference documentReference = collectionReference.document(mAuth.getCurrentUser().getUid());
                         documentReference.set(user);
+
+                        takeExam();
+                        insertData(mAuth.getCurrentUser().getUid());
+
                         Toast.makeText(getApplicationContext(), R.string.signin_success, Toast.LENGTH_LONG).show();
                         // entrare nella activity da loggato
                         finish();
@@ -206,6 +221,42 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(getApplicationContext(), R.string.register_field_void, Toast.LENGTH_LONG).show();
         }
     }
+
+    private void takeExam() {
+        EsameStudente esameStudente;
+        final String[] esame = new String[1];
+
+        db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (cds.equals(document.getString("cDs"))) {
+                            idEsami.add(document.getString("id"));
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void insertData(String uid) {
+        for(int i = 0; i < idEsami.size(); i++) {
+            Map<String, Object> link = new HashMap<>();
+            link.put("id", "");
+            link.put("idEsame", idEsami.get(i));
+            link.put("idStudente", uid);
+            link.put("stato", false);
+
+            db.collection("esamiStudente").add(link).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    documentReference.update("id", documentReference.getId());
+                }
+            });
+        }
+    }
+
 
     @Nullable
     @Override

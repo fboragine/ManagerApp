@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,24 +19,35 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Locale;
 
+import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
 import it.uniba.di.sms2021.managerapp.project.ProjectActivity;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private ArrayList<Progetto> project;
-    private Context context;
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements Filterable {
+
+    Context context;
+    LayoutInflater inflater;
+    ArrayList<Progetto> project;
+    ArrayList<Progetto> projectRicerca;
+
     public RecyclerViewAdapter(Context context, ArrayList<Progetto> project) {
-        super();
         this.context = context;
         this.project = project;
+        inflater = LayoutInflater.from(context);
+        projectRicerca = new ArrayList<>();
+        this.projectRicerca.addAll(this.project);
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_card_view, viewGroup, false);
         return new ViewHolder(v);
     }
+
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         viewHolder.projectTextView.setText(project.get(i).getNome());
@@ -55,10 +68,58 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return project.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
+    }
+
+    public void filter(String charText){
+        charText = charText.toLowerCase(Locale.getDefault());
+        project.clear();
+        if (charText.length() == 0) {
+            project.addAll(projectRicerca);
+        }
+        else {
+            for (Progetto progetti : projectRicerca) {
+                if (progetti.getNome().toLowerCase(Locale.getDefault())
+                        .contains(charText)) {
+                    project.add(progetti);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            if (constraint == null || constraint.length() == 0) {
+                project.addAll(projectRicerca);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Progetto progetti : projectRicerca) {
+                    if (progetti.getNome().toLowerCase().contains(filterPattern)) {
+                        project.add(progetti);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = project;
+            return results;
+        }
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            project.clear();
+            project.addAll((Collection<? extends Progetto>) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     private void getEsame(String codiceEsame, int i, ViewHolder viewHolder) {
 
@@ -80,7 +141,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         });
 
     }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnLongClickListener {

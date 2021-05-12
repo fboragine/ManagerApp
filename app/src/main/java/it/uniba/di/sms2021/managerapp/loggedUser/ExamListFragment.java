@@ -43,7 +43,7 @@ import it.uniba.di.sms2021.managerapp.service.Model;
 public class ExamListFragment extends Fragment {
 
 
-    private  View viewExamList;
+    private View viewExamList;
     private ListView listView;
     private ExamListAdapter adapterEsami;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
