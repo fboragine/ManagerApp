@@ -94,4 +94,6 @@
     <string name="todo">TODO</string>
     <string name="change_select_course">Change selected course</string>
     <string name="signin_success">Registration successfully completed</string>
+    <string name="esami_passati">Passed exams</string>
+    <string name="esami_da_svolgere">Not passed exams</string>
 </resources>
