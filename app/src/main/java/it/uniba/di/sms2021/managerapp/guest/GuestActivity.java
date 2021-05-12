@@ -1,6 +1,7 @@
 package it.uniba.di.sms2021.managerapp.guest;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,6 +48,8 @@ public class GuestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest);
 
+        openDialog();
+
         String pathStudente = getExternalFilesDir(null).getPath() + "/studenti.srl";
         String pathDocente = getExternalFilesDir(null).getPath() + "/docenti.srl";
         File loggedStudente = new File(pathStudente);
@@ -79,6 +83,23 @@ public class GuestActivity extends AppCompatActivity {
         }
     }
 
+    public void openDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Select a course to view projects organized by exam. Sign in to view the documents for each project.")
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //  Action for 'NO' Button
+                        dialog.cancel();
+                    }
+                });
+
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.setTitle("Welcome to ManagerApp");
+        alert.show();
+    }
     public void go_to_register(View view) {
         Intent intent = new Intent(getApplicationContext(), SignActivity.class);
         startActivity(intent);
