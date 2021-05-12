@@ -76,7 +76,7 @@ public class LibrettoFragment extends Fragment {
                         }
                     }
 
-                    listView = viewExamList.findViewById(R.id.librettoView);
+                    listView = viewExamList.findViewById(R.id.listLibretto);
                     //pass results to listViewAdapter class
                     adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
                     //bind the adapter to the listview
