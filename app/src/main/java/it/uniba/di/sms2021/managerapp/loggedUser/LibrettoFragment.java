@@ -55,7 +55,7 @@ public class LibrettoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        viewExamList = inflater.inflate(R.layout.fragment_guest_home, container, false);
+        viewExamList = inflater.inflate(R.layout.fragment_libretto, container, false);
 
         //((StudentActivity)getActivity()).enableBackArrow();
 
@@ -76,7 +76,7 @@ public class LibrettoFragment extends Fragment {
                         }
                     }
 
-                    listView = viewExamList.findViewById(R.id.listView);
+                    listView = viewExamList.findViewById(R.id.librettoView);
                     //pass results to listViewAdapter class
                     adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
                     //bind the adapter to the listview
