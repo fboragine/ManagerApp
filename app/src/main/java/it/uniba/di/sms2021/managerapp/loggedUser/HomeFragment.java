@@ -112,7 +112,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                     document.getString("codiceEsame"),
                                     document.getString("dataCreazione"),
                                     (ArrayList<String>) document.get("idStudenti"),
-                                    document.getBoolean("stato"));
+                                    document.getBoolean("stato"),
+                                    document.getBoolean("valutato"));
 
                             visualizzaProgettiStudente(progetto);
                         }
@@ -157,7 +158,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                 document.getString("codiceEsame"),
                                 document.getString("dataCreazione"),
                                 (ArrayList<String>) document.get("idStudenti"),
-                                document.getBoolean("stato"));
+                                document.getBoolean("stato"),
+                                document.getBoolean("valutato"));
 
                         visualizzaProgettiDocente(esame, progetto);
                     }

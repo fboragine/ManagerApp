@@ -85,7 +85,8 @@ public class ExamProjectActivity extends AppCompatActivity {
                                     document.getString("codiceEsame"),
                                     document.getString("data"),
                                     (ArrayList<String>) document.get("idStudenti"),
-                                    document.getBoolean("stato"));
+                                    document.getBoolean("stato"),
+                                    false);
                             progetti.add(progetto);
                         }
                     }

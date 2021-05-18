@@ -47,4 +47,9 @@
     <string name="signin_success">Registration successfully completed</string>
     <string name="img_upload">Image uploaded</string>
     <string name="imgProfile_msg">Insert the profile image, inside to ManagerApp folder, located in the following path: \nAndroid/data/it.uniba.sms.2021.managerapp/files</string>
+    <string name="set_result">Rate this project</string>
+    <string name="project_rate_title_dialog">Project rating</string>
+    <string name="project_rate_message_dialog">Rate the project using value between 0 and 33.</string>
+    <string name="project_comment_message_dialog">Insert your personal comment</string>
+    <string name="succesful_rate">Project successfully evaluated</string>
 </resources>

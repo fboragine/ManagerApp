@@ -16,8 +16,9 @@ public class Progetto implements Parcelable {
     private String dataCreazione;
     private ArrayList<String> idStudenti;
     private boolean stato;
+    private boolean valutato;
 
-    public Progetto(String id, String nome, String descrizione, String codiceEsame, String dataCreazione, ArrayList<String> idStudenti, Boolean stato) {
+    public Progetto(String id, String nome, String descrizione, String codiceEsame, String dataCreazione, ArrayList<String> idStudenti, Boolean stato, Boolean valutato) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -25,6 +26,7 @@ public class Progetto implements Parcelable {
         this.dataCreazione = dataCreazione;
         this.idStudenti = idStudenti;
         this.stato = stato;
+        this.valutato = valutato;
     }
 
     public Progetto(String nome) {
@@ -140,6 +142,14 @@ public class Progetto implements Parcelable {
             risposta = true;
         }
         return risposta;
+    }
+
+    public boolean isValutato() {
+        return valutato;
+    }
+
+    public void setValutato(boolean valutato) {
+        this.valutato = valutato;
     }
 
     @Override

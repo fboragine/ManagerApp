@@ -300,6 +300,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
             project.put("idStudenti",newProject.getIdStudenti());
             project.put("nome", newProject.getNome());
             project.put("stato", newProject.getStato());
+            project.put("valutato", false);
 
             db.collection("progetti").add(project).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
