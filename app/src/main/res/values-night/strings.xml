@@ -52,4 +52,6 @@
     <string name="project_rate_message_dialog">Rate the project using value between 0 and 33.</string>
     <string name="project_comment_message_dialog">Insert your personal comment</string>
     <string name="succesful_rate">Project successfully evaluated</string>
+    <string name="exam_not_found">Exam not found</string>
+    <string name="exam_firebase_error">\"Error getting exam:  \"</string>
 </resources>

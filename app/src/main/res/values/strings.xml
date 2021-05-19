@@ -62,7 +62,7 @@
     <string name="upload_error">Upload error!</string>
     <string name="upload_image">Upload an image</string>
     <string name="no_file_upload">No File selected for uploading!</string>
-    <string name="upload_label">Uploading file...</string>
+    <string name="upload_label">Uploading file…</string>
     <string name="file_upload">File was be uploaded</string>
     <string name="email_sent">Email sent! Check your mailbox!</string>
     <string name="reset_password">Reset Password</string>
@@ -104,4 +104,6 @@
     <string name="error_insert_rate">Rate insert not valid</string>
     <string name="project_comment_message_dialog">Insert your personal comment</string>
     <string name="succesful_rate">Project successfully evaluated</string>
+    <string name="exam_not_found">Exam not found</string>
+    <string name="exam_firebase_error">Error getting exam</string>
 </resources>
