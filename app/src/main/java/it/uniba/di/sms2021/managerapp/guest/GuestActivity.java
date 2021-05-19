@@ -48,8 +48,6 @@ public class GuestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest);
 
-        openDialog();
-
         String pathStudente = getExternalFilesDir(null).getPath() + "/studenti.srl";
         String pathDocente = getExternalFilesDir(null).getPath() + "/docenti.srl";
         File loggedStudente = new File(pathStudente);
@@ -73,6 +71,8 @@ public class GuestActivity extends AppCompatActivity {
             BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
             NavController navController = Navigation.findNavController(findViewById(R.id.fragment));
             AppBarConfiguration appBarConfiguration = (new AppBarConfiguration.Builder(Set.of(R.id.guestHomeFragment, R.id.loginFragment))).build();
+
+            openDialog();
 
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
             NavigationUI.setupWithNavController(bottomNavigationView,navController);
