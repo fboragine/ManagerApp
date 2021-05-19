@@ -83,7 +83,7 @@ public class StudentActivity extends AppCompatActivity {
         }
     }
 
-    protected void readFile(String filename){
+    protected  void readFile(String filename){
         ObjectInputStream input;
 
         try {
