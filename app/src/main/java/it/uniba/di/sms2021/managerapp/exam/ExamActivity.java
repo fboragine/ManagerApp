@@ -29,6 +29,7 @@ import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class ExamActivity extends AppCompatActivity {
 
@@ -90,7 +91,8 @@ public class ExamActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Toast.makeText(getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), Settings.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -47,6 +47,7 @@ import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.entities.SpecsFile;
 import it.uniba.di.sms2021.managerapp.service.FileListAdapter;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 @RequiresApi(api = Build.VERSION_CODES.R)
 public class ProjectDocumentsActivity extends AppCompatActivity {
@@ -306,7 +307,8 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
             case R.id.action_search:
-                Toast.makeText(getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), Settings.class);
+                startActivity(intent);
                 return true;
         }
 

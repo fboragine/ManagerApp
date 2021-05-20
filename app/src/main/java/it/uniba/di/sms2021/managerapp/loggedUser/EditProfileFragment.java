@@ -55,6 +55,7 @@ import java.util.Map;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -158,7 +159,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_settings:
-                Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+                startActivity(intent);
                 return true;
             case android.R.id.home:
                 NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();

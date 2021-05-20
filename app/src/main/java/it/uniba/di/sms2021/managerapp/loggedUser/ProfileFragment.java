@@ -35,6 +35,7 @@ import java.io.File;
 
 import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 import static it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity.loggedStudent;
 
@@ -148,7 +149,8 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+            startActivity(intent);
             return true;
         }
 

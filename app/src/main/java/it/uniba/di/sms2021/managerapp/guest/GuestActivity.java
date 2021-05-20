@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp.guest;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +18,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -29,6 +32,8 @@ import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.loggedUser.ExamListFragment;
 import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
+import it.uniba.di.sms2021.managerapp.project.ProjectDocumentsActivity;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class GuestActivity extends AppCompatActivity {
 
@@ -86,7 +91,7 @@ public class GuestActivity extends AppCompatActivity {
     public void openDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setMessage("Select a course to view projects organized by exam. Sign in to view the documents for each project.")
+        builder.setMessage("Select the degree course to view the projects included in each exam. Login is required.")
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //  Action for 'NO' Button
@@ -100,16 +105,10 @@ public class GuestActivity extends AppCompatActivity {
         alert.setTitle("Welcome to ManagerApp");
         alert.show();
     }
+
     public void go_to_register(View view) {
         Intent intent = new Intent(getApplicationContext(), SignActivity.class);
         startActivity(intent);
-    }
-
-    public void fakeLogin(View view) {
-        Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
-        intent.putParcelableArrayListExtra("progetti", progetti);
-        startActivity(intent);
-        finish();
     }
 
     public void goBackFragment() {
@@ -133,5 +132,17 @@ public class GuestActivity extends AppCompatActivity {
                 goBackFragment();
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), Settings.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
