@@ -151,11 +151,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
-
-    //
-    //
 
     private void deleteSelectedFile(String nomeFile, String percorso) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -298,12 +294,10 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     }
 
     private boolean validateInputFileName(String fileName) {
-
         if (TextUtils.isEmpty(fileName)) {
-            Toast.makeText(getApplicationContext(), "Enter file name!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.file_name, Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true;
     }
 
@@ -356,7 +350,6 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     }
 
     private synchronized void getFileList(int numberRelease, SpecsCallback myCallback) {
-
         StorageReference storageRef = storage.getReference();
         // Get reference to the file
         StorageReference forestRef = storageRef.child("progetti/" + progetto.getId());
@@ -400,5 +393,4 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         });
     }
-
 }

@@ -88,7 +88,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
 
         Toolbar toolbar = findViewById(R.id.top_register_project_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Create new project");
+        getSupportActionBar().setTitle(R.string.create_project);
 
         db = FirebaseFirestore.getInstance();
         getLoggedStudent();
@@ -194,7 +194,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
         });
 
         // Imposta un'eventuale azione in caso di click su pulsante negativo quindi cancel
-        alertDialog.setNegativeButton("Cancel", (dialog, which) -> {
+        alertDialog.setNegativeButton(R.string.cancel, (dialog, which) -> {
 
         });
 
@@ -238,8 +238,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
         });
 
         // Imposta un'eventuale azione in caso di click su pulsante negativo quindi cancel
-        alertDialog.setNegativeButton("Cancel", (dialog, which) -> {
-
+        alertDialog.setNegativeButton(R.string.cancel, (dialog, which) -> {
         });
 
         // Crea il customAlertDialog
@@ -273,7 +272,6 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
     }
 
     private void register() {
-
         EditText nomeProgetto = findViewById(R.id.name_new_project);
         EditText descrizioneProgetto = findViewById(R.id.project_description);
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -313,7 +311,6 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
                 }
             });
         }
-
     }
 
     private void getLoggedStudent() {
@@ -378,6 +375,5 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
                 }
             });
         }
-
     }
 }

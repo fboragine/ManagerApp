@@ -107,7 +107,6 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             voto.setInputType(InputType.TYPE_CLASS_NUMBER);
             showInputBox(voto);    //Visualizzazione inputBox dove true = primo avvio
         }
-
     }
 
     private void showInputBox(EditText textField) {
@@ -141,7 +140,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        alertDialog.setNegativeButton("Cancel", (dialog, whichButton) -> db.collection("esami").document(progetto.getCodiceEsame()).update("commento", "")
+        alertDialog.setNegativeButton(R.string.cancel, (dialog, whichButton) -> db.collection("esami").document(progetto.getCodiceEsame()).update("commento", "")
                                                                                             .addOnSuccessListener(aVoid -> dialog.dismiss()));
 
         alertDialog.show();
@@ -156,7 +155,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 .setMessage(R.string.project_rate_message_dialog)
                 .setView(descrizioneDialog)
                 .setMessage(R.string.project_comment_message_dialog)
-                .setPositiveButton("Confirm", (dialog, whichButton) -> db.collection("esamiStudente").whereEqualTo("idEsame", progetto.getCodiceEsame()).get()
+                .setPositiveButton(R.string.confirm, (dialog, whichButton) -> db.collection("esamiStudente").whereEqualTo("idEsame", progetto.getCodiceEsame()).get()
                                                                               .addOnSuccessListener(documentSnapshot -> {
                                                                                   for(QueryDocumentSnapshot document : documentSnapshot)
                                                                                   {
@@ -171,7 +170,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                                                                                                       }));
                                                                                   }
                                                                               }))
-                .setNegativeButton("Cancel", (dialog, whichButton) -> db.collection("esamiStudente").whereEqualTo("idEsame", progetto.getCodiceEsame()).get()
+                .setNegativeButton(R.string.cancel, (dialog, whichButton) -> db.collection("esamiStudente").whereEqualTo("idEsame", progetto.getCodiceEsame()).get()
                                                                               .addOnSuccessListener(documentSnapshot -> {
                                                                                   for(QueryDocumentSnapshot document : documentSnapshot)
                                                                                   {
@@ -218,7 +217,6 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void getEsame() {
-
         db.collection("esami").document(progetto.getCodiceEsame()).get()
                      .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {

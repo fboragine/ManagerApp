@@ -72,8 +72,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         viewHome = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -99,7 +98,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     private void createProjectView() {
-
         if (loggedStudente.exists()) {
 
             db.collection("progetti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -122,10 +120,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     }
                 }
             });
-
         }
         else if (loggedDocente.exists()) {
-
             db.collection("esami").whereArrayContains("idDocenti", mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -297,5 +293,4 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         return super.onOptionsItemSelected(item);
     }
-
 }

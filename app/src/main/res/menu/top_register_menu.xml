@@ -4,10 +4,10 @@
 
     <item
         android:id="@+id/cancel_registration"
-        android:title="Cancel"
+        android:title="@string/cancel"
         app:showAsAction="always"/>
     <item
         android:id="@+id/do_registration"
-        android:title="Register"
+        android:title="@string/register"
         app:showAsAction="always"/>
 </menu>

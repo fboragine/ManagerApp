@@ -76,16 +76,11 @@ public class LibrettoFragment extends Fragment {
                 uidStudente = "";
             }
         }
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewExamList = inflater.inflate(R.layout.fragment_libretto, container, false);
-
-        //((StudentActivity)getActivity()).enableBackArrow();
 
         if(uidStudente != "") {
             passato = (RadioButton) viewExamList.findViewById(R.id.passed);
@@ -105,11 +100,8 @@ public class LibrettoFragment extends Fragment {
             notpassedExam.setVisibility(View.GONE);
         }
 
-        // Inflate the layout for this fragment
         return viewExamList;
     }
-
-
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -131,7 +123,6 @@ public class LibrettoFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-
         // Add Filter Menu Item
         int filterId = StudentActivity.FILTER_ITEM_ID;
         if (menu.findItem(filterId) == null) {

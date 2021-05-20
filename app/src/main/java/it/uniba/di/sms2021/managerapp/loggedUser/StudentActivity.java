@@ -112,7 +112,5 @@ public class StudentActivity extends AppCompatActivity {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
     }
-
 }

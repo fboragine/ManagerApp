@@ -39,6 +39,7 @@
     <string name="exam">Exam</string>
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="students">Students</string>
+    <string name="student">Student</string>
     <string name="succesful_save">Successfully edited</string>
     <string name="undone_save">Changes undone</string>
     <string name="reauth_msg_email">For another email change, you must logout and re-authenticate in Manager App</string>
@@ -69,6 +70,7 @@
     <string name="btn_goto_login">Back to the login</string>
     <string name="exam_name">Esame 1</string>
     <string name="teachers">Teachers</string>
+    <string name="teacher">Teacher</string>
     <string name="add_new_project">Add new project</string>
     <string name="closed_projects">Closed Projects</string>
     <string name="in_progress_projects">In Progress Projects</string>
@@ -83,9 +85,8 @@
     <string name="attendees_dialog_title">Select project\'s attendees</string>
     <string name="change_select_attendees">Change Selected Attendees</string>
     <string name="change_select_exam">Change Selected Exam</string>
-    <string name="label_cDs">Select Course</string>
+    <string name="select_course">Select course</string>
     <string name="add_course">Add course</string>
-    <string name="cds_dialog_title">Select course</string>
     <string name="matricola_txtLabel">Matricola</string>
     <string name="todo">TODO</string>
     <string name="change_select_course">Change selected course</string>
@@ -113,4 +114,8 @@
     <string name="delete_succ">File deleted successfully</string>
     <string name="delete_error">Delete failed</string>
     <string name="alert_home">Select the degree course to view the projects included in each exam. Login is required.</string>
+    <string name="file_name">Enter file name!</string>
+    <string name="file_select">Select file</string>
+    <string name="create_project">Create new project</string>
+    <string name="confirm">Confirm</string>
 </resources>

@@ -85,7 +85,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.getId() == R.id.add_course) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(SignActivity.this);
-            alertDialog.setTitle(R.string.cds_dialog_title);
+            alertDialog.setTitle(R.string.select_course);
 
             getCdS();
 

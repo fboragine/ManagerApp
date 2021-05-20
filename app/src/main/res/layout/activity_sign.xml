@@ -113,7 +113,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:elegantTextHeight="true"
-                        android:text="@string/label_cDs"
+                        android:text="@string/select_course"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:typeface="normal" />

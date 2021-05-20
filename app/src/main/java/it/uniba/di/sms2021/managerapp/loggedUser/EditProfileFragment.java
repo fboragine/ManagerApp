@@ -105,8 +105,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         vistaModifica = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
@@ -173,7 +172,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-
         // Add Save Menu Item
         int saveId = StudentActivity.SAVE_ITEM_ID;
         if (menu.findItem(saveId) == null) {
@@ -224,7 +222,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                     return true;
                 }
             });
-
         }
 
         // Add Cancel Menu Item
@@ -288,9 +285,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private boolean validateInputFileName(String fileName) {
-
         if (TextUtils.isEmpty(fileName)) {
-            Toast.makeText(getActivity().getApplicationContext(), "Enter file name!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(), R.string.file_name, Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -390,7 +386,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     public void saveFile(String FILE_NAME, Object oggetto) {
-
         ObjectOutput out = null;
 
         try {
@@ -405,7 +400,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void modificaFile() {
-
         StudentActivity.loggedUser.setNome(editName.getText().toString());
         StudentActivity.loggedUser.setCognome(editSurname.getText().toString());
         StudentActivity.loggedUser.setMatricola(editMatricola.getText().toString());
@@ -466,7 +460,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             DocumentReference docUpdate = db.collection("docenti").document(mAuth.getCurrentUser().getUid());
             modifyFirebase(docUpdate, userModify);
         }
-
     }
 
     private void modificaAuth( boolean flag, String replace, String originalMail) {
@@ -500,12 +493,10 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                     }
                 }
             });
-
         }
     }
 
     private void modifyFirebase(DocumentReference docUpdate, Map<String, Object> userModify) {
-
         docUpdate
         .update(userModify)
         .addOnSuccessListener(new OnSuccessListener<Void>() {

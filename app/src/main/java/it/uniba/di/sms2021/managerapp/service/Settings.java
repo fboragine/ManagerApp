@@ -44,7 +44,7 @@ public class Settings extends AppCompatActivity {
         toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
-        toolbar.setTitle("Settings");
+        toolbar.setTitle(R.string.action_settings);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -99,7 +99,6 @@ public class Settings extends AppCompatActivity {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     public void logout(){

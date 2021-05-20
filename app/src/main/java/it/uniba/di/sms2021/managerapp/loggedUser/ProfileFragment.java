@@ -69,9 +69,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
 
         label = vistaProfilo.findViewById(R.id.name);
@@ -102,10 +100,8 @@ public class ProfileFragment extends Fragment {
                 }
             });
         }else {
-
             vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.INVISIBLE);
             vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.INVISIBLE);
-
         }
         return vistaProfilo;
     }
@@ -156,7 +152,6 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-
         // Add Edit Menu Item
         int editId = StudentActivity.EDIT_ITEM_ID;
         if (menu.findItem(editId) == null) {
