@@ -68,7 +68,7 @@
     <string name="btn_goto_login">Torna alla pagina di accesso.</string>
     <string name="exam_name">Esame 1</string>
     <string name="teachers">Professori</string>
-    <string name="add_new_project">Aggiunfi un nuovo progetto.</string>
+    <string name="add_new_project">Aggiungi un nuovo progetto.</string>
     <string name="closed_projects">Progetti finiti.</string>
     <string name="in_progress_projects">Progetti in corso.</string>
     <string name="error_email_sent">Il campo email non può essere vuoto!</string>
