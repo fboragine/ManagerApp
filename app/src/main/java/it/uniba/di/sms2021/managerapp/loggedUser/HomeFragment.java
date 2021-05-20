@@ -36,6 +36,7 @@ import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.project.AddNewProjectActivity;
 import it.uniba.di.sms2021.managerapp.service.RecyclerViewAdapter;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
@@ -289,7 +290,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+            startActivity(intent);
             return true;
         }
 

@@ -39,6 +39,7 @@ import it.uniba.di.sms2021.managerapp.project.ProjectActivity;
 import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
 import it.uniba.di.sms2021.managerapp.service.ListViewAdapter;
 import it.uniba.di.sms2021.managerapp.service.Model;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class ExamListFragment extends Fragment {
 
@@ -141,7 +142,8 @@ public class ExamListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+            startActivity(intent);
             return true;
         }
 

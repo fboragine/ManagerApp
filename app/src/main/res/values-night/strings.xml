@@ -54,6 +54,8 @@
     <string name="succesful_rate">Project successfully evaluated</string>
     <string name="exam_not_found">Exam not found</string>
     <string name="exam_firebase_error">\"Error getting exam:  \"</string>
+    <string name="language">Select language</string>
+    <string name="select">select</string>
     <string name="share_file">Share file on whatsapp</string>
     <string name="file_upload_lab_btn">Upload selected file</string>
     <string name="nofile_to_share">Select file from \"Add New File\" button</string>

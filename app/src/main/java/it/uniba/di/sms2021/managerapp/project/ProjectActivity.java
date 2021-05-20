@@ -31,6 +31,7 @@ import java.util.Objects;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -255,7 +256,8 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            Toast.makeText(getApplicationContext(), item.getTitle() + " Clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(), Settings.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
