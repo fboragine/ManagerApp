@@ -174,7 +174,8 @@
                     android:text="@string/btn_goto_register"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
-                    android:onClick="go_to_register"/>
+                    android:onClick="go_to_register"
+                    tools:ignore="OnClick" />
 
             </LinearLayout>
 
