@@ -7,9 +7,7 @@
     <string name="course">Corso</string>
     <string name="action_filter">Filtro</string>
     <string name="action_settings">Impostazioni</string>
-    <string name="btn_login">Accedi</string>
     <string name="btn_forgot_password">Password dimenticata?</string>
-    <string name="btn_link_to_register">Registrati</string>
     <string name="password">Password</string>
     <string name="btn_already_reg">Già registrato. Accedi!</string>
     <string name="surname">Cognome</string>
@@ -31,10 +29,11 @@
     <string name="search_a_course">Ricerca un corso</string>
     <string name="action_search">Ricerca</string>
     <string name="login_error_msg">Errore di autenticazione</string>
-    <string name="welcome_msg">Benvenuto</string>
+    <string name="welcome_msg">Benvenuto su ManagerApp</string>
     <string name="firebase_studente_error">\"fallito con \"</string>
     <string name="in_progress">In corso</string>
     <string name="closed">Chiuso</string>
+    <string name="close">Chiudi</string>
     <string name="logout">Logout</string>
     <string name="exam">Esame</string>
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
@@ -91,6 +90,7 @@
     <string name="matricola_txtLabel">Matricola.</string>
     <string name="todo">TODO</string>
     <string name="change_select_course">Cambia corso selezionato.</string>
+    <string name="registration">Registrazione</string>
     <string name="signin_success">Registazione avvenuta con successo.</string>
     <string name="img_upload">Immagine caricata.</string>
     <string name="imgProfile_msg">Inserire l\'immagine del profilo, all\'interno della cartella ManagerApp, situata nel seguente percorso: Android/data/it.uniba.sms.2021.managerapp/files</string>
@@ -106,4 +106,12 @@
     <string name="exam_firebase_error">\"Errore durante l\'esame: \"</string>
     <string name="language">Seleziona la lingua</string>
     <string name="select">Seleziona</string>
+    <string name="share_file">Condividi file su whatsapp</string>
+    <string name="file_upload_lab_btn">Carica file selezionato</string>
+    <string name="nofile_to_share">Seleziona file dal bottone \"Aggiungi nuovo file\"</string>
+    <string name="delete_bt_doc">Elimina</string>
+    <string name="delete_select">" Eliminazione in corso"</string>
+    <string name="delete_succ">File eliminato correttamente</string>
+    <string name="delete_error">Eliminazione fallita</string>
+    <string name="alert_home">Seleziona il corso di laurea per vedere i progetti inclusi in ogni esame. Si richiede il login.</string>
 </resources>

@@ -65,7 +65,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
         Toolbar toolbar = findViewById(R.id.top_register_toolbar);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Registration");
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.registration);
 
         db = FirebaseFirestore.getInstance();
 
@@ -75,7 +75,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         addCourse.setOnClickListener(this);
 
         selectedCds = findViewById(R.id.course);
-
     }
 
     interface CdsCallback {
@@ -84,7 +83,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-
         if (v.getId() == R.id.add_course) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(SignActivity.this);
             alertDialog.setTitle(R.string.cds_dialog_title);
@@ -149,7 +147,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         // Imposta un'eventuale azione in caso di click su pulsante negativo quindi cancel
-        alertDialog.setNegativeButton("Cancel", (dialog, which) -> {
+        alertDialog.setNegativeButton(R.string.cancel, (dialog, which) -> {
 
         });
 
@@ -219,27 +217,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         }else {
             Toast.makeText(getApplicationContext(), R.string.register_field_void, Toast.LENGTH_LONG).show();
         }
-
     }
-
-    /*private void takeExam() {
-        EsameStudente esameStudente;
-        final String[] esame = new String[1];
-
-
-        db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        if (cds.equals(document.getString("cDs"))) {
-                            idEsami.add(document.getString("id"));
-                        }
-                    }
-                }
-            }
-        });
-    }*/
 
     private void insertData() {
         db.collection("esami").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -268,7 +246,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
@@ -294,6 +271,4 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

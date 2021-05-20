@@ -72,9 +72,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((GuestActivity)getActivity()).disableBackArrow();
 
         // Inflate the layout for this
@@ -95,13 +93,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Inflate the layout for this fragment
         return vistaLogin;
     }
 
     @Override
     public void onClick(View view) {
-
         if(view.getId() == R.id.buttonLogin)    //Click sul pulsante login
         {
             if(!email.getText().toString().matches("") &&
@@ -141,7 +137,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.email_sent), Toast.LENGTH_LONG).show();
-                                    Log.d(TAG, "Email sent");
+                                    Log.d(TAG, String.valueOf(R.string.email_sent));
                                 } else {
                                     Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
@@ -165,7 +161,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      * @param password : password utilizzata per l'accesso; "password non in chiaro nel database"
      */
     public void login(String email, String password) {
-
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener((Activity) getContext(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -191,7 +186,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     public void getDataFromFireStore(String id, String collectionPath) {
-
         DocumentReference docRef = db.collection(collectionPath).document(id);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -229,13 +223,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
-
             }
         });
     }
 
     public void saveFile(String FILE_NAME, Object oggetto) {
-
         ObjectOutput out = null;
 
         try {
@@ -261,11 +253,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         startActivity(intent);
         getActivity().finish();
     }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
-
         menu.findItem(R.id.action_search).setVisible(false);
     }
 
@@ -279,5 +271,4 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

@@ -74,7 +74,6 @@ public class ExamActivity extends AppCompatActivity {
         textDescEsame.setText(esame.getDescrizione());
 
         getDisplayName();
-        //getEsame();
     }
 
     @Override
@@ -138,30 +137,7 @@ public class ExamActivity extends AppCompatActivity {
         });
     }
 
-    /*private void getEsame() {
-
-        db.collection("esami").document(progetto.getCodiceEsame()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
-
-                    DocumentSnapshot document = task.getResult();
-
-                    if (document.exists()) {
-                        TextView textEsame = findViewById(R.id.project_exam);
-                        textEsame.setText(document.getString("nome").toString());
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-    }*/
-
     public void go_to_projects(View view) {
-
         Intent intent = new Intent(getApplicationContext(), ExamProjectActivity.class);
         intent.putExtra("esame",esame);
         startActivity(intent);

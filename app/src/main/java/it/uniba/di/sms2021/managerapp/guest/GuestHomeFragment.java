@@ -89,7 +89,6 @@ public class GuestHomeFragment extends Fragment {
             }
         });
 
-        // Inflate the layout for this fragment
         return viewGuestHome;
     }
 
@@ -118,22 +117,5 @@ public class GuestHomeFragment extends Fragment {
                 return true;
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
     }
 }

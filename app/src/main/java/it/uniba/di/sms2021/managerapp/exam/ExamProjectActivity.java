@@ -68,7 +68,6 @@ public class ExamProjectActivity extends AppCompatActivity {
         });
 
         getProgetti();
-
     }
 
     public void getProgetti() {
@@ -135,5 +134,4 @@ public class ExamProjectActivity extends AppCompatActivity {
 
         return true;
     }
-
 }

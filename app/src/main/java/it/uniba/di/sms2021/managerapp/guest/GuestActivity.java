@@ -64,7 +64,7 @@ public class GuestActivity extends AppCompatActivity {
             toolbar = findViewById(R.id.top_toolbar);
             setSupportActionBar(toolbar);
             toolbar.setLogo(R.mipmap.ic_launcher);
-            toolbar.setTitle("Home");
+            toolbar.setTitle(R.string.home);
             toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,8 +91,8 @@ public class GuestActivity extends AppCompatActivity {
     public void openDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setMessage("Select the degree course to view the projects included in each exam. Login is required.")
-                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.alert_home)
+                .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //  Action for 'NO' Button
                         dialog.cancel();
@@ -102,7 +102,7 @@ public class GuestActivity extends AppCompatActivity {
         //Creating dialog box
         AlertDialog alert = builder.create();
         //Setting the title manually
-        alert.setTitle("Welcome to ManagerApp");
+        alert.setTitle(R.string.welcome_msg);
         alert.show();
     }
 
