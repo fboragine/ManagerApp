@@ -39,24 +39,38 @@ tools:context=".service.Settings">
         android:textSize="20sp"
         android:typeface="normal" />
 
-    <Button
-        android:id="@+id/select_language"
-        android:layout_width="250dp"
-        android:layout_marginTop="10dp"
+    <RadioGroup
+        android:id="@+id/languageSelection"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/select"
-        android:layout_gravity="center"
-        android:background="@color/success_green"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:typeface="normal" />
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="150dp"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radio_english"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="English"
+            android:buttonTint="@color/blue_700"
+            android:textSize="16dp"/>
+
+        <RadioButton
+            android:id="@+id/radio_italian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Italian"
+            android:buttonTint="@color/blue_700"
+            android:textSize="16dp"/>
+    </RadioGroup>
 
     <Button
         android:id="@+id/logout"
         android:layout_width="250dp"
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="240dp"
+        android:layout_marginVertical="100dp"
         android:text="@string/logout"
         android:layout_gravity="center"
         android:background="@color/blue_700"

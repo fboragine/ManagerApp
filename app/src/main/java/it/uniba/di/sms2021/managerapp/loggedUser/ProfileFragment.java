@@ -140,9 +140,6 @@ public class ProfileFragment extends Fragment {
 
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
-
-        menuItem = menu.findItem(R.id.action_logout);
-        menuItem.setVisible(true);
     }
 
     @Override
@@ -151,14 +148,6 @@ public class ProfileFragment extends Fragment {
         if (id == R.id.action_settings) {
             Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
             startActivity(intent);
-            return true;
-        }
-
-        if (id == R.id.action_logout) {
-            logout();
-            Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
-            startActivity(intent);
-            getActivity().finish();
             return true;
         }
 
@@ -197,26 +186,5 @@ public class ProfileFragment extends Fragment {
         }
 
         super.onPrepareOptionsMenu(menu);
-    }
-
-    public void logout(){
-        FirebaseAuth.getInstance().signOut();
-        StudentActivity.loginFile.delete();
-        File projectFile = new File(getContext().getApplicationContext().getExternalFilesDir(null).getPath());
-        deleteFolder(projectFile);
-        Toast.makeText(getContext(),R.string.logout, Toast.LENGTH_SHORT).show();
-    }
-
-    /**La funzione pulisce la cartella di sistema eliminando la cartella dei media dei progetti e il file di log
-     * per evitare che un login diverso possa accedere a file appartenenti ad un altro utente*/
-    static void deleteFolder(File file){
-        for (File subFile : file.listFiles()) {
-            if(subFile.isDirectory()) {
-                deleteFolder(subFile);
-            } else {
-                subFile.delete();
-            }
-        }
-        file.delete();
     }
 }
