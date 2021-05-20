@@ -37,7 +37,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private Progetto progetto;
     private ListView listViewStudenti;
     private FirebaseFirestore db;
-    // TODO: Condividere i file di progetto con app o servizi esterni (Whatsapp o Telegram) vedi più facile
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,14 +65,17 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         Button rateBtn = findViewById(R.id.set_exam_result);
         rateBtn.setOnClickListener(this);
 
-        db.collection("progetti").document(progetto.getId()).get().addOnSuccessListener(documentSnapshot ->{
-            if(documentSnapshot.getBoolean("valutato")) {
-                rateBtn.setVisibility(View.GONE);
-            }else {
-                rateBtn.setVisibility(View.VISIBLE);
-            }
-        });
-
+        if(loggedDocente.exists()) {
+            db.collection("progetti").document(progetto.getId()).get().addOnSuccessListener(documentSnapshot ->{
+                if(documentSnapshot.getBoolean("valutato")) {
+                    rateBtn.setVisibility(View.GONE);
+                }else {
+                    rateBtn.setVisibility(View.VISIBLE);
+                }
+            });
+        } else {
+            rateBtn.setVisibility(View.GONE);
+        }
 
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
         toolbar.setNavigationOnClickListener(view -> finish());

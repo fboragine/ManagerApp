@@ -54,4 +54,11 @@
     <string name="succesful_rate">Project successfully evaluated</string>
     <string name="exam_not_found">Exam not found</string>
     <string name="exam_firebase_error">\"Error getting exam:  \"</string>
+    <string name="share_file">Share file on whatsapp</string>
+    <string name="file_upload_lab_btn">Upload selected file</string>
+    <string name="nofile_to_share">Select file from \"Add New File\" button</string>
+    <string name="delete_bt_doc">Delete</string>
+    <string name="delete_select">" Delete in progress"</string>
+    <string name="delete_succ">File deleted successfully</string>
+    <string name="delete_error">Delete failed</string>
 </resources>

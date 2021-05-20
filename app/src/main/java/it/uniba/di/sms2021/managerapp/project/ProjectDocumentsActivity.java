@@ -5,9 +5,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -54,13 +56,17 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     interface SpecsCallback {
         void onCallback(SpecsFile specsFile, boolean flag);
     }
-
     FirebaseStorage storage;
     private Progetto progetto;
     private ListView listViewFiles;
     private static List<SpecsFile> files;
 
-    Button btnDownload, btnUploadFile, btnSelectFile;
+    Button btnDownload;
+    Button btnUploadFile;
+    Button btnSelectFile;
+    Button shareBtn;
+    Button deleteBtn;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch switchUpload;
     TextView selectedFileLab;
 
@@ -69,7 +75,6 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private Uri fileUri;
     private Bitmap bitmap;
     private ProgressDialog progressDialog;
-    private StorageReference fileReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,28 +103,20 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         btnDownload = findViewById(R.id.button_download);
         btnUploadFile = findViewById(R.id.button_add_file);
         btnSelectFile = findViewById(R.id.button_select_file);
+        shareBtn = findViewById(R.id.button_share_file);
+        deleteBtn = findViewById(R.id.button_delete);
+
         switchUpload = findViewById(R.id.switch_upload);
         selectedFileLab = findViewById(R.id.selected_file);
-
         selectedFileLab.setVisibility(View.INVISIBLE);
         createExplorerFile();
     }
 
     private void createExplorerFile() {
-        btnUploadFile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadFile(fileUri);
-            }
-        });
-        btnSelectFile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showChoosingFile();
-
-            }
-        });
-
+        btnUploadFile.setOnClickListener(v -> uploadFile(fileUri));
+        btnSelectFile.setOnClickListener(v -> showChoosingFile());
+        shareBtn.setOnClickListener(v -> shareOnWhatsapp());
+        
         getFileList(1,new SpecsCallback() {
             @Override
             public synchronized void onCallback(SpecsFile specsFile, boolean flag) {
@@ -129,16 +126,24 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                     FileListAdapter adapter = new FileListAdapter(getApplicationContext(), files);
                     listViewFiles.setAdapter(adapter);
 
-                    btnDownload.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(adapter.selectedItem.size() == 0) {
-                                Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
-                            }else {
-                                for(int i = 0; i< adapter.selectedItem.size(); i++) {
-                                    downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
-                                                         adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
-                                }
+                    btnDownload.setOnClickListener(v -> {
+                        if(adapter.selectedItem.size() == 0) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
+                        }else {
+                            for(int i = 0; i< adapter.selectedItem.size(); i++) {
+                                downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
+                                                     adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
+                            }
+                        }
+                    });
+
+                    deleteBtn.setOnClickListener(v -> {
+                        if (adapter.selectedItem.size() == 0) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
+                        } else {
+                            for (int i = 0; i < adapter.selectedItem.size(); i++) {
+                                deleteSelectedFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
+                                        adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
                             }
                         }
                     });
@@ -146,6 +151,41 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    //
+    //
+
+    private void deleteSelectedFile(String nomeFile, String percorso) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference islandRef = storageRef.child(percorso);
+
+        progressDialog.setTitle(getString(R.string.delete_select));
+        progressDialog.show();
+
+        islandRef.delete()
+                 .addOnSuccessListener(aVoid -> {
+                     progressDialog.dismiss();
+                     Toast.makeText(getApplicationContext(), getString(R.string.delete_succ) + ": " + nomeFile, Toast.LENGTH_LONG).show();
+                     finish();
+                     startActivity(getIntent());
+                 })
+                 .addOnFailureListener(exception -> {
+                     progressDialog.dismiss();
+                     Toast.makeText(getApplicationContext(), getString(R.string.delete_error) + ": " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                 });
+    }
+
+    private synchronized void shareOnWhatsapp() {
+        if(fileUri != null) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("application/vnd.android.package-archive");
+            intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            startActivity(Intent.createChooser(intent, "Share file via"));
+        }else {
+            Toast.makeText(getApplicationContext(), getString(R.string.nofile_to_share), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void showChoosingFile() {
@@ -215,7 +255,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             progressDialog.setTitle(getString(R.string.upload_label));
             progressDialog.show();
 
-            fileReference = FirebaseStorage.getInstance().getReference().child("progetti/" + progetto.getId());
+            StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("progetti/" + progetto.getId());
             StorageReference fileRef = fileReference.child(fileName + "." + getFileExtension(fileUrl));
 
             fileRef.putFile(fileUrl)
