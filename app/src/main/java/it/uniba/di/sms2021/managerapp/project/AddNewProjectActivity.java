@@ -289,6 +289,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
             newProject.setDescrizione(descrizioneProgetto.getText().toString());
             newProject.setDataCreazione(formatter.format(Calendar.getInstance().getTime()));
             newProject.setStato(true);
+            newProject.setValutato(false);
 
             //Creazione dell'hash map per inserire il progetto nel DB
             Map<String ,Object> project = new HashMap<>();
@@ -300,7 +301,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
             project.put("idStudenti",newProject.getIdStudenti());
             project.put("nome", newProject.getNome());
             project.put("stato", newProject.getStato());
-            project.put("valutato", false);
+            project.put("valutato", newProject.isValutato());
 
             db.collection("progetti").add(project).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override

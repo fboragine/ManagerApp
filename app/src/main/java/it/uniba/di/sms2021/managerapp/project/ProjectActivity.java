@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +37,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private Progetto progetto;
     private ListView listViewStudenti;
     private FirebaseFirestore db;
-
+    // TODO: Condividere i file di progetto con app o servizi esterni (Whatsapp o Telegram) vedi più facile
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +64,15 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
         Button rateBtn = findViewById(R.id.set_exam_result);
         rateBtn.setOnClickListener(this);
+
+        db.collection("progetti").document(progetto.getId()).get().addOnSuccessListener(documentSnapshot ->{
+            if(documentSnapshot.getBoolean("valutato")) {
+                rateBtn.setVisibility(View.GONE);
+            }else {
+                rateBtn.setVisibility(View.VISIBLE);
+            }
+        });
+
 
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
         toolbar.setNavigationOnClickListener(view -> finish());
@@ -115,7 +125,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                                 isPromosso = true;
                             }
                             db.collection("esamiStudente").document(document.getId()).update("stato", isPromosso)
-                                         .addOnSuccessListener(aVoid -> db.collection("esami").document(progetto.getCodiceEsame()).update("commento", textField.getText().toString())
+                                         .addOnSuccessListener(aVoid -> db.collection("esamiStudente").document(document.getId()).update("commento", textField.getText().toString())
                                                                                 .addOnSuccessListener(aVoid1 -> dialog.dismiss()));
                         }
                         aggiuntaCommento();
@@ -142,20 +152,30 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 .setMessage(R.string.project_rate_message_dialog)
                 .setView(descrizioneDialog)
                 .setMessage(R.string.project_comment_message_dialog)
-                .setPositiveButton("Confirm", (dialog, whichButton) -> db.collection("esami").document(progetto.getCodiceEsame()).get()
+                .setPositiveButton("Confirm", (dialog, whichButton) -> db.collection("esamiStudente").whereEqualTo("idEsame", progetto.getCodiceEsame()).get()
                                                                               .addOnSuccessListener(documentSnapshot -> {
-                                                                                  String descrizione  = (String) documentSnapshot.get("commento");
+                                                                                  for(QueryDocumentSnapshot document : documentSnapshot)
+                                                                                  {
+                                                                                      String descrizione  = (String) document.get("commento");
 
-                                                                                  db.collection("esami").document(progetto.getCodiceEsame()).update("commento", descrizione + " " + descrizioneDialog.getText().toString())
-                                                                                    .addOnSuccessListener(aVoid -> db.collection("progetti").document(progetto.getId()).update("valutato", true)
-                                                                                                                     .addOnSuccessListener(aVoid1 -> {
-                                                                                                                         Toast.makeText(getApplicationContext(), R.string.succesful_rate, Toast.LENGTH_LONG).show();
-                                                                                                                         progetto.setValutato(true);
-                                                                                                                         dialog.dismiss();
-                                                                                                                    }));
+                                                                                      db.collection("esamiStudente").document(document.getId()).update("commento", descrizione + " " + descrizioneDialog.getText().toString())
+                                                                                              .addOnSuccessListener(aVoid -> db.collection("progetti").document(progetto.getId()).update("valutato", true)
+                                                                                                      .addOnSuccessListener(aVoid1 -> {
+                                                                                                          Toast.makeText(getApplicationContext(), R.string.succesful_rate, Toast.LENGTH_LONG).show();
+                                                                                                          progetto.setValutato(true);
+                                                                                                          dialog.dismiss();
+                                                                                                      }));
+                                                                                  }
                                                                               }))
-                .setNegativeButton("Cancel", (dialog, whichButton) -> db.collection("esami").document(progetto.getCodiceEsame()).update("commento", "")
-                                                                                        .addOnSuccessListener(aVoid -> dialog.dismiss()))
+                .setNegativeButton("Cancel", (dialog, whichButton) -> db.collection("esamiStudente").whereEqualTo("idEsame", progetto.getCodiceEsame()).get()
+                                                                              .addOnSuccessListener(documentSnapshot -> {
+                                                                                  for(QueryDocumentSnapshot document : documentSnapshot)
+                                                                                  {
+                                                                                     db.collection("esamiStudente").document(document.getId()).update("commento", "")
+                                                                                       .addOnSuccessListener(aVoid -> dialog.dismiss());
+                                                                                  }
+                                                                              })
+                )
                 .show();
     }
 
@@ -198,7 +218,6 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         db.collection("esami").document(progetto.getCodiceEsame()).get()
                      .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
-
                             DocumentSnapshot document = task.getResult();
 
                             if (document.exists()) {
