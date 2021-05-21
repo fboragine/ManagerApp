@@ -1,13 +1,17 @@
 package it.uniba.di.sms2021.managerapp.loggedUser;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,17 +21,31 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
+import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 import it.uniba.di.sms2021.managerapp.project.AddNewProjectActivity;
 import it.uniba.di.sms2021.managerapp.service.RecyclerViewAdapter;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
@@ -47,9 +65,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private File loggedStudente;
     private File loggedDocente;
 
+    private Locale lingua = Locale.ITALIAN;
+    private TextView testo;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        File file = new File(getActivity().getApplicationContext().getExternalFilesDir(null), "IT");
+
+        if(file.exists()) {
+            traduci(true);
+        }
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -269,5 +297,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void traduci(Boolean flag) {
+        File file = new File(getActivity().getApplicationContext().getExternalFilesDir(null), "EN");
+
+        Locale locale =  new Locale("IT");
+        saveFile("IT");
+        file.delete();
+
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getActivity().getBaseContext().getResources().updateConfiguration(configuration, getActivity().getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    public void saveFile(String FILE_NAME) {
+        ObjectOutput out;
+
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(new File(getActivity().getBaseContext().getExternalFilesDir(null), FILE_NAME)));
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
