@@ -30,10 +30,10 @@ public class HomeAdminActivity extends AppCompatActivity {
     public static final int SAVE_ITEM_ID = View.generateViewId();
     public static final int CANCEL_ITEM_ID = View.generateViewId();
     public static final int LOGOUT_ITEM_ID = View.generateViewId();
-    public static final int FILTER_ITEM_ID = View.generateViewId();
     private static final String filename = "segreteria.srl";
     private static File loginFile;
     private static Segreteria loggedAdmin;
+    private Toolbar toolbar;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -41,7 +41,7 @@ public class HomeAdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_admin);
 
-        Toolbar toolbar = findViewById(R.id.top_toolbar);
+        toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle("Home");
@@ -61,8 +61,6 @@ public class HomeAdminActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-
-
     }
 
     protected void readFile(){
@@ -88,5 +86,9 @@ public class HomeAdminActivity extends AppCompatActivity {
 
     public static File getLoginFile() {
         return loginFile;
+    }
+
+    public void disableBackArrow() {
+        toolbar.setNavigationIcon(null);
     }
 }
