@@ -58,7 +58,7 @@
     <string name="upload_error">Caricamento fallito!</string>
     <string name="upload_image">Caricamento di un\' immagine</string>
     <string name="no_file_upload">Nessun file  selezionato per il caricamento</string>
-    <string name="upload_label">Caricamento file...</string>
+    <string name="upload_label">Caricamento file…</string>
     <string name="file_upload">Il file è stato caricato</string>
     <string name="email_sent">Email inviata. Controlla la tua posta!</string>
     <string name="reset_password">Resetta la password</string>
@@ -119,4 +119,13 @@
     <string name="file_select">Seleziona file</string>
     <string name="create_project">Crea nuovo progetto</string>
     <string name="confirm">Conferma</string>
+    <string name="error_get_doc">Errore nel prelevare il documento:</string>
+    <string name="not_delete">File non cancellato</string>
+    <string name="dir_create">Cartella dell\'utente creata con successo</string>
+    <string name="name_file_label">Nome</string>
+    <string name="date_file_label">Data</string>
+    <string name="size_file_label">Dimensione</string>
+    <string name="project_name_label">Nome Progetto</string>
+    <string name="project_exam_label">Nome Esame</string>
+    <string name="selected_file_example">File Selezionato</string>
 </resources>

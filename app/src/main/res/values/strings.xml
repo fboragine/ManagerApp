@@ -118,4 +118,15 @@
     <string name="file_select">Select file</string>
     <string name="create_project">Create new project</string>
     <string name="confirm">Confirm</string>
+    <string name="error_get_doc">Error getting documents: </string>
+    <string name="not_delete">File not deleted</string>
+    <string name="dir_create">User directory successful created</string>
+    <string name="name_file_label">Name</string>
+    <string name="date_file_label">Date</string>
+    <string name="size_file_label">Size</string>
+    <string name="project_name_label">Project Name</string>
+    <string name="project_exam_label">Project Exam</string>
+    <string name="example_name_label" translatable="false">Mario</string>
+    <string name="example_surname_label" translatable="false">Rossi</string>
+    <string name="selected_file_example">Selected File</string>
 </resources>

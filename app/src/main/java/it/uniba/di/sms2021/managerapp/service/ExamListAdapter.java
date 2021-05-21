@@ -1,40 +1,30 @@
 package it.uniba.di.sms2021.managerapp.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.SearchView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
 
-import static java.util.Collections.addAll;
 
 public class ExamListAdapter extends  BaseAdapter{
 
-    private Context mContext;
-    private LayoutInflater inflater;
-    private ArrayList<Esame> esami;
-    private ArrayList<Esame> esamiRicerca;
+    private final LayoutInflater inflater;
+    private final ArrayList<Esame> esami;
+    private final ArrayList<Esame> esamiRicerca;
 
     //constructor
     public ExamListAdapter(Context context, ArrayList<Esame> esami) {
-        mContext = context;
         this.esami = esami;
-        inflater = LayoutInflater.from(mContext);
+        inflater = LayoutInflater.from(context);
         esamiRicerca = new ArrayList<>();
         esamiRicerca.addAll(esami);
     }
@@ -58,6 +48,7 @@ public class ExamListAdapter extends  BaseAdapter{
         return i;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         it.uniba.di.sms2021.managerapp.service.ExamListAdapter.ViewHolder holder;

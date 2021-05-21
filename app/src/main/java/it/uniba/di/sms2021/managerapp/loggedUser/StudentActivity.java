@@ -18,17 +18,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.StreamCorruptedException;
-import java.util.ArrayList;
 import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
-import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
 
@@ -37,13 +33,11 @@ public class StudentActivity extends AppCompatActivity {
     protected static final int EDIT_ITEM_ID = View.generateViewId();
     protected static final int SAVE_ITEM_ID = View.generateViewId();
     protected static final int CANCEL_ITEM_ID = View.generateViewId();
-    protected static final int LOGOUT_ITEM_ID = View.generateViewId();
     protected static final int FILTER_ITEM_ID = View.generateViewId();
     protected static Utente loggedUser;
     protected static File loginFile;
     protected static Studente loggedStudent;
     protected static Docente loggedDocent;
-    private ArrayList<Progetto> progetti;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -65,7 +59,7 @@ public class StudentActivity extends AppCompatActivity {
 
         final Intent src = getIntent();
         if(src != null) {
-            progetti = src.getParcelableArrayListExtra("progetti");
+            src.getParcelableArrayListExtra("progetti");
         }
 
         loginFile = new File(getApplicationContext().getExternalFilesDir(null), "studenti.srl");
@@ -88,7 +82,9 @@ public class StudentActivity extends AppCompatActivity {
     private void createUserMediaDir() {
         String path = getExternalFilesDir(null).getPath() + "/user media/";
         File f1 = new File(path);
-        f1.mkdir();
+        if(f1.mkdir()) {
+            Toast.makeText(getApplicationContext(), getString(R.string.dir_create), Toast.LENGTH_SHORT).show();
+        }
     }
 
     protected void readFile(String filename){

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,22 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnPausedListener;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 
-import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.service.Settings;
 
@@ -41,11 +31,9 @@ import static it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity.loggedSt
 
 public class ProfileFragment extends Fragment {
 
-    private View vistaProfilo;
     private FirebaseFirestore db;
     ImageView profileImg;
     TextView label;
-    private final String defaultImgProfile = "imgProfile.png";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -60,6 +48,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void viewImgProfile() {
+        String defaultImgProfile = "imgProfile.png";
         File localFile = new File(getActivity().getExternalFilesDir(null) + "/user media", defaultImgProfile);
         if(localFile.exists()) {
             profileImg.setImageURI(Uri.parse(localFile.getPath()));
@@ -70,7 +59,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
+        View vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
 
         label = vistaProfilo.findViewById(R.id.name);
         label.setText(StudentActivity.loggedUser.getNome());
@@ -93,12 +82,7 @@ public class ProfileFragment extends Fragment {
 
             label = vistaProfilo.findViewById(R.id.profile_course);
 
-            db.collection("corsiDiStudio").document(loggedStudent.getcDs()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    label.setText(documentSnapshot.getData().get("nome").toString());
-                }
-            });
+            db.collection("corsiDiStudio").document(loggedStudent.getcDs()).get().addOnSuccessListener(documentSnapshot -> label.setText(documentSnapshot.getData().get("nome").toString()));
         }else {
             vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.INVISIBLE);
             vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.INVISIBLE);
@@ -113,19 +97,8 @@ public class ProfileFragment extends Fragment {
 
         File localFile = new File(getActivity().getExternalFilesDir(null) + "/user media", nomeFile);
 
-        islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                profileImg.setImageURI(Uri.parse(localFile.getPath()));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        }).addOnPausedListener(new OnPausedListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onPaused(FileDownloadTask.TaskSnapshot taskSnapshot) {
-            }
+        islandRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> profileImg.setImageURI(Uri.parse(localFile.getPath()))).addOnFailureListener(exception -> {
+        }).addOnPausedListener(taskSnapshot -> {
         });
     }
 
@@ -170,13 +143,10 @@ public class ProfileFragment extends Fragment {
             edit.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
-            edit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    NavDirections action = ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment();
-                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
-                    return true;
-                }
+            edit.setOnMenuItemClickListener(item -> {
+                NavDirections action = ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment();
+                Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+                return true;
             });
         }
 

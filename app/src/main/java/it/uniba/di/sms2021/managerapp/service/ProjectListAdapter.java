@@ -1,47 +1,30 @@
 package it.uniba.di.sms2021.managerapp.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.SearchView;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
-import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
-
-import static java.util.Collections.addAll;
 
 public class ProjectListAdapter extends  BaseAdapter{
 
-    private Context mContext;
-    private LayoutInflater inflater;
-    private ArrayList<Progetto> progetti;
-    private ArrayList<Progetto> progettiRicerca;
+    private final LayoutInflater inflater;
+    private final ArrayList<Progetto> progetti;
+    private final ArrayList<Progetto> progettiRicerca;
 
     //constructor
     public ProjectListAdapter(Context context, ArrayList<Progetto> progetti) {
-        mContext = context;
         this.progetti = progetti;
-        inflater = LayoutInflater.from(mContext);
+        inflater = LayoutInflater.from(context);
         progettiRicerca = new ArrayList<>();
         this.progettiRicerca.addAll(this.progetti);
-    }
-
-    public static class ViewHolder{
-        TextView mTitleTv, mDescTv;
     }
 
     @Override
@@ -59,6 +42,7 @@ public class ProjectListAdapter extends  BaseAdapter{
         return i;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         it.uniba.di.sms2021.managerapp.service.ExamListAdapter.ViewHolder holder;

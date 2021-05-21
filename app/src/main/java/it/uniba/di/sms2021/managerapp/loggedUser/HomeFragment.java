@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,14 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,14 +37,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private ArrayList<Progetto> inProgressProject;
     private ArrayList<Progetto> closedProject;
-    private RecyclerView inProgressRecyclerView;
-    private RecyclerView closedRecyclerView;
-    private RecyclerView.LayoutManager inProgressLayoutManager;
-    private RecyclerView.LayoutManager closedLayoutManager;
     private RecyclerViewAdapter inProgressAdapter;
     private RecyclerViewAdapter closedAdapter;
-
-    private Button addProjectBtn;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -57,7 +46,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private View viewHome;
     private File loggedStudente;
     private File loggedDocente;
-    private ArrayList<Esame> examList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,8 +53,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
-        examList = new ArrayList<>();
 
         setHasOptionsMenu(true);
     }
@@ -79,7 +65,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         inProgressProject = new ArrayList<>();
         closedProject = new ArrayList<>();
 
-        addProjectBtn = viewHome.findViewById(R.id.add_project_btn);
+        Button addProjectBtn = viewHome.findViewById(R.id.add_project_btn);
 
         String pathStudente = getActivity().getExternalFilesDir(null).getPath() + "/studenti.srl";
         String pathDocente = getActivity().getExternalFilesDir(null).getPath() + "/docenti.srl";
@@ -100,55 +86,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private void createProjectView() {
         if (loggedStudente.exists()) {
 
-            db.collection("progetti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Progetto progetto = new Progetto(document.getString("id"),
-                                    document.getString("nome"),
-                                    document.getString("descrizione"),
-                                    document.getString("codiceEsame"),
-                                    document.getString("dataCreazione"),
-                                    (ArrayList<String>) document.get("idStudenti"),
-                                    document.getBoolean("stato"),
-                                    document.getBoolean("valutato"));
-
-                            visualizzaProgettiStudente(progetto);
-                        }
-                        initProjectView();
-                    }
-                }
-            });
-        }
-        else if (loggedDocente.exists()) {
-            db.collection("esami").whereArrayContains("idDocenti", mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-
-                            Esame esame = new Esame(document.getString("id"),
-                                    document.getString("nome"),
-                                    document.getString("commento"),
-                                    document.getString("descrizione"),
-                                    document.getString("cDs"),
-                                    (ArrayList<String>) document.get("idDocenti"));
-                            getDocentProject(esame);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    private void getDocentProject(Esame esame) {
-        db.collection("progetti").whereEqualTo("codiceEsame", esame.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            db.collection("progetti").get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-
                         Progetto progetto = new Progetto(document.getString("id"),
                                 document.getString("nome"),
                                 document.getString("descrizione"),
@@ -158,23 +98,60 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                 document.getBoolean("stato"),
                                 document.getBoolean("valutato"));
 
-                        visualizzaProgettiDocente(esame, progetto);
+                        visualizzaProgettiStudente(progetto);
                     }
                     initProjectView();
                 }
+            });
+        }
+        else if (loggedDocente.exists()) {
+            db.collection("esami").whereArrayContains("idDocenti", mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+
+                        Esame esame = new Esame(document.getString("id"),
+                                document.getString("nome"),
+                                document.getString("commento"),
+                                document.getString("descrizione"),
+                                document.getString("cDs"),
+                                (ArrayList<String>) document.get("idDocenti"));
+                        getDocentProject(esame);
+                    }
+                }
+            });
+        }
+    }
+
+    private void getDocentProject(Esame esame) {
+        db.collection("progetti").whereEqualTo("codiceEsame", esame.getId()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+
+                    Progetto progetto = new Progetto(document.getString("id"),
+                            document.getString("nome"),
+                            document.getString("descrizione"),
+                            document.getString("codiceEsame"),
+                            document.getString("dataCreazione"),
+                            (ArrayList<String>) document.get("idStudenti"),
+                            document.getBoolean("stato"),
+                            document.getBoolean("valutato"));
+
+                    visualizzaProgettiDocente(esame, progetto);
+                }
+                initProjectView();
             }
         });
     }
 
     private void initProjectView() {
-        inProgressRecyclerView = viewHome.findViewById(R.id.inProgressRecyclerView);
+        RecyclerView inProgressRecyclerView = viewHome.findViewById(R.id.inProgressRecyclerView);
         inProgressRecyclerView.setHasFixedSize(true);
-        closedRecyclerView = viewHome.findViewById(R.id.closedRecyclerView);
+        RecyclerView closedRecyclerView = viewHome.findViewById(R.id.closedRecyclerView);
         closedRecyclerView.setHasFixedSize(true);
 
-        inProgressLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager inProgressLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         inProgressRecyclerView.setLayoutManager(inProgressLayoutManager);
-        closedLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager closedLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         closedRecyclerView.setLayoutManager(closedLayoutManager);
         inProgressAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), inProgressProject);
         inProgressRecyclerView.setAdapter(inProgressAdapter);
@@ -253,7 +230,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.add_project_btn) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), AddNewProjectActivity.class);;
+            Intent intent = new Intent(getActivity().getApplicationContext(), AddNewProjectActivity.class);
             startActivity(intent);
             getActivity().finish();
         }

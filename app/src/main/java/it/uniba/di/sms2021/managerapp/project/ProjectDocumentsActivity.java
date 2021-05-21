@@ -9,7 +9,6 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -26,14 +25,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnPausedListener;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import it.uniba.di.sms2021.managerapp.R;
@@ -99,7 +91,9 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
 
         String path = getExternalFilesDir(null).getPath() + "/projects files/";
         File f1 = new File(path);
-        f1.mkdir();
+        if(f1.mkdir()) {
+            Toast.makeText(getApplicationContext(), getString(R.string.dir_create), Toast.LENGTH_SHORT).show();
+        }
 
         btnDownload = findViewById(R.id.button_download);
         btnUploadFile = findViewById(R.id.button_add_file);
@@ -118,7 +112,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         btnSelectFile.setOnClickListener(v -> showChoosingFile());
         shareBtn.setOnClickListener(v -> shareOnWhatsapp());
         
-        getFileList(1,new SpecsCallback() {
+        getFileList(new SpecsCallback() {
             @Override
             public synchronized void onCallback(SpecsFile specsFile, boolean flag) {
                 files.add(specsFile);
@@ -199,7 +193,9 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private void createProjectDir() {
         String path = getExternalFilesDir(null).getPath() + "/projects files/" + progetto.getNome();
         File f1 = new File(path);
-        f1.mkdir();
+        if(f1.mkdir()) {
+            Toast.makeText(getApplicationContext(), getString(R.string.dir_create), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void downloadFile(String nomeFile, String percorso) {
@@ -214,32 +210,16 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         progressDialog.setTitle(getString(R.string.download_select));
         progressDialog.show();
 
-        islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), getString(R.string.download_succ) + ": " + nomeFile, Toast.LENGTH_LONG).show();
-            }
-        }).addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                // progress percentage
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+        islandRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+            progressDialog.dismiss();
+            Toast.makeText(getApplicationContext(), getString(R.string.download_succ) + ": " + nomeFile, Toast.LENGTH_LONG).show();
+        }).addOnProgressListener(taskSnapshot -> {
+            // progress percentage
+            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                // percentage in progress dialog
-                progressDialog.setMessage("Downloaded " + ((int) progress) + "%...");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                progressDialog.dismiss();
-            }
-        }).addOnPausedListener(new OnPausedListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onPaused(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(), getString(R.string.donwload_stop), Toast.LENGTH_LONG).show();
-            }
-        });
+            // percentage in progress dialog
+            progressDialog.setMessage("Downloaded " + ((int) progress) + "%...");
+        }).addOnFailureListener(exception -> progressDialog.dismiss()).addOnPausedListener(taskSnapshot -> Toast.makeText(getApplicationContext(), getString(R.string.donwload_stop), Toast.LENGTH_LONG).show());
     }
 
     public void uploadFile(Uri fileUrl) {
@@ -256,38 +236,24 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             StorageReference fileRef = fileReference.child(fileName + "." + getFileExtension(fileUrl));
 
             fileRef.putFile(fileUrl)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), getString(R.string.file_upload), Toast.LENGTH_LONG).show();
-                            finish();
-                            startActivity(getIntent());
-                        }
+                    .addOnSuccessListener(taskSnapshot -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), getString(R.string.file_upload), Toast.LENGTH_LONG).show();
+                        finish();
+                        startActivity(getIntent());
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            progressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-                        }
+                    .addOnFailureListener(exception -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                     })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            // progress percentage
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    .addOnProgressListener(taskSnapshot -> {
+                        // progress percentage
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                            // percentage in progress dialog
-                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
-                        }
+                        // percentage in progress dialog
+                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                     })
-                    .addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(getApplicationContext(), getString(R.string.upload_stop), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    .addOnPausedListener(taskSnapshot -> Toast.makeText(getApplicationContext(), getString(R.string.upload_stop), Toast.LENGTH_LONG).show());
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.no_file_upload), Toast.LENGTH_LONG).show();
         }
@@ -336,6 +302,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -349,17 +316,14 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private synchronized void getFileList(int numberRelease, SpecsCallback myCallback) {
+    @SuppressLint("SimpleDateFormat")
+    private synchronized void getFileList(SpecsCallback myCallback) {
         StorageReference storageRef = storage.getReference();
         // Get reference to the file
         StorageReference forestRef = storageRef.child("progetti/" + progetto.getId());
 
         forestRef.listAll()
         .addOnSuccessListener(listResult -> {
-            for (StorageReference prefix : listResult.getPrefixes()) {
-                // All the prefixes under listRef.
-                // You may call listAll() recursively on them.
-            }
 
             AtomicInteger i = new AtomicInteger();
 
@@ -389,8 +353,6 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                 }
             }
         })
-        .addOnFailureListener(e -> {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        });
+        .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show());
     }
 }

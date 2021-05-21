@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,8 +20,6 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -35,18 +32,11 @@ import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
-import static android.content.ContentValues.TAG;
-
-/**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
- */
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
     View vistaLogin;
@@ -132,15 +122,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             if(!emailAddress.matches("")) {
                 FirebaseAuth auth = FirebaseAuth.getInstance();
                 auth.sendPasswordResetEmail(emailAddress)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.email_sent), Toast.LENGTH_LONG).show();
-                                    Log.d(TAG, String.valueOf(R.string.email_sent));
-                                } else {
-                                    Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.email_sent), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -161,25 +147,22 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      * @param password : password utilizzata per l'accesso; "password non in chiaro nel database"
      */
     public void login(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener((Activity) getContext(), new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) //Login avvenuto con successo
-                {
-                    FirebaseUser user;
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener((Activity) getContext(), task -> {
+            if(task.isSuccessful()) //Login avvenuto con successo
+            {
+                FirebaseUser user;
 
-                    user = mAuth.getCurrentUser();
-                    if(studenteLogin.isChecked()){
-                        getDataFromFireStore(user.getUid(),"studenti");
-                    }else {
-                        getDataFromFireStore(user.getUid(),"docenti");
-                    }
+                user = mAuth.getCurrentUser();
+                if(studenteLogin.isChecked()){
+                    getDataFromFireStore(user.getUid(),"studenti");
+                }else {
+                    getDataFromFireStore(user.getUid(),"docenti");
+                }
 
-                }
-                else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_error_msg) + task.getException(), Toast.LENGTH_LONG).show();
-                }
+            }
+            else {
+                // If sign in fails, display a message to the user.
+                Toast.makeText(getActivity().getApplicationContext(),getString(R.string.login_error_msg) + task.getException(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -188,54 +171,49 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void getDataFromFireStore(String id, String collectionPath) {
         DocumentReference docRef = db.collection(collectionPath).document(id);
 
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
+        docRef.get().addOnCompleteListener((OnCompleteListener<DocumentSnapshot>) task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
 
-                    if (document.exists()) {
-                        if(collectionPath.toString().matches("studenti")){
-                            Studente risultato;
-                            risultato = new Studente(
-                                    (String) document.get("id"),
-                                    (String) document.get("matricola"),
-                                    (String) document.get("nome"),
-                                    (String) document.get("cognome"),
-                                    (String) document.get("email"),
-                                    (String) document.get("cDs"));
-                            salvaSessione((Object)risultato, collectionPath);
+                if (document.exists()) {
+                    if(collectionPath.matches("studenti")){
+                        Studente risultato;
+                        risultato = new Studente(
+                                (String) document.get("id"),
+                                (String) document.get("matricola"),
+                                (String) document.get("nome"),
+                                (String) document.get("cognome"),
+                                (String) document.get("email"),
+                                (String) document.get("cDs"));
+                        salvaSessione((Object)risultato, collectionPath);
 
-                        } else if(collectionPath.toString().matches("docenti")){
-                            Docente risultato;
-                            risultato = new Docente(
-                                    (String) document.get("id"),
-                                    (String) document.get("matricola"),
-                                    (String) document.get("nome"),
-                                    (String) document.get("cognome"),
-                                    (String) document.get("email"));
-                            salvaSessione((Object)risultato, collectionPath);
-                        }
-
-                    } else {
-                        Toast.makeText(getActivity().getApplicationContext(), R.string.doc_not_found, Toast.LENGTH_LONG).show();
+                    } else if(collectionPath.matches("docenti")){
+                        Docente risultato;
+                        risultato = new Docente(
+                                (String) document.get("id"),
+                                (String) document.get("matricola"),
+                                (String) document.get("nome"),
+                                (String) document.get("cognome"),
+                                (String) document.get("email"));
+                        salvaSessione((Object)risultato, collectionPath);
                     }
+
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.doc_not_found, Toast.LENGTH_LONG).show();
                 }
+            } else {
+                Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     public void saveFile(String FILE_NAME, Object oggetto) {
-        ObjectOutput out = null;
+        ObjectOutput out;
 
         try {
             out = new ObjectOutputStream(new FileOutputStream(new File(getContext().getExternalFilesDir(null), FILE_NAME)));
             out.writeObject(oggetto);
             out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -249,7 +227,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     public void trasferisciIstanza() {
-        Intent intent = new Intent(getActivity().getApplicationContext(), StudentActivity.class);;
+        Intent intent = new Intent(getActivity().getApplicationContext(), StudentActivity.class);
         startActivity(intent);
         getActivity().finish();
     }

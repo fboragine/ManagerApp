@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,9 @@ import it.uniba.di.sms2021.managerapp.entities.SpecsFile;
 
 public class FileListAdapter extends BaseAdapter {
 
-    private List<SpecsFile> item;
+    private final List<SpecsFile> item;
     public ArrayList<Integer> selectedItem;
     Context context;
-
-    private static final String TAG = "StorageActivity";
 
     public FileListAdapter(Context p_context,List<SpecsFile> p_item) {
         context=p_context;
@@ -41,10 +40,11 @@ public class FileListAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) { return position; }
 
+    @SuppressLint({"SetTextI18n", "InflateParams"})
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
-        ViewHolder viewHolder = null;
+        View view;
+        ViewHolder viewHolder;
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             view = layoutInflater.inflate(R.layout.layout_file, null);
@@ -69,13 +69,13 @@ public class FileListAdapter extends BaseAdapter {
             if (isChecked) {
                 selectedItem.add(position);
             } else {
-                selectedItem.remove(selectedItem.indexOf(position));
+                selectedItem.remove((Integer) position);
             }
         });
         return view;
     }
 
-    class ViewHolder
+    static class ViewHolder
     {
         CheckBox fileCb;
         ImageView fileIcon;
@@ -87,7 +87,7 @@ public class FileListAdapter extends BaseAdapter {
 
     private int setFileImageType(File file)
     {
-        int firstIndex = file.getAbsolutePath().indexOf("/",0);
+        int firstIndex = file.getAbsolutePath().indexOf("/");
         int lastIndex = file.getAbsolutePath().indexOf("/",1);
         String filepath = file.getAbsolutePath();
 

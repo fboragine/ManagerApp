@@ -47,7 +47,7 @@
                     android:layout_toEndOf="@+id/ic_action_name"
                     android:fontFamily="@font/bungee"
                     android:includeFontPadding="false"
-                    android:text="Mario"
+                    android:text="@string/example_name_label"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -60,7 +60,7 @@
                     android:layout_toEndOf="@+id/name"
                     android:fontFamily="@font/bungee"
                     android:includeFontPadding="false"
-                    android:text="Rossi"
+                    android:text="@string/example_surname_label"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -76,7 +76,7 @@
                     android:includeFontPadding="false"
                     android:text="@string/serial_number"
                     android:textColor="@color/white"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
             </RelativeLayout>
 
@@ -114,7 +114,8 @@
                 android:layout_marginBottom="60dp"
                 android:paddingStart="55dp"
                 android:paddingEnd="10dp"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:id="@+id/profile_img"

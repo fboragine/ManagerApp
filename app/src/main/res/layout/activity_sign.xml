@@ -51,7 +51,7 @@
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="50dp"
                     android:src="@drawable/ic_baseline_person_24"
-                    android:contentDescription="@string/person_image" />
+                    android:contentDescription="@string/profile_image" />
 
                 <EditText
                     android:id="@+id/name"

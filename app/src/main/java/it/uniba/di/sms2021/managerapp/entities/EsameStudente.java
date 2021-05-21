@@ -3,9 +3,6 @@ package it.uniba.di.sms2021.managerapp.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 public class EsameStudente implements Parcelable {
 
     private String id;

@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,19 +20,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firestore.v1.WriteResult;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,21 +32,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
-import it.uniba.di.sms2021.managerapp.entities.SpecsFile;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
-import it.uniba.di.sms2021.managerapp.entities.Utente;
-import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
-import it.uniba.di.sms2021.managerapp.loggedUser.HomeFragment;
 import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
 
 public class AddNewProjectActivity extends AppCompatActivity implements View.OnClickListener{
@@ -66,7 +47,6 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
         void onCallback(ArrayList<Esame> examList, ArrayList<Studente> attendeesList);
     }
 
-    private static final String TAG = "NewProject";
     private static Studente loggedStudent;
     private FirebaseFirestore db;
     Button addExam;
@@ -149,48 +129,41 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
         }
 
         //Avvia un alert dialog box impostandolo come scelta singola
-        alertDialog.setMultiChoiceItems(listItems, selectedItems, new DialogInterface.OnMultiChoiceClickListener()  {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                //Salva la posizione dell'elemento selezionato anche nella prossima apertura del dialog box
-                selectedItems[which] = isChecked;
-            }
+        alertDialog.setMultiChoiceItems(listItems, selectedItems, (dialog, which, isChecked) -> {
+            //Salva la posizione dell'elemento selezionato anche nella prossima apertura del dialog box
+            selectedItems[which] = isChecked;
         });
 
         // Set the positive/yes button click listener
-        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ArrayList<String> idStudenti = new ArrayList<>();
-                ArrayList<String> studentiSelezionati = new ArrayList<>();
+        alertDialog.setPositiveButton("OK", (dialog, which) -> {
+            ArrayList<String> idStudenti = new ArrayList<>();
+            ArrayList<String> studentiSelezionati = new ArrayList<>();
 
-                idStudenti.add(loggedStudent.getId());
+            idStudenti.add(loggedStudent.getId());
 
-                // Do something when click positive button
-                Log.d(null, "Elementi selezionati: " + selectedItems.length);
-                for (int i = 0; i < selectedItems.length; i++) {
-                    boolean checked = selectedItems[i];
-                    if (checked) {
-                        idStudenti.add(attendeesList.get(i).getId());
-                        studentiSelezionati.add(attendeesList.get(i).getNome() + " " + attendeesList.get(i).getCognome());
-                    }
+            // Do something when click positive button
+            Log.d(null, "Elementi selezionati: " + selectedItems.length);
+            for (int i = 0; i < selectedItems.length; i++) {
+                boolean checked = selectedItems[i];
+                if (checked) {
+                    idStudenti.add(attendeesList.get(i).getId());
+                    studentiSelezionati.add(attendeesList.get(i).getNome() + " " + attendeesList.get(i).getCognome());
                 }
-
-                newProject.setIdStudenti(idStudenti);
-
-                selectedAttendees.setVisibility(View.VISIBLE);
-                selectedAttendeesView.setVisibility(View.VISIBLE);
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, studentiSelezionati);
-                selectedAttendees.setAdapter(adapter);
-
-                // Chiude il dialog box e modifica il testo nel bottone
-                dialog.dismiss();
-                addAttendees.setText(R.string.change_select_attendees);
-                int color = Color.parseColor("#63A4FF");
-                addAttendees.setBackgroundColor(color);
             }
+
+            newProject.setIdStudenti(idStudenti);
+
+            selectedAttendees.setVisibility(View.VISIBLE);
+            selectedAttendeesView.setVisibility(View.VISIBLE);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, studentiSelezionati);
+            selectedAttendees.setAdapter(adapter);
+
+            // Chiude il dialog box e modifica il testo nel bottone
+            dialog.dismiss();
+            addAttendees.setText(R.string.change_select_attendees);
+            int color = Color.parseColor("#63A4FF");
+            addAttendees.setBackgroundColor(color);
         });
 
         // Imposta un'eventuale azione in caso di click su pulsante negativo quindi cancel
@@ -213,28 +186,24 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
             listItems[i] = examList.get(i).getDescrizione();
 
         //Avvia un alert dialog box impostandolo come scelta singola
-        alertDialog.setSingleChoiceItems(listItems, checkedItem[0], new DialogInterface.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        alertDialog.setSingleChoiceItems(listItems, checkedItem[0], (dialog, which) -> {
 
-                //Salva la posizione dell'elemento selezionato anche nella prossima apertura del dialog box
-                checkedItem[0] = which;
+            //Salva la posizione dell'elemento selezionato anche nella prossima apertura del dialog box
+            checkedItem[0] = which;
 
-                // Aggiorna la textView e seleziona l'id dell'esame scelto
-                selectedExam.setText(listItems[which]);
-                newProject.setCodiceEsame(examList.get(which).getId());
+            // Aggiorna la textView e seleziona l'id dell'esame scelto
+            selectedExam.setText(listItems[which]);
+            newProject.setCodiceEsame(examList.get(which).getId());
 
-                // Chiude il dialog box e modifica il testo nel bottone
-                dialog.dismiss();
+            // Chiude il dialog box e modifica il testo nel bottone
+            dialog.dismiss();
 
-                addExam.setText(R.string.change_select_exam);
-                int color = Color.parseColor("#63A4FF");
-                addExam.setBackgroundColor(color);
+            addExam.setText(R.string.change_select_exam);
+            int color = Color.parseColor("#63A4FF");
+            addExam.setBackgroundColor(color);
 
-                selectedExam.setVisibility(View.VISIBLE);
+            selectedExam.setVisibility(View.VISIBLE);
 
-            }
         });
 
         // Imposta un'eventuale azione in caso di click su pulsante negativo quindi cancel
@@ -254,6 +223,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -271,6 +241,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("SimpleDateFormat")
     private void register() {
         EditText nomeProgetto = findViewById(R.id.name_new_project);
         EditText descrizioneProgetto = findViewById(R.id.project_description);
@@ -301,14 +272,11 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
             project.put("stato", newProject.getStato());
             project.put("valutato", newProject.isValutato());
 
-            db.collection("progetti").add(project).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    documentReference.update("id", documentReference.getId());
-                    Intent intent = new Intent(getApplicationContext(), StudentActivity.class);;
-                    startActivity(intent);
-                    finish();
-                }
+            db.collection("progetti").add(project).addOnSuccessListener(documentReference -> {
+                documentReference.update("id", documentReference.getId());
+                Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
+                startActivity(intent);
+                finish();
             });
         }
     }
@@ -327,51 +295,45 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
     }
 
     private void getEsamiCdS() {
-        db.collection("esami").whereEqualTo("cDs",loggedStudent.getcDs()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    ArrayList<Esame> displayEsami = new ArrayList<>();
+        db.collection("esami").whereEqualTo("cDs",loggedStudent.getcDs()).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                ArrayList<Esame> displayEsami = new ArrayList<>();
 
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
 
-                        Esame newEsame = new Esame( document.getString("id"),
-                                                    document.getString("nome"),
-                                                    document.getString("commento"),
-                                                    document.getString("descrizione"),
-                                                    document.getString("cDs"),
-                                (ArrayList<String>) document.get("idDocenti"));
+                    Esame newEsame = new Esame( document.getString("id"),
+                                                document.getString("nome"),
+                                                document.getString("commento"),
+                                                document.getString("descrizione"),
+                                                document.getString("cDs"),
+                            (ArrayList<String>) document.get("idDocenti"));
 
-                        displayEsami.add(newEsame);
-                    }
-                    myCallback.onCallback(displayEsami,null);
+                    displayEsami.add(newEsame);
                 }
+                myCallback.onCallback(displayEsami,null);
             }
         });
     }
 
     private void getPartecipanti() {
         if(!addAttendees.getText().toString().matches(String.valueOf(R.string.change_select_attendees))) {
-            db.collection("studenti").whereEqualTo("cDs",loggedStudent.getcDs()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if(task.isSuccessful()) {
-                        ArrayList<Studente> displayPartecipanti = new ArrayList<Studente>();
+            db.collection("studenti").whereEqualTo("cDs",loggedStudent.getcDs()).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()) {
+                    ArrayList<Studente> displayPartecipanti = new ArrayList<>();
 
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            if(!loggedStudent.getId().equals(document.getString("id"))) {
-                                Studente newStudente = new Studente( document.getString("id"),
-                                        document.getString("matricola"),
-                                        document.getString("nome"),
-                                        document.getString("cognome"),
-                                        document.getString("email"),
-                                        document.getString("cDs"));
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(!loggedStudent.getId().equals(document.getString("id"))) {
+                            Studente newStudente = new Studente( document.getString("id"),
+                                    document.getString("matricola"),
+                                    document.getString("nome"),
+                                    document.getString("cognome"),
+                                    document.getString("email"),
+                                    document.getString("cDs"));
 
-                                displayPartecipanti.add(newStudente);
-                            }
+                            displayPartecipanti.add(newStudente);
                         }
-                        myCallback.onCallback(null,displayPartecipanti);
                     }
+                    myCallback.onCallback(null,displayPartecipanti);
                 }
             });
         }

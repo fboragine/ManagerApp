@@ -32,7 +32,7 @@
 
     <Button
         android:id="@+id/button_download"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
@@ -80,7 +80,7 @@
     <Switch
         android:id="@+id/switch_upload"
         android:layout_width="162dp"
-        android:layout_height="26dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="38dp"
         android:layout_marginRight="20dp"
@@ -103,7 +103,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:elegantTextHeight="true"
-        android:text="File Selezionato"
+        android:text="@string/selected_file_example"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:typeface="normal"
@@ -135,7 +135,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="20dp"
-        android:paddingLeft="15dp"
+        android:paddingStart="15dp"
         android:background="@color/success_green"
         android:drawableStart="@drawable/ic_whatsapp"
         android:elegantTextHeight="true"
@@ -146,7 +146,8 @@
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_add_file" />
+        app:layout_constraintTop_toBottomOf="@id/button_add_file"
+        tools:ignore="RtlSymmetry" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
