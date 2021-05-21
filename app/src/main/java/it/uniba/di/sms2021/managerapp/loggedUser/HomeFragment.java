@@ -300,11 +300,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     public void traduci(Boolean flag) {
-        File file = new File(getActivity().getApplicationContext().getExternalFilesDir(null), "EN");
 
         Locale locale =  new Locale("IT");
         saveFile("IT");
-        file.delete();
 
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();

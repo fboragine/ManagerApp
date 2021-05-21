@@ -11,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -19,6 +20,11 @@ import android.view.View;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.util.Locale;
 import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.R;
@@ -34,6 +40,12 @@ public class GuestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest);
+
+        File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
+
+        if(file.exists()) {
+            traduci(true);
+        }
 
         String pathStudente = getExternalFilesDir(null).getPath() + "/studenti.srl";
         String pathDocente = getExternalFilesDir(null).getPath() + "/docenti.srl";
@@ -111,5 +123,26 @@ public class GuestActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void traduci(Boolean flag) {
+        Locale locale =  new Locale("IT");
+        saveFile("IT");
+
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    public void saveFile(String FILE_NAME) {
+        ObjectOutput out;
+
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(new File(getBaseContext().getExternalFilesDir(null), FILE_NAME)));
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

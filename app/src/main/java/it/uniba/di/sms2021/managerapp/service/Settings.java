@@ -93,20 +93,15 @@ public class Settings extends AppCompatActivity {
     }
 
     public void traduci(Boolean flag) {
-        File file;
-
         Locale locale =  new Locale("");
         if (!flag) {
-            file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
+            File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
             locale = Locale.ENGLISH;
-            saveFile("EN");
             file.delete();
 
         } else {
-            file = new File(getApplicationContext().getExternalFilesDir(null), "EN");
             locale = Locale.ITALIAN;
             saveFile("IT");
-            file.delete();
         }
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
