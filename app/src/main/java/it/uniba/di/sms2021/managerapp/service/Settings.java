@@ -4,13 +4,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -32,8 +29,6 @@ import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
 import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
-
-import static android.os.Environment.getExternalStorageDirectory;
 
 public class Settings extends AppCompatActivity {
 
@@ -64,9 +59,7 @@ public class Settings extends AppCompatActivity {
             linguaIta.setChecked(true);
         }
 
-        linguaIta.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            traduci(linguaIta.isChecked());
-        });
+        linguaIta.setOnCheckedChangeListener((buttonView, isChecked) -> traduci(linguaIta.isChecked()));
 
         Button logout = findViewById(R.id.logout);
         logout.setOnClickListener(v -> {
@@ -93,11 +86,13 @@ public class Settings extends AppCompatActivity {
     }
 
     public void traduci(Boolean flag) {
-        Locale locale =  new Locale("");
+        Locale locale;
         if (!flag) {
             File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
             locale = Locale.ENGLISH;
-            file.delete();
+            if(!file.delete()) {
+                Toast.makeText(getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
+            }
 
         } else {
             locale = Locale.ITALIAN;
@@ -151,16 +146,18 @@ public class Settings extends AppCompatActivity {
      * per evitare che un login diverso possa accedere a file appartenenti ad un altro utente*/
     void deleteFolder(File file){
         for (File subFile : file.listFiles()) {
-            if(subFile.isDirectory()) {
+            if (subFile.isDirectory()) {
                 deleteFolder(subFile);
             } else {
-                if(!subFile.delete()) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
+                if (!subFile.getName().equals("IT")) {
+                    if (!subFile.delete()) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
-        }
-        if(!file.delete()) {
-            Toast.makeText(getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
+            if (!file.delete()) {
+                Toast.makeText(getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
