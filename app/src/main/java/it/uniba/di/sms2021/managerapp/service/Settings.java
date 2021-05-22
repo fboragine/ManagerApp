@@ -55,7 +55,7 @@ public class Settings extends AppCompatActivity {
 
 
 
-        if(getBaseContext().getResources().getConfiguration().getLocales().get(0).equals(Locale.ITALIAN)) {
+        if(getBaseContext().getResources().getConfiguration().getLocales().get(0).equals(Locale.ITALIAN) || getBaseContext().getResources().getConfiguration().getLocales().get(0).equals(Locale.ITALY)) {
             linguaIta.setChecked(true);
         }
 
@@ -90,12 +90,12 @@ public class Settings extends AppCompatActivity {
         if (!flag) {
             File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
             locale = Locale.ENGLISH;
-            if(!file.delete()) {
-                Toast.makeText(getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
-            }
-
+            file.delete();
+            saveFile("EN");
         } else {
+            File file = new File(getApplicationContext().getExternalFilesDir(null), "EN");
             locale = Locale.ITALIAN;
+            file.delete();
             saveFile("IT");
         }
         Locale.setDefault(locale);

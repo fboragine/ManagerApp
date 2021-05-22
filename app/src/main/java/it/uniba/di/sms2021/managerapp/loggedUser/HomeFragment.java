@@ -77,6 +77,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         if(file.exists()) {
             traduci(true);
+        } else {
+            traduci(false);
         }
 
         db = FirebaseFirestore.getInstance();
@@ -301,9 +303,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     public void traduci(Boolean flag) {
 
-        Locale locale =  new Locale("IT");
-        saveFile("IT");
-
+        Locale locale;
+        if (!flag) {
+            File file = new File(getActivity().getApplicationContext().getExternalFilesDir(null), "IT");
+            locale = Locale.ENGLISH;
+            file.delete();
+            saveFile("EN");
+        } else {
+            File file = new File(getActivity().getApplicationContext().getExternalFilesDir(null), "EN");
+            locale = Locale.ITALIAN;
+            file.delete();
+            saveFile("IT");
+        }
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
         configuration.locale = locale;

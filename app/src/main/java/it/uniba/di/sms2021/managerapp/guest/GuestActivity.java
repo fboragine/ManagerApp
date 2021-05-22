@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -45,6 +46,8 @@ public class GuestActivity extends AppCompatActivity {
 
         if(file.exists()) {
             traduci(true);
+        } else {
+            traduci(false);
         }
 
         String pathStudente = getExternalFilesDir(null).getPath() + "/studenti.srl";
@@ -126,9 +129,18 @@ public class GuestActivity extends AppCompatActivity {
     }
 
     public void traduci(Boolean flag) {
-        Locale locale =  new Locale("IT");
-        saveFile("IT");
-
+        Locale locale;
+        if (!flag) {
+            File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
+            locale = Locale.ENGLISH;
+            file.delete();
+            saveFile("EN");
+        } else {
+            File file = new File(getApplicationContext().getExternalFilesDir(null), "EN");
+            locale = Locale.ITALIAN;
+            file.delete();
+            saveFile("IT");
+        }
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
         configuration.locale = locale;
