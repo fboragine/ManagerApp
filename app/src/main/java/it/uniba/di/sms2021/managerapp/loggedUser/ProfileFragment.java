@@ -1,6 +1,7 @@
 package it.uniba.di.sms2021.managerapp.loggedUser;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,19 +15,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
+import java.io.File;
+
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.service.Settings;
+
+import static it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity.loggedStudent;
 
 public class ProfileFragment extends Fragment {
 
-    private View vistaProfilo;
-    private GuestActivity callback;
-
+    private FirebaseFirestore db;
+    ImageView profileImg;
     TextView label;
 
     public ProfileFragment() {
@@ -37,46 +43,70 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        db = FirebaseFirestore.getInstance();
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
+    private void viewImgProfile() {
+        String defaultImgProfile = "imgProfile.png";
+        File localFile = new File(getActivity().getExternalFilesDir(null) + "/user media", defaultImgProfile);
+        if(localFile.exists()) {
+            profileImg.setImageURI(Uri.parse(localFile.getPath()));
+        }else {
+            downloadFile(defaultImgProfile, "file user/" + StudentActivity.loggedUser.getId());
+        }
+    }
 
-        label = (TextView) vistaProfilo.findViewById(R.id.name);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View vistaProfilo = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        label = vistaProfilo.findViewById(R.id.name);
         label.setText(StudentActivity.loggedUser.getNome());
 
-        label = (TextView) vistaProfilo.findViewById(R.id.surname);
+        label = vistaProfilo.findViewById(R.id.surname);
         label.setText(StudentActivity.loggedUser.getCognome());
 
-        label = (TextView) vistaProfilo.findViewById(R.id.serial_number);
+        label = vistaProfilo.findViewById(R.id.serial_number);
         label.setText(StudentActivity.loggedUser.getMatricola());
 
-        label = (TextView) vistaProfilo.findViewById(R.id.profile_email);
+        label = vistaProfilo.findViewById(R.id.profile_email);
         label.setText(StudentActivity.loggedUser.getEmail());
+
+        profileImg = vistaProfilo.findViewById(R.id.ic_action_name);
+        viewImgProfile();
 
         if(StudentActivity.loginFile.getName().matches("studenti.srl")){
             vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.VISIBLE);
             vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.VISIBLE);
 
-            label = (TextView) vistaProfilo.findViewById(R.id.profile_course);
-            label.setText(StudentActivity.loggedStudent.getcDs());
-        }else {
+            label = vistaProfilo.findViewById(R.id.profile_course);
 
+            db.collection("corsiDiStudio").document(loggedStudent.getcDs()).get().addOnSuccessListener(documentSnapshot -> label.setText(documentSnapshot.getData().get("nome").toString()));
+        }else {
             vistaProfilo.findViewById(R.id.profile_course).setVisibility(View.INVISIBLE);
             vistaProfilo.findViewById(R.id.profile_img).setVisibility(View.INVISIBLE);
-
         }
         return vistaProfilo;
+    }
+
+    public void downloadFile(String nomeFile, String percorso) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference islandRef = storageRef.child(percorso + "/" + nomeFile);
+
+        File localFile = new File(getActivity().getExternalFilesDir(null) + "/user media", nomeFile);
+
+        islandRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> profileImg.setImageURI(Uri.parse(localFile.getPath()))).addOnFailureListener(exception -> {
+        }).addOnPausedListener(taskSnapshot -> {
+        });
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
+
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
     }
@@ -85,7 +115,8 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+            startActivity(intent);
             return true;
         }
 
@@ -94,7 +125,6 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-
         // Add Edit Menu Item
         int editId = StudentActivity.EDIT_ITEM_ID;
         if (menu.findItem(editId) == null) {
@@ -113,51 +143,13 @@ public class ProfileFragment extends Fragment {
             edit.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
-            edit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(R.id.action_profileFragment_to_editProfileFragment);
-                    return true;
-                }
-            });
-        }
-
-        // Add Logout Menu Item
-        int logoutId = StudentActivity.LOGOUT_ITEM_ID;
-        if (menu.findItem(logoutId) == null) {
-            // If it not exists then add the menu item to menu
-            MenuItem logout = menu.add(
-                    Menu.NONE,
-                    logoutId,
-                    2,
-                    getString(R.string.logout)
-            );
-
-            // Set an icon for the new menu item
-            logout.setIcon(R.drawable.ic_logout);
-
-            // Set the show as action flags for new menu item
-            logout.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            // Set a click listener for the new menu item
-            logout.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    logout();
-                    Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
-                    return true;
-                }
+            edit.setOnMenuItemClickListener(item -> {
+                NavDirections action = ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment();
+                Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+                return true;
             });
         }
 
         super.onPrepareOptionsMenu(menu);
-    }
-
-    public void logout(){
-        FirebaseAuth.getInstance().signOut();
-        StudentActivity.loginFile.delete();
-        Toast.makeText(getContext(),R.string.logout, Toast.LENGTH_SHORT).show();
     }
 }

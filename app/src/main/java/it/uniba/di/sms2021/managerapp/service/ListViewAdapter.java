@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,16 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentTransaction;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
-
-import static java.util.Collections.addAll;
 
 public class ListViewAdapter extends BaseAdapter {
 
@@ -54,6 +50,7 @@ public class ListViewAdapter extends BaseAdapter {
         return i;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         ViewHolder holder;

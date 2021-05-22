@@ -16,8 +16,9 @@ public class Progetto implements Parcelable {
     private String dataCreazione;
     private ArrayList<String> idStudenti;
     private boolean stato;
+    private boolean valutato;
 
-    public Progetto(String id, String nome, String descrizione, String codiceEsame, String dataCreazione, ArrayList<String> idStudenti, Boolean stato) {
+    public Progetto(String id, String nome, String descrizione, String codiceEsame, String dataCreazione, ArrayList<String> idStudenti, Boolean stato, Boolean valutato) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -25,6 +26,7 @@ public class Progetto implements Parcelable {
         this.dataCreazione = dataCreazione;
         this.idStudenti = idStudenti;
         this.stato = stato;
+        this.valutato = valutato;
     }
 
     public Progetto(String nome) {
@@ -69,6 +71,10 @@ public class Progetto implements Parcelable {
             return new Progetto[size];
         }
     };
+
+    public Progetto() {
+
+    }
 
     public String getId() {
         return id;
@@ -118,6 +124,10 @@ public class Progetto implements Parcelable {
         this.idStudenti = idStudenti;
     }
 
+    public boolean getStato() { return stato; }
+
+    public void setStato(boolean stato) { this.stato = stato; }
+
     public String idGenerator() {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference progettRef = rootRef.child("progetti");
@@ -132,6 +142,14 @@ public class Progetto implements Parcelable {
             risposta = true;
         }
         return risposta;
+    }
+
+    public boolean isValutato() {
+        return valutato;
+    }
+
+    public void setValutato(boolean valutato) {
+        this.valutato = valutato;
     }
 
     @Override

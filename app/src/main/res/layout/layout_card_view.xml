@@ -28,9 +28,9 @@
                 android:gravity="center_vertical"
                 android:paddingStart="5dp"
                 android:paddingEnd="2dp"
-                android:text="Project Name"
+                android:text="@string/project_name_label"
                 android:textColor="@color/black"
-                android:textSize="24dp"/>
+                android:textSize="24sp"/>
             <TextView
                 android:id="@+id/projectExamCardTextView"
                 android:layout_width="match_parent"
@@ -41,9 +41,9 @@
                 android:gravity="center_vertical"
                 android:paddingStart="5dp"
                 android:paddingEnd="2dp"
-                android:text="Project Exam"
+                android:text="@string/project_exam_label"
                 android:textColor="@color/black"
-                android:textSize="20dp"/>
+                android:textSize="20sp"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

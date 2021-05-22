@@ -13,36 +13,32 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.loggedUser.ExamListFragment;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
-import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.service.ListViewAdapter;
-import it.uniba.di.sms2021.managerapp.service.Model;
 
 public class GuestHomeFragment extends Fragment {
 
     private View viewGuestHome;
     private ListView listView;
     private ListViewAdapter adapter;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db = FirebaseFirestore.getInstance();
+
         setHasOptionsMenu(true);
     }
 
@@ -52,44 +48,37 @@ public class GuestHomeFragment extends Fragment {
 
         ((GuestActivity)getActivity()).disableBackArrow();
 
-        ArrayList<CorsoDiStudio> corsiDiStudio = new ArrayList<CorsoDiStudio>();
+        ArrayList<CorsoDiStudio> corsiDiStudio = new ArrayList<>();
 
-        db.collection("corsiDiStudio").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+        db.collection("corsiDiStudio").get().addOnCompleteListener(task -> {
 
-                if(task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        CorsoDiStudio corsoDiStudio = new CorsoDiStudio(document.getString("id"),
-                                                                        document.getString("nome"),
-                                                                        document.getString("descrizione"),
-                                                                        (ArrayList<String>) document.get("idEsami"));
-                        corsiDiStudio.add(corsoDiStudio);
-                    }
-
-                    listView = viewGuestHome.findViewById(R.id.listView);
-
-                    //pass results to listViewAdapter class
-                    adapter = new ListViewAdapter(getActivity().getApplicationContext(), corsiDiStudio);
-
-                    //bind the adapter to the listview
-                    listView.setAdapter(adapter);
-
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            ExamListFragment examListFragment = new ExamListFragment(corsiDiStudio.get(i).getIdCorsoDiStudio());
-                            FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(R.id.fragment, examListFragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
-                    });
+            if(task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    CorsoDiStudio corsoDiStudio = new CorsoDiStudio(document.getString("id"),
+                                                                    document.getString("nome"),
+                                                                    document.getString("descrizione"),
+                                                                    (ArrayList<String>) document.get("idEsami"));
+                    corsiDiStudio.add(corsoDiStudio);
                 }
+
+                listView = viewGuestHome.findViewById(R.id.listView);
+
+                //pass results to listViewAdapter class
+                adapter = new ListViewAdapter(getActivity().getApplicationContext(), corsiDiStudio);
+
+                //bind the adapter to the listview
+                listView.setAdapter(adapter);
+
+                listView.setOnItemClickListener((adapterView, view, i, l) -> {
+                    ExamListFragment examListFragment = new ExamListFragment(corsiDiStudio.get(i).getIdCorsoDiStudio());
+                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment, examListFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                });
             }
         });
 
-        // Inflate the layout for this fragment
         return viewGuestHome;
     }
 
@@ -118,22 +107,5 @@ public class GuestHomeFragment extends Fragment {
                 return true;
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
     }
 }

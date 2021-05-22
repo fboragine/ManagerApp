@@ -1,123 +1,107 @@
 package it.uniba.di.sms2021.managerapp.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.SpecsFile;
 
 public class FileListAdapter extends BaseAdapter {
 
-    private List<String> item;
-    private List<String> path;
+    private final List<SpecsFile> item;
     public ArrayList<Integer> selectedItem;
     Context context;
-    Boolean isRoot;
 
-    public FileListAdapter(Context context, List<String> item, List<String> path, Boolean isRoot) {
-        this.context = context;
-        this.item = item;
-        this.path = path;
-        this.isRoot = isRoot;
-        this.selectedItem = new ArrayList<>();
+    public FileListAdapter(Context p_context,List<SpecsFile> p_item) {
+        context=p_context;
+        item=p_item;
+        selectedItem = new ArrayList<>();
     }
 
     @Override
-    public int getCount() {
-        return item.size();
-    }
+    public int getCount() { return item.size(); }
 
     @Override
-    public Object getItem(int position) {
-        return item.get(position);
-    }
+    public SpecsFile getItem(int position) { return item.get(position); }
 
     @Override
-    public long getItemId(int position) {
-        return position;
-    }
+    public long getItemId(int position) { return position; }
 
+    @SuppressLint({"SetTextI18n", "InflateParams"})
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
-        ViewHolder viewHolder = null;
+        View view;
+        ViewHolder viewHolder;
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             view = layoutInflater.inflate(R.layout.layout_file, null);
             viewHolder = new ViewHolder();
             viewHolder.fileName = (TextView) view.findViewById(R.id.file_name);
             viewHolder.fileDate = (TextView) view.findViewById(R.id.file_date);
+            viewHolder.fileSize = (TextView) view.findViewById(R.id.file_size);
             viewHolder.fileIcon = (ImageView) view.findViewById(R.id.file_icon);
             viewHolder.fileCb = (CheckBox) view.findViewById(R.id.file_cb);
+            viewHolder.viewBtnDownload = (Button) view.findViewById(R.id.button_download);
             view.setTag(viewHolder);
         } else {
             view = convertView;
             viewHolder = ((ViewHolder) view.getTag());
         }
-        if (!isRoot && position == 0) {
-            viewHolder.fileCb.setVisibility(View.INVISIBLE);
-        }
 
-        viewHolder.fileName.setText(item.get(position));
-        viewHolder.fileIcon.setImageResource(setFileImageType(new File(path.get(position))));
-        viewHolder.fileDate.setText(getLastDate(position));
-        viewHolder.fileCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    selectedItem.add(position);
-                } else {
-                    selectedItem.remove(selectedItem.indexOf(position));
-                }
+        viewHolder.fileName.setText(item.get(position).getNome());
+        viewHolder.fileIcon.setImageResource(setFileImageType(new File(item.get(position).getFormato())));
+        viewHolder.fileDate.setText(item.get(position).getData());
+        viewHolder.fileSize.setText(item.get(position).getDimensione() + " Kb");
+        viewHolder.fileCb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                selectedItem.add(position);
+            } else {
+                selectedItem.remove((Integer) position);
             }
         });
-
         return view;
     }
 
-
-    class ViewHolder
+    static class ViewHolder
     {
         CheckBox fileCb;
         ImageView fileIcon;
         TextView fileName;
         TextView fileDate;
+        TextView fileSize;
+        Button viewBtnDownload;
     }
 
     private int setFileImageType(File file)
     {
-        int lastIndex=file.getAbsolutePath().lastIndexOf(".");
-        String filepath=file.getAbsolutePath();
+        int firstIndex = file.getAbsolutePath().indexOf("/");
+        int lastIndex = file.getAbsolutePath().indexOf("/",1);
+        String filepath = file.getAbsolutePath();
+
         if (file.isDirectory())
             return R.drawable.ic_folder_open;
         else
         {
-            if(filepath.substring(lastIndex).equalsIgnoreCase(".png") || filepath.substring(lastIndex).equalsIgnoreCase(".jpg"))
-            {
+            if (filepath.substring(firstIndex,lastIndex).equalsIgnoreCase("/image")) {
                 return R.drawable.ic_image;
             }
-            else
-            {
+            else {
                 return R.drawable.ic_file;
             }
         }
     }
 
-    String getLastDate(int position)
-    {
-        File file=new File(path.get(position));
-        SimpleDateFormat m_dateFormat=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        return m_dateFormat.format(file.lastModified());
-    }
 }

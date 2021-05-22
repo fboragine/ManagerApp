@@ -2,23 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="?attr/actionBarSize"
-    android:layout_marginBottom="?attr/actionBarSize"
+    android:id="@+id/main_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:layout_marginBottom="?attr/actionBarSize"
     android:orientation="vertical"
     tools:context=".loggedUser.HomeFragment">
 
     <ScrollView
+        android:id="@+id/scroll_home"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
             <RelativeLayout
                 android:id="@+id/inProgressContainer"
                 android:layout_width="match_parent"
                 android:layout_height="220dp">
+
                 <TextView
                     android:id="@+id/inProgressTextView"
                     android:layout_width="match_parent"
@@ -26,15 +31,15 @@
                     android:gravity="center"
                     android:paddingStart="5dp"
                     android:paddingEnd="2dp"
-                    android:text="In Progress Projects"
-                    android:textSize="20dp"/>
+                    android:text="@string/in_progress_projects"
+                    android:textSize="20sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/inProgressRecyclerView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/inProgressTextView"
-                    android:layout_centerHorizontal="true"/>
+                    android:layout_centerHorizontal="true" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -43,6 +48,7 @@
                 android:layout_height="220dp"
                 android:layout_below="@id/inProgressContainer"
                 android:layout_marginTop="20dp">
+
                 <TextView
                     android:id="@+id/closedTextView"
                     android:layout_width="match_parent"
@@ -50,17 +56,42 @@
                     android:gravity="center"
                     android:paddingStart="5dp"
                     android:paddingEnd="2dp"
-                    android:text="Closed Projects"
-                    android:textSize="20dp"/>
+                    android:text="@string/closed_projects"
+                    android:textSize="20sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/closedRecyclerView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_below="@id/closedTextView"/>
+                    android:layout_below="@id/closedTextView"
+                    android:layout_centerHorizontal="true" />
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/layout_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/scroll_home"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp">
+
+        <Button
+            android:id="@+id/add_project_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_new_project"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/success_green"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:typeface="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+    </RelativeLayout>
 
 </RelativeLayout>

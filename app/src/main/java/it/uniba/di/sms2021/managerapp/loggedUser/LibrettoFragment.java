@@ -1,6 +1,6 @@
 package it.uniba.di.sms2021.managerapp.loggedUser;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,68 +12,78 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LibrettoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.io.File;
+import java.util.ArrayList;
+
+import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Esame;
+import it.uniba.di.sms2021.managerapp.exam.ExamActivity;
+
+import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
+import it.uniba.di.sms2021.managerapp.service.Settings;
+
+
 public class LibrettoFragment extends Fragment {
 
-    private static final String TAG = "SimpleToolbarTest";
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private Activity activity;
-
-    public LibrettoFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LibrettoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LibrettoFragment newInstance(String param1, String param2) {
-        LibrettoFragment fragment = new LibrettoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private String cds;
+    private View viewExamList;
+    private ListView listView;
+    private ExamListAdapter adapterEsami;
+    private FirebaseFirestore db;
+    private String uidStudente;
+    private String uidDocente;
+    private ArrayList<Esame> esami;
+    private RadioButton passato;
+    protected static File loginFile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
-        setHasOptionsMenu(true);
+        db = FirebaseFirestore.getInstance();
+
+        loginFile = new File(getActivity().getApplicationContext().getExternalFilesDir(null), "studenti.srl");
+        if(loginFile.exists()) {
+            cds = StudentActivity.loggedStudent.getcDs();
+            uidStudente = StudentActivity.loggedStudent.getId();
+            uidDocente = "";
+
+            riempiArray();
+        }else {
+            loginFile = new File(getActivity().getApplicationContext().getExternalFilesDir(null), "docenti.srl");
+            if (loginFile.exists()) {
+                uidDocente = StudentActivity.loggedDocent.getId();
+                uidStudente = "";
+            }
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_libretto, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        viewExamList = inflater.inflate(R.layout.fragment_libretto, container, false);
+
+        if(!uidStudente.equals("")) {
+            passato = (RadioButton) viewExamList.findViewById(R.id.passed);
+
+            passato.setOnCheckedChangeListener((buttonView, isChecked) -> riempiArray());
+        } else if(!uidDocente.equals("")) {
+            getEsamiDocente();
+
+            TextView passedExam = viewExamList.findViewById(R.id.passed);
+            passedExam.setVisibility(View.GONE);
+            TextView notpassedExam = viewExamList.findViewById(R.id.not_passed);
+            notpassedExam.setVisibility(View.GONE);
+        }
+
+        return viewExamList;
     }
 
     @Override
@@ -86,7 +96,8 @@ public class LibrettoFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+            startActivity(intent);
             return true;
         }
 
@@ -95,7 +106,6 @@ public class LibrettoFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-
         // Add Filter Menu Item
         int filterId = StudentActivity.FILTER_ITEM_ID;
         if (menu.findItem(filterId) == null) {
@@ -114,16 +124,93 @@ public class LibrettoFragment extends Fragment {
             filter.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
-            filter.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+            filter.setOnMenuItemClickListener(item -> {
+                Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                return true;
             });
 
         }
 
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public synchronized void riempiArray() {
+        esami = new ArrayList<>();
+        db.collection("esami").get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    if(cds.equals(document.getString("cDs"))) {
+                        Esame esame = new Esame(document.getString("id"),
+                                document.getString("nome"),
+                                document.getString("commento"),
+                                document.getString("desrizione"),
+                                document.getString("cDs"),
+                                (ArrayList<String>) document.get("idDocenti"));
+
+                        db.collection("esamiStudente").get().addOnCompleteListener(task1 -> {
+                            if(task1.isSuccessful()) {
+                                for (QueryDocumentSnapshot document1 : task1.getResult()) {
+                                    if(passato.isChecked()) {
+                                        if((esame.getId().equals(document1.getString("idEsame")) && (uidStudente.equals(document1.getString("idStudente")))  && document1.getBoolean("stato"))) {
+                                            esami.add(esame);
+                                        }
+                                    } else {
+                                        if((esame.getId().equals(document1.getString("idEsame")) && (uidStudente.equals(document1.getString("idStudente")))  && !document1.getBoolean("stato"))) {
+                                            esami.add(esame);
+                                        }
+                                    }
+                                }
+                                listView = viewExamList.findViewById(R.id.listLibretto);
+                                //pass results to listViewAdapter class
+                                adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
+                                //bind the adapter to the listview
+                                listView.setAdapter(adapterEsami);
+
+                                listView.setOnItemClickListener((adapterView, view, i, l) -> {
+                                    Intent intent = new Intent(getActivity().getApplicationContext(), ExamActivity.class);
+                                    intent.putExtra("esame",esami.get(i));
+                                    startActivity(intent);
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    private void getEsamiDocente() {
+        esami = new ArrayList<>();
+        db.collection("esami").get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+
+                    Esame esame = new Esame(document.getString("id"),
+                            document.getString("nome"),
+                            document.getString("commento"),
+                            document.getString("desrizione"),
+                            document.getString("cDs"),
+                            (ArrayList<String>) document.get("idDocenti"));
+
+                    for(int i = 0; i < esame.getIdDocenti().size(); i++) {
+                        if(uidDocente.equals(esame.getIdDocenti().get(i))) {
+                            esami.add(esame);
+                        }
+                    }
+
+                    listView = viewExamList.findViewById(R.id.listLibretto);
+                    //pass results to listViewAdapter class
+                    adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
+                    //bind the adapter to the listview
+                    listView.setAdapter(adapterEsami);
+
+                    listView.setOnItemClickListener((adapterView, view, i, l) -> {
+                        Intent intent = new Intent(getActivity().getApplicationContext(), ExamActivity.class);
+                        intent.putExtra("esame",esami.get(i));
+                        startActivity(intent);
+                    });
+                }
+            }
+        });
     }
 }

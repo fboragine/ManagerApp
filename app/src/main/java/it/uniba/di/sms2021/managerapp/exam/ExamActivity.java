@@ -6,42 +6,28 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
-import it.uniba.di.sms2021.managerapp.entities.Progetto;
-import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class ExamActivity extends AppCompatActivity {
 
-    protected static final int EDIT_ITEM_ID = View.generateViewId();
-    protected static final int SAVE_ITEM_ID = View.generateViewId();
-    protected static final int CANCEL_ITEM_ID = View.generateViewId();
-    private static final String TAG = "ExamActivityLog";
-
     private Esame esame;
-    private TextView textViewNome;
-    private TextView textDescEsame;
     private ListView listViewEsami;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,21 +45,17 @@ public class ExamActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(esame.getNome());
 
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
 
-        textViewNome = findViewById(R.id.exam_name);
+        TextView textViewNome = findViewById(R.id.exam_name);
         textViewNome.setText(esame.getNome());
 
-        textDescEsame = findViewById(R.id.exam_description);
+        TextView textDescEsame = findViewById(R.id.exam_description);
         textDescEsame.setText(esame.getDescrizione());
 
+        db = FirebaseFirestore.getInstance();
+
         getDisplayName();
-        //getEsame();
     }
 
     @Override
@@ -88,78 +70,49 @@ public class ExamActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Toast.makeText(getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
-                return true;
+        if (item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), Settings.class);
+            startActivity(intent);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void getDisplayName() {
-        ArrayList<String> idDocentiPart = new ArrayList<>();
-               idDocentiPart.addAll(esame.getIdDocenti());
+        ArrayList<String> idDocentiPart = new ArrayList<>(esame.getIdDocenti());
 
-        ArrayList<Docente> docenti = new ArrayList<>();
         ArrayList<String> displayNameDocenti = new ArrayList<>();
 
-        db.collection("docenti").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        boolean flag;
-                        int count = 0;
+        db.collection("docenti").get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    boolean flag;
+                    int count = 0;
 
-                        do {
-                            flag = false;
+                    do {
+                        flag = false;
 
-                            if(idDocentiPart.get(count).equals(document.getString("id"))) {
-                                Docente docente = new Docente(document.getString("id"),
-                                        document.getString("matricola"),
-                                        document.getString("nome"),
-                                        document.getString("cognome"),
-                                        document.getString("email"));
-                                docenti.add(docente);
+                        if(idDocentiPart.get(count).equals(document.getString("id"))) {
+                            Docente docente = new Docente(document.getString("id"),
+                                    document.getString("matricola"),
+                                    document.getString("nome"),
+                                    document.getString("cognome"),
+                                    document.getString("email"));
 
-                                    displayNameDocenti.add(docente.getNome() + " " + docente.getCognome());
-                            }
-                            count ++;
-                        }while(!flag  && count < idDocentiPart.size());
-                    }
-
-                    listViewEsami = findViewById(R.id.exam_teachers);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, displayNameDocenti);
-                    listViewEsami.setAdapter(adapter);
+                            displayNameDocenti.add(docente.getNome() + " " + docente.getCognome());
+                        }
+                        count ++;
+                    }while(!flag  && count < idDocentiPart.size());
                 }
+
+                listViewEsami = findViewById(R.id.exam_teachers);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, displayNameDocenti);
+                listViewEsami.setAdapter(adapter);
             }
         });
     }
 
-    /*private void getEsame() {
-
-        db.collection("esami").document(progetto.getCodiceEsame()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
-
-                    DocumentSnapshot document = task.getResult();
-
-                    if (document.exists()) {
-                        TextView textEsame = findViewById(R.id.project_exam);
-                        textEsame.setText(document.getString("nome").toString());
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-    }*/
-
     public void go_to_projects(View view) {
-
         Intent intent = new Intent(getApplicationContext(), ExamProjectActivity.class);
         intent.putExtra("esame",esame);
         startActivity(intent);

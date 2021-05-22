@@ -1,5 +1,12 @@
 package it.uniba.di.sms2021.managerapp.loggedUser;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,27 +14,28 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutput;
@@ -38,6 +46,7 @@ import java.util.Map;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class EditProfileFragment extends Fragment implements View.OnClickListener{
 
@@ -47,12 +56,19 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     EditText editMatricola;
     EditText editEmail;
     EditText editPassword;
-
+    ImageView profileImg;
     Button btnEdit;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String course;
+    private final String defaultImgProfile = "imgProfile.png";
+    private static final int CHOOSING_IMAGE_REQUEST = 1234;
+    boolean changedImgProfile = false;
+
+    private Uri fileUri;
+    private Bitmap bitmap;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,31 +77,35 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         if(StudentActivity.loginFile.getName().matches("studenti.srl")){
             course = StudentActivity.loggedStudent.getcDs();
         }
+
+        progressDialog = new ProgressDialog(getActivity());
         setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         vistaModifica = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        editName = (EditText) vistaModifica.findViewById(R.id.name);
+        editName = vistaModifica.findViewById(R.id.name);
         editName.setText(StudentActivity.loggedUser.getNome());
 
-        editSurname = (EditText) vistaModifica.findViewById(R.id.surname);
+        editSurname = vistaModifica.findViewById(R.id.surname);
         editSurname.setText(StudentActivity.loggedUser.getCognome());
 
-        editMatricola = (EditText) vistaModifica.findViewById(R.id.serial_number);
+        editMatricola = vistaModifica.findViewById(R.id.serial_number);
         editMatricola.setText(StudentActivity.loggedUser.getMatricola());
 
-        editPassword = (EditText) vistaModifica.findViewById(R.id.pw_txt);
+        editPassword = vistaModifica.findViewById(R.id.pw_txt);
 
-        editEmail = (EditText) vistaModifica.findViewById(R.id.email_txt);
+        editEmail = vistaModifica.findViewById(R.id.email_txt);
         editEmail.setText(StudentActivity.loggedUser.getEmail());
 
-        btnEdit = (Button) vistaModifica.findViewById(R.id.btn_edit);
+        btnEdit = vistaModifica.findViewById(R.id.edit_img_btn);
         btnEdit.setOnClickListener(this);
+
+        profileImg = vistaModifica.findViewById(R.id.ic_action_name);
+        viewImgProfile();
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -93,20 +113,36 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         return vistaModifica;
     }
 
+    private void viewImgProfile() {
+        File localFile = new File(getActivity().getExternalFilesDir(null) + "/user media", defaultImgProfile);
+        if(localFile.exists()) {
+            profileImg.setImageURI(Uri.parse(localFile.getPath()));
+        }
+    }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        menuItem.setVisible(false);
+
+        menuItem = menu.findItem(R.id.action_search);
+        menuItem.setVisible(false);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_settings:
-                Toast.makeText(getActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+                startActivity(intent);
                 return true;
             case android.R.id.home:
-                Navigation.findNavController(getActivity(), R.id.fragment).navigate(R.id.action_editProfileFragment_to_profileFragment);
+                NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
+                Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
                 return true;
         }
 
@@ -115,7 +151,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-
         // Add Save Menu Item
         int saveId = StudentActivity.SAVE_ITEM_ID;
         if (menu.findItem(saveId) == null) {
@@ -134,15 +169,40 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             save.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
-            save.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    modificaFile();
-                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(R.id.action_editProfileFragment_to_profileFragment);
-                    return true;
-                }
-            });
+            save.setOnMenuItemClickListener(item -> {
+                if(changedImgProfile) {
+                    downloadFile(defaultImgProfile, "file user/" + StudentActivity.loggedUser.getId());
 
+                    if(fileUri != null) {
+                        String path = getActivity().getExternalFilesDir(null).getPath() +"/"+ fileUri.getPath().substring(fileUri.getPath().lastIndexOf("/")+1);
+                        if (!path.contains(getActivity().getExternalFilesDir(null) + "/user media")) {
+                            File deleteFileImg = new File(path);
+                            if(deleteFileImg.delete()) {
+                                if (deleteFileImg.exists()) {
+                                    try {
+                                        if(deleteFileImg.getCanonicalFile().delete()) {
+                                            if (deleteFileImg.exists()) {
+                                                getActivity().getApplicationContext().deleteFile(deleteFileImg.getName());
+                                            }
+                                        }else {
+                                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+
+                modificaFile();
+                NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
+                Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+                return true;
+            });
         }
 
         // Add Cancel Menu Item
@@ -163,36 +223,128 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             cancel.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
-            cancel.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.undone_save, Toast.LENGTH_SHORT).show();
-                    Navigation.findNavController(getActivity(), R.id.fragment).navigate(R.id.action_editProfileFragment_to_profileFragment);
-                    return true;
-                }
+            cancel.setOnMenuItemClickListener(item -> {
+                Toast.makeText(getActivity().getApplicationContext(), R.string.undone_save, Toast.LENGTH_SHORT).show();
+                NavDirections action = EditProfileFragmentDirections.actionEditProfileFragmentToProfileFragment();
+                Navigation.findNavController(getActivity(), R.id.fragment).navigate(action);
+                return true;
             });
         }
 
         super.onPrepareOptionsMenu(menu);
     }
 
-    public void saveFile(String FILE_NAME, Object oggetto) {
+    private void showChoosingFile() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSING_IMAGE_REQUEST);
+    }
 
-        ObjectOutput out = null;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (bitmap != null) {
+            bitmap.recycle();
+        }
+
+        if (requestCode == CHOOSING_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            this.fileUri = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), fileUri);
+                profileImg.setImageURI(this.fileUri);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            uploadFile(fileUri);
+        }
+    }
+
+    private boolean validateInputFileName(String fileName) {
+        if (TextUtils.isEmpty(fileName)) {
+            Toast.makeText(getActivity().getApplicationContext(), R.string.file_name, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver contentResolver = getActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    public void uploadFile(Uri fileUrl) {
+        if (fileUrl != null) {
+            String fileName = fileUrl.getPath().substring(fileUrl.getPath().lastIndexOf("/")+1, fileUrl.getPath().lastIndexOf("."));
+
+            if (!validateInputFileName(fileName)) {
+                return;
+            }
+            progressDialog.setTitle(getString(R.string.upload_label));
+            progressDialog.show();
+
+            StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("file user/" + StudentActivity.loggedUser.getId());
+            StorageReference fileRef = fileReference.child("imgProfile" + "." + getFileExtension(fileUrl));
+
+            fileRef.putFile(fileUrl)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity().getApplicationContext(), R.string.img_upload, Toast.LENGTH_LONG).show();
+                    })
+                    .addOnFailureListener(exception -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity().getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                    })
+                    .addOnProgressListener(taskSnapshot -> {
+                        // progress percentage
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                        // percentage in progress dialog
+                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                    })
+                    .addOnPausedListener(taskSnapshot -> Toast.makeText(getActivity().getApplicationContext(), getString(R.string.upload_stop), Toast.LENGTH_LONG).show());
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.no_file_upload), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void downloadFile(String nomeFile, String percorso) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference islandRef = storageRef.child(percorso + "/" + nomeFile);
+
+        File localFile = new File(getActivity().getExternalFilesDir(null) + "/user media", nomeFile);
+
+        progressDialog.setTitle(getString(R.string.download_select));
+        progressDialog.show();
+
+        islandRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> progressDialog.dismiss()).addOnProgressListener(taskSnapshot -> {
+            // progress percentage
+            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+            // percentage in progress dialog
+            progressDialog.setMessage("Downloaded " + ((int) progress) + "%...");
+        });
+    }
+
+    public void saveFile(String FILE_NAME, Object oggetto) {
+        ObjectOutput out;
 
         try {
             out = new ObjectOutputStream(new FileOutputStream(new File(getContext().getExternalFilesDir(null), FILE_NAME)));
             out.writeObject(oggetto);
             out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void modificaFile() {
-
         StudentActivity.loggedUser.setNome(editName.getText().toString());
         StudentActivity.loggedUser.setCognome(editSurname.getText().toString());
         StudentActivity.loggedUser.setMatricola(editMatricola.getText().toString());
@@ -213,7 +365,13 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         userModify.put("id",mAuth.getCurrentUser().getUid());
         userModify.put("matricola",StudentActivity.loggedUser.getMatricola());
         userModify.put("nome",StudentActivity.loggedUser.getNome());
-        userModify.put("percorsoImg", "");
+        if(changedImgProfile) {
+            if(fileUri != null)
+                userModify.put("percorsoImg", fileUri.getPath());
+        }else {
+            userModify.put("percorsoImg", "");
+        }
+
 
         if(StudentActivity.loginFile.getName().matches("studenti.srl")) {
 
@@ -226,11 +384,14 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
             userModify.put("cDs",course);
 
-            StudentActivity.loginFile.delete();
-            saveFile("studenti.srl", StudentActivity.loggedStudent);
+            if(StudentActivity.loginFile.delete()) {
+                saveFile("studenti.srl", StudentActivity.loggedStudent);
 
-            DocumentReference docUpdate = db.collection("studenti").document(StudentActivity.loggedUser.getId());
-            modifyFirebase(docUpdate, userModify);
+                DocumentReference docUpdate = db.collection("studenti").document(StudentActivity.loggedUser.getId());
+                modifyFirebase(docUpdate, userModify);
+            }else {
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
+            }
 
         }else if(StudentActivity.loginFile.getName().matches("docenti.srl")) {
 
@@ -241,13 +402,15 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                     StudentActivity.loggedUser.getCognome(),
                     StudentActivity.loggedUser.getEmail());
 
-            StudentActivity.loginFile.delete();
-            saveFile("docenti.srl", StudentActivity.loggedDocent);
+            if(StudentActivity.loginFile.delete()) {
+                saveFile("docenti.srl", StudentActivity.loggedDocent);
 
-            DocumentReference docUpdate = db.collection("docenti").document(mAuth.getCurrentUser().getUid());
-            modifyFirebase(docUpdate, userModify);
+                DocumentReference docUpdate = db.collection("docenti").document(mAuth.getCurrentUser().getUid());
+                modifyFirebase(docUpdate, userModify);
+            }else {
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
+            }
         }
-
     }
 
     private void modificaAuth( boolean flag, String replace, String originalMail) {
@@ -255,60 +418,41 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         if(flag) {   //Modifica l'email
             user.updateEmail(replace)
-            .addOnCompleteListener(new OnCompleteListener<Void>() {
-             @Override
-             public void onComplete(@NonNull Task<Void> task) {
-                 if (task.isSuccessful()) {
-                     Toast.makeText(getActivity().getApplicationContext(), R.string.email_changed, Toast.LENGTH_LONG).show();
-                 }else
-                 {
-                     Toast.makeText(getActivity().getApplicationContext(), R.string.reauth_msg_email, Toast.LENGTH_LONG).show();
-                     StudentActivity.loggedUser.setEmail(originalMail);
-                 }
-             }
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.email_changed, Toast.LENGTH_LONG).show();
+                }else
+                {
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.reauth_msg_email, Toast.LENGTH_LONG).show();
+                    StudentActivity.loggedUser.setEmail(originalMail);
+                }
             });
 
         }else {
             user.updatePassword(replace)
-            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(getActivity().getApplicationContext(), R.string.password_changed, Toast.LENGTH_LONG).show();
-                    }else
-                    {
-                        Toast.makeText(getActivity().getApplicationContext(), R.string.weak_password, Toast.LENGTH_LONG).show();
-                    }
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.password_changed, Toast.LENGTH_LONG).show();
+                }else
+                {
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.weak_password, Toast.LENGTH_LONG).show();
                 }
             });
-
         }
     }
 
     private void modifyFirebase(DocumentReference docUpdate, Map<String, Object> userModify) {
-
         docUpdate
         .update(userModify)
-        .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
-            }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity().getApplicationContext(), R.string.error_save, Toast.LENGTH_SHORT).show();
-            }
-        });
+        .addOnSuccessListener(aVoid -> Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show())
+        .addOnFailureListener(e -> Toast.makeText(getActivity().getApplicationContext(), R.string.error_save, Toast.LENGTH_SHORT).show());
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btn_edit){
-            modificaFile();
-            Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(getActivity(), R.id.fragment).navigate(R.id.action_editProfileFragment_to_profileFragment);
+        if(v.getId() == R.id.edit_img_btn){
+            changedImgProfile = true;
+            showChoosingFile();
         }
     }
 }
