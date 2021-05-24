@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp.segreteria;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,9 +31,11 @@ import java.util.Map;
 import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class EditProfileAdminFragment extends Fragment {
 
+    private View editView;
     private EditText editEmail;
     private EditText editPassword;
 
@@ -54,17 +57,17 @@ public class EditProfileAdminFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View vistaModifica = inflater.inflate(R.layout.fragment_edit_profile_admin, container, false);
+        editView = inflater.inflate(R.layout.fragment_edit_profile_admin, container, false);
 
-        editPassword = vistaModifica.findViewById(R.id.pw_txt);
+        editPassword = editView.findViewById(R.id.pw_txt);
 
-        editEmail = vistaModifica.findViewById(R.id.email_txt);
+        editEmail = editView.findViewById(R.id.email_txt);
         editEmail.setText(HomeAdminActivity.getLoggedAdmin().getEmail());
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        return vistaModifica;
+        return editView;
     }
 
     @Override
@@ -79,7 +82,8 @@ public class EditProfileAdminFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_settings:
-                Toast.makeText(requireActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+                startActivity(intent);
                 return true;
             case android.R.id.home:
                 Navigation.findNavController(requireActivity(), R.id.fragment).navigate(R.id.action_editProfileAdminFragment_to_profileAdminFragment);
