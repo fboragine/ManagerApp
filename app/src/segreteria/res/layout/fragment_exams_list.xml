@@ -17,4 +17,13 @@
         android:layout_height="wrap_content">
     </ListView>
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/ic_add_circle_24"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
