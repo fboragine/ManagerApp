@@ -8,7 +8,7 @@ apply plugin: "androidx.navigation.safeargs"
 android {
     signingConfigs {
         SegreteriaSigningConfig {
-            storeFile file('C:\\Users\\fishe\\mykeystore\\ManagerAppKey.jks')
+            storeFile file('C:\\Users\\leomr\\mykeystore\\ManagerAppKey.jks')
             storePassword 'pippo123'
             keyAlias 'ManagerAppKey'
             keyPassword 'pippo123'
