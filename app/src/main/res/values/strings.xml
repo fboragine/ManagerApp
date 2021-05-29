@@ -68,7 +68,7 @@
     <string name="donwload_stop">Download is paused!</string>
     <string name="upload_stop">Upload is paused!</string>
     <string name="btn_goto_login">Back to the login</string>
-    <string name="exam_name">Esame 1</string>
+    <string name="exam_name">Exam name</string>
     <string name="teachers">Teachers</string>
     <string name="secretariat">Secretariat</string>
     <string name="courses">Courses</string>
@@ -131,4 +131,7 @@
     <string name="example_name_label" translatable="false">Mario</string>
     <string name="example_surname_label" translatable="false">Rossi</string>
     <string name="selected_file_example">Selected File</string>
+    <string name="exam_description">Exam description</string>
+    <string name="select_teacher">Select Teacher</string>
+    <string name="add_teacher">Add teacher</string>
 </resources>
