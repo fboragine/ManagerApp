@@ -35,7 +35,6 @@ import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class EditProfileAdminFragment extends Fragment {
 
-    private View editView;
     private EditText editEmail;
     private EditText editPassword;
 
@@ -57,7 +56,7 @@ public class EditProfileAdminFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        editView = inflater.inflate(R.layout.fragment_edit_profile_admin, container, false);
+        View editView = inflater.inflate(R.layout.fragment_edit_profile_admin, container, false);
 
         editPassword = editView.findViewById(R.id.pw_txt);
 
