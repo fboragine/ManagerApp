@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,7 +24,7 @@ import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
+import it.uniba.di.sms2021.managerapp.segreteria.entities.Segreteria;
 
 import static android.content.ContentValues.TAG;
 

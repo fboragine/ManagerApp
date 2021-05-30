@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import android.os.Bundle;
 
@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.segreteria.service.TabAdapter;
 
 public class HomeAdminFragment extends Fragment {
 

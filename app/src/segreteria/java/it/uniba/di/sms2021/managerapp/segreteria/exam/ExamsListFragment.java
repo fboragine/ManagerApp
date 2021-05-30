@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.exam;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
+import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
 import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
 
 public class ExamsListFragment extends Fragment {

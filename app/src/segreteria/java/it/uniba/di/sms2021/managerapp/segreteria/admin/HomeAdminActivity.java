@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +23,7 @@ import java.io.ObjectInputStream;
 import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.segreteria.entities.Segreteria;
 
 public class HomeAdminActivity extends AppCompatActivity {
 
