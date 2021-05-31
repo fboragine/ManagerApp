@@ -2,6 +2,7 @@ package it.uniba.di.sms2021.managerapp.segreteria.courses;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -31,7 +33,7 @@ public class CoursesListFragment extends Fragment {
     private View viewCoursesList;
     private ListView courseListView;
     private ListViewAdapter adapter;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
     private ArrayList<CorsoDiStudio> corsi;
 
     public CoursesListFragment() {
@@ -41,6 +43,7 @@ public class CoursesListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
         setHasOptionsMenu(true);
     }
 
@@ -72,11 +75,13 @@ public class CoursesListFragment extends Fragment {
 
                 courseListView.setOnItemClickListener((parent, view, position, id) -> {
                     // TODO implementare la logica per il click sul docente
-//                    ExamListFragment examListFragment = new ExamListFragment(corsiDiStudio.get(i).getIdCorsoDiStudio());
-//                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.fragment, examListFragment);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
+                    Log.d(null, "POSIZIONE: " + position);
+                    Log.d(null, "IDENTIFICATIVO: " + id);
+                    EditCourseFragment examListFragment = new EditCourseFragment(corsi.get(position));
+                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment, examListFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 });
             }
         });
