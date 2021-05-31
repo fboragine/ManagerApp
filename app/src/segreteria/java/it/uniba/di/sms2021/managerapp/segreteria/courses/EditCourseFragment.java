@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -31,6 +33,7 @@ public class EditCourseFragment extends Fragment {
 
     private EditText editName;
     private EditText editDescription;
+    private Button deleteBtn;
     private final CorsoDiStudio cDsSelected;
     private FirebaseFirestore db;
 
@@ -57,9 +60,45 @@ public class EditCourseFragment extends Fragment {
         editDescription = vistaModifica.findViewById(R.id.description_course);
         editDescription.setText(cDsSelected.getDescrizione());
 
+        deleteBtn = vistaModifica.findViewById(R.id.button_delete_course);
+        deleteBtn.setOnClickListener((view) -> {
+            deleteCds();
+            getActivity().finish();
+            getActivity().startActivity(getActivity().getIntent());
+        });
         db = FirebaseFirestore.getInstance();
 
         return vistaModifica;
+    }
+
+    /**
+     * La rimozione del CDS causa le seguenti modifiche:
+     * - Cancellazione del document dalla tabella corsiDiStudio;
+     * - Cancellazione di tutti gli esami appartenenti al corso di studio;
+     * - Annullamento del corso di studio a cui partecipa lo studente (cDs = "")
+     */
+    private void deleteCds() {
+        db.collection("corsiDiStudio").document(this.cDsSelected.getIdCorsoDiStudio()).delete();
+
+        db.collection("esami")
+                .whereEqualTo("cDs", this.cDsSelected.getIdCorsoDiStudio())
+                .get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        for(DocumentSnapshot document : task.getResult()){
+                            db.collection("esami").document(document.getId()).delete();
+                        }
+                    }
+                });
+
+        db.collection("studenti")
+                .whereEqualTo("cDs", this.cDsSelected.getIdCorsoDiStudio())
+                .get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                for(DocumentSnapshot document : task.getResult()){
+                    db.collection("studenti").document(document.getId()).update("cDs","");
+                }
+            }
+        });
     }
 
     @Override
@@ -68,22 +107,6 @@ public class EditCourseFragment extends Fragment {
         inflater.inflate(R.menu.toolbar_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
-    }
-
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
-                startActivity(intent);
-                return true;
-            case android.R.id.home:
-                Navigation.findNavController(requireActivity(), R.id.fragment).navigate(R.id.action_editProfileAdminFragment_to_profileAdminFragment);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
