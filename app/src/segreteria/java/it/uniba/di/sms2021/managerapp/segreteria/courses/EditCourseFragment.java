@@ -1,7 +1,5 @@
 package it.uniba.di.sms2021.managerapp.segreteria.courses;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,7 +26,6 @@ import java.util.Map;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
 import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
-import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class EditCourseFragment extends Fragment {
 
@@ -104,7 +102,10 @@ public class EditCourseFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        menu.findItem(R.id.action_settings).setVisible(false);
+
         inflater.inflate(R.menu.toolbar_menu, menu);
+
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
     }
@@ -134,8 +135,7 @@ public class EditCourseFragment extends Fragment {
             save.setOnMenuItemClickListener(item -> {
                 modificaFile();
                 Toast.makeText(requireActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-                getActivity().startActivity(getActivity().getIntent());
+                Navigation.findNavController(requireActivity(), R.id.fragment).navigate(R.id.action_editProfileAdminFragment_to_profileAdminFragment);
                 return true;
             });
 

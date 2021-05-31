@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
     android:layout_marginBottom="?attr/actionBarSize"
-    tools:context=".segreteria.admin.EditProfileAdminFragment">
+    tools:context=".segreteria.courses.EditCourseFragment">
 
     <ScrollView
         android:id="@+id/ScrollViewID"
