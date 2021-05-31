@@ -49,12 +49,8 @@ public class ProfileAdminFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.toolbar_menu, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_search);
-        menuItem.setVisible(false);
-
-        menuItem = menu.findItem(R.id.action_settings);
         menuItem.setVisible(false);
     }
 
@@ -82,6 +78,30 @@ public class ProfileAdminFragment extends Fragment {
             // Set a click listener for the new menu item
             edit.setOnMenuItemClickListener(item -> {
                 Navigation.findNavController(requireActivity(), R.id.fragment).navigate(R.id.action_profileAdminFragment_to_editProfileAdminFragment);
+                return true;
+            });
+        }
+
+        // Add Logout Menu Item
+        int logoutId = HomeAdminActivity.LOGOUT_ITEM_ID;
+        if (menu.findItem(logoutId) == null) {
+            // If it not exists then add the menu item to menu
+            MenuItem logout = menu.add(
+                    Menu.NONE,
+                    logoutId,
+                    2,
+                    getString(R.string.logout)
+            );
+
+            // Set an icon for the new menu item
+            logout.setIcon(R.drawable.ic_logout);
+
+            // Set the show as action flags for new menu item
+            logout.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            // Set a click listener for the new menu item
+            logout.setOnMenuItemClickListener(item -> {
+               logout();
                 return true;
             });
         }

@@ -71,6 +71,14 @@ public class EditProfileAdminFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        menuItem.setVisible(false);
+    }
+
+    @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
