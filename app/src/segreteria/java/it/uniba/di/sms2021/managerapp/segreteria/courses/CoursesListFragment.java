@@ -75,8 +75,6 @@ public class CoursesListFragment extends Fragment {
 
                 courseListView.setOnItemClickListener((parent, view, position, id) -> {
                     // TODO implementare la logica per il click sul docente
-                    Log.d(null, "POSIZIONE: " + position);
-                    Log.d(null, "IDENTIFICATIVO: " + id);
                     EditCourseFragment examListFragment = new EditCourseFragment(corsi.get(position));
                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragment, examListFragment);

@@ -16,13 +16,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
@@ -33,7 +31,7 @@ public class EditCourseFragment extends Fragment {
 
     private EditText editName;
     private EditText editDescription;
-    private CorsoDiStudio cDsSelected;
+    private final CorsoDiStudio cDsSelected;
     private FirebaseFirestore db;
 
     public EditCourseFragment(CorsoDiStudio corsoDiStudio) {
