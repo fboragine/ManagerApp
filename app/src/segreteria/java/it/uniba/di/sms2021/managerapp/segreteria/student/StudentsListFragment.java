@@ -27,6 +27,7 @@ import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
 import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
+import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 import it.uniba.di.sms2021.managerapp.segreteria.service.UserListAdapter;
 import it.uniba.di.sms2021.managerapp.service.Settings;
 
@@ -119,7 +120,7 @@ public class StudentsListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsAdmin.class);
             startActivity(intent);
             return true;
         }

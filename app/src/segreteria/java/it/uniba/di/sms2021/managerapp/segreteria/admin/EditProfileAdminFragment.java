@@ -1,6 +1,5 @@
 package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,7 +31,6 @@ import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.segreteria.entities.Segreteria;
-import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class EditProfileAdminFragment extends Fragment {
 

@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class ProfileAdminFragment extends Fragment {
 
