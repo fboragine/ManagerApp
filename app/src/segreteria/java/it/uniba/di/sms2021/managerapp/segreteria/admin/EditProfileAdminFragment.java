@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.segreteria.entities.Segreteria;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class EditProfileAdminFragment extends Fragment {
 
@@ -80,7 +82,8 @@ public class EditProfileAdminFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_settings:
-                Toast.makeText(requireActivity().getApplicationContext(), item.getTitle()+" Clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+                startActivity(intent);
                 return true;
             case android.R.id.home:
                 Navigation.findNavController(requireActivity(), R.id.fragment).navigate(R.id.action_editProfileAdminFragment_to_profileAdminFragment);

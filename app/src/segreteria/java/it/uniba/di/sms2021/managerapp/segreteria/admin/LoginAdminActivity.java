@@ -1,8 +1,14 @@
 package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -21,7 +28,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.segreteria.entities.Segreteria;
@@ -41,7 +50,18 @@ public class LoginAdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_admin);
 
-        if(Objects.requireNonNull(getExternalFilesDir(null).listFiles()).length == 0) {
+        File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
+
+        if(file.exists()) {
+            traduci(true);
+        } else {
+            traduci(false);
+        }
+
+        String pathSegreteria = getExternalFilesDir(null).getPath() + "/segreteria.srl";
+        File loggedSegreteria = new File(pathSegreteria);
+
+        if(getApplicationContext().getExternalFilesDir(null).listFiles().length == 0 || !loggedSegreteria.exists()){
             Button btnLogin = findViewById(R.id.buttonLogin);
             Button btnResetPsw = findViewById(R.id.btn_reset_password);
 
@@ -148,5 +168,35 @@ public class LoginAdminActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), HomeAdminActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void traduci(Boolean flag) {
+        Locale locale;
+        if (!flag) {
+            File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
+            locale = Locale.ENGLISH;
+            file.delete();
+            saveFile("EN");
+        } else {
+            File file = new File(getApplicationContext().getExternalFilesDir(null), "EN");
+            locale = Locale.ITALIAN;
+            file.delete();
+            saveFile("IT");
+        }
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    public void saveFile(String FILE_NAME) {
+        ObjectOutput out;
+
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(new File(getBaseContext().getExternalFilesDir(null), FILE_NAME)));
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
