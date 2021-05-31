@@ -9,7 +9,11 @@
         android:id="@+id/homeAdminFragment"
         android:name="it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_home_admin" />
+        tools:layout="@layout/fragment_home_admin" >
+        <action
+            android:id="@+id/action_homeAdminFragment_to_profileAdminFragment"
+            app:destination="@id/profileAdminFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileAdminFragment"
         android:name="it.uniba.di.sms2021.managerapp.segreteria.admin.ProfileAdminFragment"

@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp.segreteria.exam;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
 import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class ExamsListFragment extends Fragment {
 
@@ -116,10 +118,10 @@ public class ExamsListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(requireActivity().getApplicationContext(), item.getTitle() + " Clicked!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
+            startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

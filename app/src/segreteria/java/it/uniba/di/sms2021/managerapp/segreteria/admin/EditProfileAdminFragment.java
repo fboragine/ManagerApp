@@ -58,7 +58,7 @@ public class EditProfileAdminFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View vistaModifica = inflater.inflate(R.layout.fragment_edit_profile_admin, container, false);
-
+        ((HomeAdminActivity) requireActivity()).disableBackArrow();
         editPassword = vistaModifica.findViewById(R.id.pw_txt);
 
         editEmail = vistaModifica.findViewById(R.id.email_txt);
@@ -68,29 +68,6 @@ public class EditProfileAdminFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         return vistaModifica;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.toolbar_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_search);
-        menuItem.setVisible(false);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
-                startActivity(intent);
-                return true;
-            case android.R.id.home:
-                Navigation.findNavController(requireActivity(), R.id.fragment).navigate(R.id.action_editProfileAdminFragment_to_profileAdminFragment);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
