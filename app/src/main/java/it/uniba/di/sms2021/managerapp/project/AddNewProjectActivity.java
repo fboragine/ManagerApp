@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
@@ -61,6 +62,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
     final int[] checkedItem = {-1};
     SpecsCallback myCallback;
     Progetto newProject;
+    ArrayList<String> idExam;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +70,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
 
         Toolbar toolbar = findViewById(R.id.top_register_project_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.create_project);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.create_project);
 
         db = FirebaseFirestore.getInstance();
         getLoggedStudent();
@@ -86,6 +88,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
         selectedAttendeesView = findViewById(R.id.attendees_list_view);
 
         newProject = new Progetto();
+        idExam = new ArrayList<>();
     }
 
     @Override
@@ -95,6 +98,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
             alertDialog.setTitle(R.string.exam_dialog_title);
 
             getEsamiCdS();
+            setDisplayExam();
 
             myCallback = new SpecsCallback() {
                 @Override
@@ -183,7 +187,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
 
         //Ottengo i valori da visualizzare nella lista degli esami
         for (int i = 0; i < examList.size(); i++)
-            listItems[i] = examList.get(i).getDescrizione();
+            listItems[i] = examList.get(i).getNome();
 
         //Avvia un alert dialog box impostandolo come scelta singola
         alertDialog.setSingleChoiceItems(listItems, checkedItem[0], (dialog, which) -> {
@@ -204,10 +208,14 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
 
             selectedExam.setVisibility(View.VISIBLE);
 
+            //reset array esami
+            idExam.clear();
         });
 
         // Imposta un'eventuale azione in caso di click su pulsante negativo quindi cancel
         alertDialog.setNegativeButton(R.string.cancel, (dialog, which) -> {
+            //reset array esami
+            idExam.clear();
         });
 
         // Crea il customAlertDialog
@@ -294,25 +302,42 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void getEsamiCdS() {
-        db.collection("esami").whereEqualTo("cDs",loggedStudent.getcDs()).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                ArrayList<Esame> displayEsami = new ArrayList<>();
+    private synchronized void getEsamiCdS() {
+        db.collection("esamiStudente").whereEqualTo("stato", false)
+                                                   .whereEqualTo("idStudente", loggedStudent.getId())
+                                                   .get().addOnCompleteListener(taskExamStudent -> {
+                                                        if (taskExamStudent.isSuccessful()) {
+                                                            for (QueryDocumentSnapshot documentExamStudent : Objects.requireNonNull(taskExamStudent.getResult())) {
+                                                                idExam.add(documentExamStudent.getString("idEsame"));
+                                                            }
+                                                        }
+                                                   }
+        );
+    }
 
-                for (QueryDocumentSnapshot document : task.getResult()) {
+    private synchronized void setDisplayExam() {
+        ArrayList<Esame> displayEsami = new ArrayList<>();
 
-                    Esame newEsame = new Esame( document.getString("id"),
-                                                document.getString("nome"),
-                                                document.getString("commento"),
-                                                document.getString("descrizione"),
-                                                document.getString("cDs"),
-                            (ArrayList<String>) document.get("idDocenti"));
-
-                    displayEsami.add(newEsame);
-                }
-                myCallback.onCallback(displayEsami,null);
-            }
-        });
+            db.collection("esami").whereEqualTo("cDs", loggedStudent.getcDs())
+                                               .get().addOnCompleteListener(taskExams -> {
+                                                    if (taskExams.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot documentExam : Objects.requireNonNull(taskExams.getResult())) {
+                                                            for(String exam : idExam) {
+                                                                if(Objects.equals(documentExam.getString("id"), exam)) {
+                                                                    Esame newEsame = new Esame(documentExam.getString("id"),
+                                                                            documentExam.getString("nome"),
+                                                                            documentExam.getString("commento"),
+                                                                            documentExam.getString("descrizione"),
+                                                                            documentExam.getString("cDs"),
+                                                                            (ArrayList<String>) documentExam.get("idDocenti"));
+                                                                    displayEsami.add(newEsame);
+                                                                }
+                                                            }
+                                                        }
+                                                        myCallback.onCallback(displayEsami, null);
+                                                    }
+                                               }
+            );
     }
 
     private void getPartecipanti() {
@@ -321,7 +346,7 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
                 if(task.isSuccessful()) {
                     ArrayList<Studente> displayPartecipanti = new ArrayList<>();
 
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                         if(!loggedStudent.getId().equals(document.getString("id"))) {
                             Studente newStudente = new Studente( document.getString("id"),
                                     document.getString("matricola"),
