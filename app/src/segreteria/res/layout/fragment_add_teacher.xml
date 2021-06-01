@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".segreteria.AddTeacherFragment">
+
+    <ScrollView
+        android:id="@+id/ScrollViewID"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/teacher_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/teacher_matricola"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:autofillHints="@string/matricola_txtLabel"
+                android:ems="10"
+                android:hint="@string/matricola_txtLabel"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/teacher_name"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/teacher_matricola"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints="@string/name"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/name"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/teacher_surname"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/teacher_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints="@string/surname"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/surname"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/teacher_email"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/teacher_surname"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints="@string/e_mail"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/e_mail"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/teacher_password"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/teacher_email"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints="@string/password"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/password"
+                android:inputType="textPassword" />
+        </RelativeLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

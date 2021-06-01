@@ -23,6 +23,8 @@ public class AddActivity extends AppCompatActivity {
 
     private String[] items;
     private AddExamFragment examFragment;
+    private AddCourseFragment courseFragment;
+    private AddTeacherFragment teacherFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,23 @@ public class AddActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO implementare cambio fragment aggiunta item
+                // Cambio del fragment
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                switch (position) {
+                    case 0:
+                        teacherFragment = new AddTeacherFragment();
+                        transaction.replace(R.id.currentFrame, teacherFragment);
+                        break;
+                    case 1:
+                        examFragment = new AddExamFragment();
+                        transaction.replace(R.id.currentFrame, examFragment);
+                        break;
+                    case 2:
+                        courseFragment = new AddCourseFragment();
+                        transaction.replace(R.id.currentFrame, courseFragment);
+                        break;
+                }
+                transaction.commit();
             }
 
             @Override
@@ -51,9 +69,9 @@ public class AddActivity extends AppCompatActivity {
         });
 
         // Add the fragment
-        examFragment = new AddExamFragment();
+        teacherFragment = new AddTeacherFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.currentFrame, examFragment);
+        transaction.add(R.id.currentFrame, teacherFragment);
         transaction.commit();
     }
 
