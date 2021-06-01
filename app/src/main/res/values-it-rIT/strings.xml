@@ -128,4 +128,6 @@
     <string name="project_name_label">Nome Progetto</string>
     <string name="project_exam_label">Nome Esame</string>
     <string name="selected_file_example">File Selezionato</string>
+    <string name="secretariat">Segreteria</string>
+    <string name="courses">Corsi</string>
 </resources>
