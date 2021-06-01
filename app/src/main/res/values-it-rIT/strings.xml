@@ -133,4 +133,6 @@
     <string name="exam_description">Descrizione esame</string>
     <string name="select_teacher">Seleziona Professore</string>
     <string name="add_teacher">Aggiungi Professore</string>
+    <string name="course_name">Nome corso</string>
+    <string name="course_description">Descrizione corso</string>
 </resources>
