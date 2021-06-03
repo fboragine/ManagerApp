@@ -93,8 +93,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
                     CorsoDiStudio newCorso = new CorsoDiStudio( document.getString("id"),
                             document.getString("nome"),
-                            document.getString("descrizione"),
-                            null);
+                            document.getString("descrizione"));
 
                     displayCds.add(newCorso);
                 }

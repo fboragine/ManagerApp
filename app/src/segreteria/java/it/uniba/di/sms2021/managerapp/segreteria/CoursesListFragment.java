@@ -56,8 +56,7 @@ public class CoursesListFragment extends Fragment {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                     CorsoDiStudio corsoDiStudio = new CorsoDiStudio(document.getString("id"),
                             document.getString("nome"),
-                            document.getString("descrizione"),
-                            (ArrayList<String>) document.get("idEsami"));
+                            document.getString("descrizione"));
                     corsi.add(corsoDiStudio);
                 }
 
