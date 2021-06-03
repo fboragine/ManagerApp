@@ -80,7 +80,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/deep_orange_500"
                 android:elevation="2dp"
-                android:text="@string/add_exam"
+                android:text="@string/add_course"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:typeface="normal"/>
