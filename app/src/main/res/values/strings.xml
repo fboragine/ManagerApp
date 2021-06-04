@@ -136,4 +136,7 @@
     <string name="add_teacher">Add teacher</string>
     <string name="course_name">Course name</string>
     <string name="course_description">Course description</string>
+    <string name="cds_dialog_title">Choose a course</string>
+    <string name="teacher_dialog_title">Select the teachers</string>
+    <string name="change_select_teachers">Change selected teachers</string>
 </resources>

@@ -56,7 +56,6 @@ public class ExamsListFragment extends Fragment {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                     Esame esame = new Esame(document.getString("id"),
                             document.getString("nome"),
-                            document.getString("commento"),
                             document.getString("descrizione"),
                             document.getString("cDs"),
                             (ArrayList<String>) document.get("idDocenti"));

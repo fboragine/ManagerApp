@@ -1,16 +1,8 @@
 package it.uniba.di.sms2021.managerapp.segreteria;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,23 +12,26 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
-import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
+import it.uniba.di.sms2021.managerapp.entities.Esame;
 
 public class AddActivity extends AppCompatActivity {
 
-    private String[] items;
     private AddExamFragment examFragment;
     private AddCourseFragment courseFragment;
     private AddTeacherFragment teacherFragment;
@@ -56,7 +51,7 @@ public class AddActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Add the drop down menu
-        items = new String[]{getString(R.string.teacher), getString(R.string.exam), getString(R.string.course)};
+        String[] items = new String[]{getString(R.string.teacher), getString(R.string.exam), getString(R.string.course)};
         spinner = findViewById(R.id.itemSpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -85,7 +80,6 @@ public class AddActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO implementare default?
             }
         });
 
@@ -112,7 +106,6 @@ public class AddActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.do_registration:
-                // TODO implementare aggiunta item al db
                 switch (spinner.getSelectedItemPosition()) {
                     case 0:
                         Docente newTeacher = teacherFragment.getDocente();
@@ -150,11 +143,28 @@ public class AddActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(getApplicationContext(), R.string.register_field_void, Toast.LENGTH_LONG).show();
                         }
-                        if(mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getUid() != null)
-                            Log.d("AAAAAAAAA", "Utente loggato: " + mAuth.getCurrentUser().getUid());
                         break;
                     case 1:
-                        // TODO implementare aggiunta esame
+                        Esame newExam = examFragment.getExam();
+
+                        // Controllo che l'utente non abbia lasciato valori nulli
+                        if (!newExam.getcDs().equals("") && !newExam.getDescrizione().equals("") && !newExam.getNome().equals("") && newExam.getIdDocenti() != null) {
+                            //Creazione dell'hash map per inserire l'esame nel DB
+                            Map<String ,Object> exam = new HashMap<>();
+
+                            exam.put("descrizione", newExam.getDescrizione());
+                            exam.put("id", "");
+                            exam.put("nome", newExam.getNome());
+                            exam.put("cDs", newExam.getcDs());
+                            exam.put("idDocenti", newExam.getIdDocenti());
+
+                            db.collection("esami").add(exam).addOnSuccessListener(documentReference -> {
+                                documentReference.update("id", documentReference.getId());
+                                finish();
+                            });
+                        } else {
+                            Toast.makeText(getApplicationContext(), R.string.register_field_void, Toast.LENGTH_LONG).show();
+                        }
                         break;
                     case 2:
                         CorsoDiStudio newCourse = courseFragment.getCourse();

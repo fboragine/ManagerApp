@@ -135,4 +135,7 @@
     <string name="add_teacher">Aggiungi Professore</string>
     <string name="course_name">Nome corso</string>
     <string name="course_description">Descrizione corso</string>
+    <string name="cds_dialog_title">Scegli un corso</string>
+    <string name="teacher_dialog_title">Seleziona i professori</string>
+    <string name="change_select_teachers">Cambia professori selezionati</string>
 </resources>

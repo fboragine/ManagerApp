@@ -65,7 +65,6 @@ public class ExamListFragment extends Fragment {
                     if(idCdS.equals(document.getString("cDs"))) {
                         Esame esame = new Esame(document.getString("id"),
                                 document.getString("nome"),
-                                document.getString("commento"),
                                 document.getString("desrizione"),
                                 document.getString("cDs"),
                                 (ArrayList<String>) document.get("idDocenti"));

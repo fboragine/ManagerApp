@@ -71,7 +71,7 @@ public class LibrettoFragment extends Fragment {
         viewExamList = inflater.inflate(R.layout.fragment_libretto, container, false);
 
         if(!uidStudente.equals("")) {
-            passato = (RadioButton) viewExamList.findViewById(R.id.passed);
+            passato = viewExamList.findViewById(R.id.passed);
 
             passato.setOnCheckedChangeListener((buttonView, isChecked) -> riempiArray());
         } else if(!uidDocente.equals("")) {
@@ -142,7 +142,6 @@ public class LibrettoFragment extends Fragment {
                     if(cds.equals(document.getString("cDs"))) {
                         Esame esame = new Esame(document.getString("id"),
                                 document.getString("nome"),
-                                document.getString("commento"),
                                 document.getString("desrizione"),
                                 document.getString("cDs"),
                                 (ArrayList<String>) document.get("idDocenti"));
@@ -187,7 +186,6 @@ public class LibrettoFragment extends Fragment {
 
                     Esame esame = new Esame(document.getString("id"),
                             document.getString("nome"),
-                            document.getString("commento"),
                             document.getString("desrizione"),
                             document.getString("cDs"),
                             (ArrayList<String>) document.get("idDocenti"));

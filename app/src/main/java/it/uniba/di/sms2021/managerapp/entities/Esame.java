@@ -4,21 +4,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Esame implements Parcelable {
 
     private String id;
     private String nome;
-    private String commento;
     private String descrizione;
     private String cDs;
     private ArrayList<String> idDocenti;
 
-    public Esame(String id, String nome, String commento, String descrizione, String cDs, ArrayList<String> idDocenti) {
+    public Esame(String id, String nome, String descrizione, String cDs, ArrayList<String> idDocenti) {
         this.id = id;
         this.nome = nome;
-        this.commento = commento;
         this.descrizione = descrizione;
         this.cDs = cDs;
         this.idDocenti = idDocenti;
@@ -27,7 +24,6 @@ public class Esame implements Parcelable {
     protected Esame(Parcel in) {
         id = in.readString();
         nome = in.readString();
-        commento = in.readString();
         descrizione = in.readString();
         cDs = in.readString();
         idDocenti = in.createStringArrayList();
@@ -59,14 +55,6 @@ public class Esame implements Parcelable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getCommento() {
-        return commento;
-    }
-
-    public void setCommento(String commento) {
-        this.commento = commento;
     }
 
     public String getDescrizione() {
@@ -102,7 +90,6 @@ public class Esame implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
         dest.writeString(nome);
-        dest.writeString(commento);
         dest.writeString(descrizione);
         dest.writeString(cDs);
         dest.writeStringList(idDocenti);

@@ -303,7 +303,6 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
 
                     Esame newEsame = new Esame( document.getString("id"),
                                                 document.getString("nome"),
-                                                document.getString("commento"),
                                                 document.getString("descrizione"),
                                                 document.getString("cDs"),
                             (ArrayList<String>) document.get("idDocenti"));
