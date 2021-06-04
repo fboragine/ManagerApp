@@ -8,6 +8,6 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/do_registration"
-        android:title="@string/register"
+        android:title="@string/confirm"
         app:showAsAction="always"/>
 </menu>
