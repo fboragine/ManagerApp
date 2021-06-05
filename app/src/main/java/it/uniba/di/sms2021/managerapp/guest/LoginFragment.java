@@ -31,7 +31,6 @@ import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
-import it.uniba.di.sms2021.managerapp.segreteria.HomeAdminActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
