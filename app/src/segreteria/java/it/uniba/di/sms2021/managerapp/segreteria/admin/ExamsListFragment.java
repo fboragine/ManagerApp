@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.segreteria.exam;
+package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import android.content.Intent;
 import android.os.Bundle;

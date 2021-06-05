@@ -6,7 +6,7 @@
     android:layout_marginTop="?attr/actionBarSize"
     android:layout_marginBottom="?attr/actionBarSize"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".segreteria.exam.ExamsListFragment">
+    tools:context=".segreteria.admin.ExamsListFragment">
 
     <ListView
         android:id="@+id/examListView"

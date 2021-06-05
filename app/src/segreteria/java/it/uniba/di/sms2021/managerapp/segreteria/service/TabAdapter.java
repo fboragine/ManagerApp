@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import it.uniba.di.sms2021.managerapp.segreteria.courses.CoursesListFragment;
-import it.uniba.di.sms2021.managerapp.segreteria.exam.ExamsListFragment;
-import it.uniba.di.sms2021.managerapp.segreteria.student.StudentsListFragment;
-import it.uniba.di.sms2021.managerapp.segreteria.teacher.TeachersListFragment;
+import it.uniba.di.sms2021.managerapp.segreteria.admin.CoursesListFragment;
+import it.uniba.di.sms2021.managerapp.segreteria.admin.ExamsListFragment;
+import it.uniba.di.sms2021.managerapp.segreteria.admin.StudentsListFragment;
+import it.uniba.di.sms2021.managerapp.segreteria.admin.TeachersListFragment;
 
 public class TabAdapter extends FragmentPagerAdapter {
     private Context context;

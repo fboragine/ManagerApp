@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.addItem;
 
 import android.app.AlertDialog;
 import android.graphics.Color;

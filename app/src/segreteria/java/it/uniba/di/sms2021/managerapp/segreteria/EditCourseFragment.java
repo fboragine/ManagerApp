@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.segreteria.courses;
+package it.uniba.di.sms2021.managerapp.segreteria;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
