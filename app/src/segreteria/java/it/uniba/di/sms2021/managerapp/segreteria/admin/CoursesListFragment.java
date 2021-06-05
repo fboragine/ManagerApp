@@ -73,9 +73,9 @@ public class CoursesListFragment extends Fragment {
                 courseListView.setAdapter(adapter);
 
                 courseListView.setOnItemClickListener((parent, view, position, id) -> {
-                    EditCourseFragment examListFragment = new EditCourseFragment(corsi.get(position));
+                    EditCourseFragment courseEditFragment = new EditCourseFragment(corsi.get(position));
                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, examListFragment);
+                    fragmentTransaction.replace(R.id.fragment, courseEditFragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 });

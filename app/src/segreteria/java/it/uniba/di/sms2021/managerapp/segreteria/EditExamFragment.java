@@ -13,31 +13,28 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
+import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
 
-public class EditCourseFragment extends Fragment {
+public class EditExamFragment extends Fragment {
 
     private EditText editName;
     private EditText editDescription;
-    private final CorsoDiStudio cDsSelected;
+    private final Esame examSelected;
     private FirebaseFirestore db;
 
-    public EditCourseFragment(CorsoDiStudio corsoDiStudio) {
-        this.cDsSelected = corsoDiStudio;
+    public EditExamFragment(Esame esame) {
+        this.examSelected = esame;
     }
 
     @Override
@@ -51,101 +48,80 @@ public class EditCourseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View vistaModifica = inflater.inflate(R.layout.fragment_edit_course, container, false);
+        View vistaModifica = inflater.inflate(R.layout.fragment_edit_exam, container, false);
 
-        editName = vistaModifica.findViewById(R.id.name_course);
-        editName.setText(cDsSelected.getNome());
+        editName = vistaModifica.findViewById(R.id.name_exam);
+        editName.setText(examSelected.getNome());
 
-        editDescription = vistaModifica.findViewById(R.id.description_course);
-        editDescription.setText(cDsSelected.getDescrizione());
+        editDescription = vistaModifica.findViewById(R.id.description_exam);
+        editDescription.setText(examSelected.getDescrizione());
 
-        Button deleteBtn = vistaModifica.findViewById(R.id.button_delete_course);
-        deleteBtn.setOnClickListener((view) -> deleteCds());
+        Button deleteBtn = vistaModifica.findViewById(R.id.button_delete_exam);
+        deleteBtn.setOnClickListener((view) -> deleteExam());
         db = FirebaseFirestore.getInstance();
 
         return vistaModifica;
     }
 
     /**
-     * La rimozione del CDS NON VIENE EFFETTUATA se vi è la presenza di studenti iscritti al CDS
-     * La rimozione del CDS causa le seguenti modifiche:
-     * - Cancellazione del document dalla tabella corsiDiStudio;
-     * - Cancellazione di tutti gli esami appartenenti al corso di studio;
-     * - Cancellazione di tutti i progetti e le relative cartelle collegati agli esami rimossi;
+     * L'esame può essere rimosso SOLO SE non possiede alcuno studente registrato o se tutti
+     * gli studenti sono stati promossi.
+     * La rimozione dell'esame causa le seguenti modifiche:
+     * - Cancellazione del document dalla tabella esami;
+     * - Cancellazione di tutti i progetti e i relativi collegamenti del esame agli studenti;
      */
-    private void deleteCds() {
-
-        db.collection("studenti")
-                .whereEqualTo("cDs", this.cDsSelected.getIdCorsoDiStudio())
-                .get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                if(Objects.requireNonNull(task.getResult()).isEmpty()) {
-                    rimozioneEsami();
-                    db.collection("corsiDiStudio").document(this.cDsSelected.getIdCorsoDiStudio()).delete();
-                }else {
-                    Toast.makeText(requireActivity().getApplicationContext(), R.string.cds_with_student_error, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    private void rimozioneEsami() {
+    private synchronized void deleteExam() {
         db.collection("esami")
-                .whereEqualTo("cDs", this.cDsSelected.getIdCorsoDiStudio())
+                .document(this.examSelected.getId())
                 .get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())){
-                    rimozioneEsamiStudente(document.getId());
-                    db.collection("esami").document(document.getId()).delete();
-                }
+                rimozioneEsamiStudenti();
             }
         });
     }
 
-    private void rimozioneEsamiStudente(String idEsame) {
+    private synchronized void rimozioneEsamiStudenti() {
         db.collection("esamiStudente")
-                .whereEqualTo("idEsame", idEsame)
+                .whereEqualTo("idEsame", this.examSelected.getId())
                 .get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())){
-                    rimozioniProgetti(idEsame);
-                    db.collection("esamiStudente").document(document.getId()).delete();
-                }
-            }
-        });
-    }
-
-    private void rimozioniProgetti(String idEsame) {
-        db.collection("progetti")
-                .whereEqualTo("codiceEsame", idEsame)
-                .get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-
-                for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())){
-                    rimozioniFileProgetto(storage, document.getId());
-                    db.collection("progetti").document(document.getId()).delete();
-                }
-            }
-        });
-    }
-
-    private void rimozioniFileProgetto(FirebaseStorage storage, String idProgetto) {
-        StorageReference listRef = storage.getReference().child("progetti/" + idProgetto);
-        listRef.listAll()
-                .addOnSuccessListener(listResult -> {
-                    for (StorageReference prefix : listResult.getPrefixes()) {
-                        prefix.delete();
+                if(Objects.requireNonNull(task.getResult()).size() != 0) {
+                    for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                        if (Objects.requireNonNull(document.getBoolean("stato"))) {
+                            rimozioneProgettiEsame(document.getId());
+                        } else {
+                            Toast.makeText(requireActivity().getApplicationContext(), R.string.exam_delete_error, Toast.LENGTH_SHORT).show();
+                        }
                     }
-
-                    for (StorageReference item : listResult.getItems()) {
-                        item.delete();
-                    }
-
+                }else {
+                    Toast.makeText(requireActivity().getApplicationContext(), R.string.no_exam_linked_error, Toast.LENGTH_SHORT).show();
+                    db.collection("esami").document(this.examSelected.getId()).delete();
                     getActivity().finish();
                     getActivity().startActivity(getActivity().getIntent());
-                })
-                .addOnFailureListener(e -> Toast.makeText(requireActivity().getApplicationContext(), "File project: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                }
+            }
+        });
+    }
+
+    private synchronized void rimozioneProgettiEsame(String idEsameStudente) {
+
+        db.collection("progetti")
+                .whereEqualTo("codiceEsame", this.examSelected.getId())
+                .get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                if(Objects.requireNonNull(task.getResult()).size() != 0) {
+                    for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())){
+                        db.collection("progetti").document(document.getId()).delete();
+                    }
+                }else {
+                    Toast.makeText(requireActivity().getApplicationContext(), R.string.no_project_linked_error, Toast.LENGTH_SHORT).show();
+                }
+                db.collection("esamiStudente").document(idEsameStudente).delete();
+                db.collection("esami").document(this.examSelected.getId()).delete();
+                getActivity().finish();
+                getActivity().startActivity(getActivity().getIntent());
+            }
+        });
     }
 
     @Override
@@ -221,10 +197,10 @@ public class EditCourseFragment extends Fragment {
             Map<String ,Object> userModify = new HashMap<>();
 
             userModify.put("descrizione",editDescription.getText().toString());
-            userModify.put("id", this.cDsSelected.getIdCorsoDiStudio());
+            userModify.put("id", this.examSelected.getId());
             userModify.put("nome", editName.getText().toString());
 
-            DocumentReference docUpdate = db.collection("corsiDiStudio").document(this.cDsSelected.getIdCorsoDiStudio());
+            DocumentReference docUpdate = db.collection("esami").document(this.examSelected.getId());
 
             docUpdate
                     .update(userModify)
