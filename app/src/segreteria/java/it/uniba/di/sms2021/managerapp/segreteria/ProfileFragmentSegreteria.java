@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,14 +31,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
-import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
-import it.uniba.di.sms2021.managerapp.project.ProjectActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
-import it.uniba.di.sms2021.managerapp.service.ProjectListAdapter;
 import it.uniba.di.sms2021.managerapp.service.Settings;
 
 
@@ -52,6 +49,7 @@ public class ProfileFragmentSegreteria extends Fragment {
     private TextView label;
     private Utente utente;
     private Boolean isStudent;
+    private Boolean errDocente;
 
     public ProfileFragmentSegreteria() {
     }
@@ -174,6 +172,7 @@ public class ProfileFragmentSegreteria extends Fragment {
             rimozioneEsamiStudente(utente.getId());
             docUpdate = db.collection("studenti").document(utente.getId());
         }else if(!isStudent) {
+            rimozioneEsamiDocente(utente.getId());
             docUpdate = db.collection("docenti").document(utente.getId());
         }
 
@@ -184,6 +183,36 @@ public class ProfileFragmentSegreteria extends Fragment {
 
         Intent intent = new Intent(getActivity().getApplicationContext(), HomeAdminActivity.class);
         startActivity(intent);
+    }
+
+    private void rimozioneEsamiDocente(String idDocente) {
+        db.collection("esami").get().addOnCompleteListener((OnCompleteListener<QuerySnapshot>) task -> {
+            if(task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Esame esame = new Esame(document.getString("id"),
+                            document.getString("nome"),
+                            document.getString("descrizione"),
+                            document.getString("cDs"),
+                            (ArrayList<String>) document.get("idDocenti"));
+
+                    for (int i = 0; i < esame.getIdDocenti().size(); i++) {
+                        if((esame.getIdDocenti().get(i)).equals(idDocente)) {
+
+                                esame.getIdDocenti().remove(i);
+                                Map<String ,Object> exam = new HashMap<>();
+
+                                exam.put("id",esame.getId());
+                                exam.put("descrizione",esame.getDescrizione());
+                                exam.put("cDs",esame.getcDs());
+                                exam.put("idDocenti",esame.getIdDocenti());
+                                exam.put("nome", esame.getNome());
+
+                                db.collection("esami").document(document.getId()).update(exam);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void rimozioneEsamiStudente(String idStudente) {

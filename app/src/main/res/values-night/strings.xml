@@ -74,4 +74,6 @@
     <string name="cds_with_student_error">This CDS have some student registered, it cannot be delete</string>
     <string name="label_cDs">Select CDS</string>
     <string name="label_teacher">Select Teachers</string>
+    <string name="err_delete_tea">Before deleting the teacher make sure that all related exams have at least one oteacher.</string>
+    <string name="teach_miss">No teacher has been assigned</string>
 </resources>
