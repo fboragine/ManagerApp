@@ -44,7 +44,6 @@ public class TeachersListFragment extends Fragment {
     private ArrayList<Utente> docenti;
 
     public TeachersListFragment() {
-        // Required empty public constructor
     }
 
     @Override
