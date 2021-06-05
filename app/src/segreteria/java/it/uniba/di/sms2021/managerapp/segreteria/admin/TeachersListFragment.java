@@ -3,18 +3,14 @@ package it.uniba.di.sms2021.managerapp.segreteria.admin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -30,10 +26,8 @@ import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
 import it.uniba.di.sms2021.managerapp.segreteria.ProfileFragmentSegreteria;
-import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 import it.uniba.di.sms2021.managerapp.segreteria.service.UserListAdapter;
-import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class TeachersListFragment extends Fragment {
 
@@ -58,16 +52,19 @@ public class TeachersListFragment extends Fragment {
         viewTeachersList = inflater.inflate(R.layout.fragment_teachers_list, container, false);
 
         ((HomeAdminActivity)requireActivity()).disableBackArrow();
-        docenti = new ArrayList<>();
 
+        return viewTeachersList;
+    }
+
+    private synchronized void getTeachers() {
         db.collection("docenti").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                     Docente docente = new Docente(document.getString("id"),
-                                                document.getString("matricola"),
-                                                document.getString("nome"),
-                                                document.getString("cognome"),
-                                                document.getString("email"));
+                            document.getString("matricola"),
+                            document.getString("nome"),
+                            document.getString("cognome"),
+                            document.getString("email"));
                     docenti.add(docente);
                 }
 
@@ -90,8 +87,13 @@ public class TeachersListFragment extends Fragment {
                 });
             }
         });
+    }
 
-        return viewTeachersList;
+    @Override
+    public void onResume() {
+        super.onResume();
+        docenti = new ArrayList<>();
+        getTeachers();
     }
 
     @Override
@@ -124,7 +126,7 @@ public class TeachersListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsAdmin.class);
+            Intent intent = new Intent(requireActivity().getApplicationContext(), SettingsAdmin.class);
             startActivity(intent);
             return true;
         }

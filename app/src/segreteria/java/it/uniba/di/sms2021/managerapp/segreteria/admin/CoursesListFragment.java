@@ -53,8 +53,11 @@ public class CoursesListFragment extends Fragment {
         viewCoursesList = inflater.inflate(R.layout.fragment_courses_list, container, false);
 
         ((HomeAdminActivity)requireActivity()).disableBackArrow();
-        corsi = new ArrayList<>();
 
+        return viewCoursesList;
+    }
+
+    private synchronized void getCourses() {
         db.collection("corsiDiStudio").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
@@ -81,8 +84,13 @@ public class CoursesListFragment extends Fragment {
                 });
             }
         });
+    }
 
-        return viewCoursesList;
+    @Override
+    public void onResume() {
+        super.onResume();
+        corsi = new ArrayList<>();
+        getCourses();
     }
 
     @Override
@@ -115,7 +123,7 @@ public class CoursesListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsAdmin.class);
+            Intent intent = new Intent(requireActivity().getApplicationContext(), SettingsAdmin.class);
             startActivity(intent);
             return true;
         }

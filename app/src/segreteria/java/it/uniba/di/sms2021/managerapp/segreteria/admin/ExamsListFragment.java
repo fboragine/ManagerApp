@@ -52,9 +52,6 @@ public class ExamsListFragment extends Fragment {
         viewExamsList = inflater.inflate(R.layout.fragment_exams_list, container, false);
 
         ((HomeAdminActivity)requireActivity()).disableBackArrow();
-        esami = new ArrayList<>();
-
-        getExams();
 
         return viewExamsList;
     }
@@ -120,7 +117,7 @@ public class ExamsListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsAdmin.class);
+            Intent intent = new Intent(requireActivity().getApplicationContext(), SettingsAdmin.class);
             startActivity(intent);
             return true;
         }
@@ -135,6 +132,7 @@ public class ExamsListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        esami = new ArrayList<>();
+        getExams();
     }
 }

@@ -2,11 +2,6 @@ package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -28,10 +26,8 @@ import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
 import it.uniba.di.sms2021.managerapp.segreteria.ProfileFragmentSegreteria;
-import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 import it.uniba.di.sms2021.managerapp.segreteria.service.UserListAdapter;
-import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class StudentsListFragment extends Fragment {
 
@@ -56,8 +52,11 @@ public class StudentsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         viewStudentList = inflater.inflate(R.layout.fragment_students_list, container, false);
         ((HomeAdminActivity) requireActivity()).disableBackArrow();
-        studenti = new ArrayList<>();
 
+        return viewStudentList;
+    }
+
+    private synchronized void getStudents() {
         db.collection("studenti").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
@@ -87,8 +86,13 @@ public class StudentsListFragment extends Fragment {
                 });
             }
         });
+    }
 
-        return viewStudentList;
+    @Override
+    public void onResume() {
+        super.onResume();
+        studenti = new ArrayList<>();
+        getStudents();
     }
 
     @Override
@@ -121,7 +125,7 @@ public class StudentsListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsAdmin.class);
+            Intent intent = new Intent(requireActivity().getApplicationContext(), SettingsAdmin.class);
             startActivity(intent);
             return true;
         }
