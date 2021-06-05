@@ -131,6 +131,9 @@
     <string name="example_name_label" translatable="false">Mario</string>
     <string name="example_surname_label" translatable="false">Rossi</string>
     <string name="selected_file_example">Selected File</string>
+    <string name="cds_with_student_error">This CDS have some student registered, it cannot be delete</string>
+    <string name="label_cDs">Select CDS</string>
+    <string name="label_teacher">Select Teachers</string>
     <string name="exam_description">Exam description</string>
     <string name="select_teacher">Select Teacher</string>
     <string name="add_teacher">Add teacher</string>
@@ -140,7 +143,4 @@
     <string name="teacher_dialog_title">Select the teachers</string>
     <string name="change_select_teachers">Change selected teachers</string>
     <string name="add">Add</string>
-    <string name="cds_with_student_error">This CDS have some student registered, it cannot be delete</string>
-    <string name="label_cDs">Select CDS</string>
-    <string name="label_teacher">Select Teachers</string>
 </resources>
