@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -52,37 +53,67 @@ public class LoginAdminActivity extends AppCompatActivity {
 
         File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
 
-        if(file.exists()) {
-            traduci(true);
-        } else {
-            traduci(false);
-        }
+        traduci(file.exists());
 
         String pathSegreteria = getExternalFilesDir(null).getPath() + "/segreteria.srl";
         File loggedSegreteria = new File(pathSegreteria);
 
-        if(getApplicationContext().getExternalFilesDir(null).listFiles().length == 0 || !loggedSegreteria.exists()){
+        if(Objects.requireNonNull(getApplicationContext().getExternalFilesDir(null).listFiles()).length == 0 || !loggedSegreteria.exists()){
             Button btnLogin = findViewById(R.id.buttonLogin);
-            Button btnResetPsw = findViewById(R.id.btn_reset_password);
+            Button btnResetPsw = findViewById(R.id.btn_reset_password_admin);
+            Button btnResetPswConfirm = findViewById(R.id.btn_reset_password_confirm);
+            LinearLayout layout = findViewById(R.id.pw_layout);
 
             mAuth = FirebaseAuth.getInstance();
             db = FirebaseFirestore.getInstance();
+            btnResetPswConfirm.setVisibility(View.GONE);
+            email = findViewById(R.id.emailTxt);
+            password = findViewById(R.id.passwordTxt);
 
             View.OnClickListener listener = v -> {
                 if (v.getId() == R.id.buttonLogin) {
-                    email = findViewById(R.id.emailTxt);
-                    password = findViewById(R.id.passwordTxt);
                     if (!email.getText().toString().matches("") &&
                             !password.getText().toString().matches("")) {
                         login(email.getText().toString(), password.getText().toString());
                     }
-                } else if (v.getId() == R.id.btn_reset_password) {
+                } else if (v.getId() == R.id.btn_reset_password_admin) {
                     // TODO implementare il reset della password
+                    if(layout.getVisibility() == View.VISIBLE) {
+                        layout.setVisibility(View.GONE);
+                        btnResetPsw.setText(R.string.btn_goto_login);
+                        btnLogin.setVisibility(View.GONE);
+                        btnResetPswConfirm.setVisibility(View.VISIBLE);
+                        Toast.makeText(getApplicationContext(),getString(R.string.msg_reset), Toast.LENGTH_LONG).show();
+
+                    }else {
+                        layout.setVisibility(View.VISIBLE);
+                        btnLogin.setVisibility(View.VISIBLE);
+                        btnResetPswConfirm.setVisibility(View.GONE);
+                        btnResetPsw.setText(R.string.reset_password);
+                        email.setText("");
+                        password.setText("");
+                    }
+                }else if(v.getId() == R.id.btn_reset_password_confirm) {
+                    String emailAddress = email.getText().toString();
+                    if(!emailAddress.matches("")) {
+                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                        auth.sendPasswordResetEmail(emailAddress)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getApplicationContext(), getString(R.string.email_sent), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }else {
+                        Toast.makeText(getApplicationContext(),getString(R.string.error_email_sent), Toast.LENGTH_SHORT).show();
+                    }
                 }
             };
 
             btnLogin.setOnClickListener(listener);
             btnResetPsw.setOnClickListener(listener);
+            btnResetPswConfirm.setOnClickListener(listener);
         } else {
             Intent intent = new Intent(getApplicationContext(), HomeAdminActivity.class);
             startActivity(intent);

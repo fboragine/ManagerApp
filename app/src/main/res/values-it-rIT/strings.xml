@@ -62,7 +62,7 @@
     <string name="file_upload">Il file è stato caricato</string>
     <string name="email_sent">Email inviata. Controlla la tua posta!</string>
     <string name="reset_password">Resetta la password</string>
-    <string name="msg_reset">Inserisci la mail se vuoi resettare la password</string>
+    <string name="msg_reset">Inserisci la mail di cui vuoi resettare la password</string>
     <string name="donwload_stop">Scaricamento in pausa!</string>
     <string name="upload_stop">Caricamento in pausa!</string>
     <string name="btn_goto_login">Torna alla pagina di accesso</string>

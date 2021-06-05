@@ -78,6 +78,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/pw_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -128,7 +129,18 @@
                     android:text="@string/login" />
 
                 <Button
-                    android:id="@+id/btn_reset_password"
+                    android:id="@+id/btn_reset_password_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dip"
+                    android:text="@string/reset_password"
+                    android:background="@color/deep_orange_500"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:visibility="gone"/>
+
+                <Button
+                    android:id="@+id/btn_reset_password_admin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dip"
