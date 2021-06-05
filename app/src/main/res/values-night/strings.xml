@@ -71,4 +71,7 @@
     <string name="example_name_label">Mario</string>
     <string name="example_surname_label">Rossi</string>
     <string name="selected_file_example">Selected File</string>
+    <string name="cds_with_student_error">This CDS have some student registered, it cannot be delete</string>
+    <string name="label_cDs">Select CDS</string>
+    <string name="label_teacher">Select Teachers</string>
 </resources>

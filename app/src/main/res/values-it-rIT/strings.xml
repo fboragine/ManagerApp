@@ -130,4 +130,7 @@
     <string name="selected_file_example">File Selezionato</string>
     <string name="secretariat">Segreteria</string>
     <string name="courses">Corsi</string>
+    <string name="cds_with_student_error">Questo corso di studio possiede almeno uno studente registrato, non è possibile eliminarlo!</string>
+    <string name="label_cDs">Seleziona il corso di studio</string>
+    <string name="label_teacher">Seleziona il docente</string>
 </resources>

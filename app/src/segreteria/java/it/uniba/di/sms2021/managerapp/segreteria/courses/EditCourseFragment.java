@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -19,9 +18,12 @@ import androidx.navigation.Navigation;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
@@ -31,7 +33,6 @@ public class EditCourseFragment extends Fragment {
 
     private EditText editName;
     private EditText editDescription;
-    private Button deleteBtn;
     private final CorsoDiStudio cDsSelected;
     private FirebaseFirestore db;
 
@@ -58,45 +59,93 @@ public class EditCourseFragment extends Fragment {
         editDescription = vistaModifica.findViewById(R.id.description_course);
         editDescription.setText(cDsSelected.getDescrizione());
 
-        deleteBtn = vistaModifica.findViewById(R.id.button_delete_course);
-        deleteBtn.setOnClickListener((view) -> {
-            deleteCds();
-            getActivity().finish();
-            getActivity().startActivity(getActivity().getIntent());
-        });
+        Button deleteBtn = vistaModifica.findViewById(R.id.button_delete_course);
+        deleteBtn.setOnClickListener((view) -> deleteCds());
         db = FirebaseFirestore.getInstance();
 
         return vistaModifica;
     }
 
     /**
+     * La rimozione del CDS NON VIENE EFFETTUATA se vi è la presenza di studenti iscritti al CDS
      * La rimozione del CDS causa le seguenti modifiche:
      * - Cancellazione del document dalla tabella corsiDiStudio;
      * - Cancellazione di tutti gli esami appartenenti al corso di studio;
-     * - Annullamento del corso di studio a cui partecipa lo studente (cDs = "")
+     * - Cancellazione di tutti i progetti e le relative cartelle collegati agli esami rimossi;
      */
     private void deleteCds() {
-        db.collection("corsiDiStudio").document(this.cDsSelected.getIdCorsoDiStudio()).delete();
-
-        db.collection("esami")
-                .whereEqualTo("cDs", this.cDsSelected.getIdCorsoDiStudio())
-                .get().addOnCompleteListener(task -> {
-                    if(task.isSuccessful()) {
-                        for(DocumentSnapshot document : task.getResult()){
-                            db.collection("esami").document(document.getId()).delete();
-                        }
-                    }
-                });
 
         db.collection("studenti")
                 .whereEqualTo("cDs", this.cDsSelected.getIdCorsoDiStudio())
                 .get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                for(DocumentSnapshot document : task.getResult()){
-                    db.collection("studenti").document(document.getId()).update("cDs","");
+                if(Objects.requireNonNull(task.getResult()).isEmpty()) {
+                    rimozioneEsami();
+                    db.collection("corsiDiStudio").document(this.cDsSelected.getIdCorsoDiStudio()).delete();
+                }else {
+                    Toast.makeText(requireActivity().getApplicationContext(), R.string.cds_with_student_error, Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void rimozioneEsami() {
+        db.collection("esami")
+                .whereEqualTo("cDs", this.cDsSelected.getIdCorsoDiStudio())
+                .get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())){
+                    rimozioneEsamiStudente(document.getId());
+                    db.collection("esami").document(document.getId()).delete();
+                }
+            }
+        });
+    }
+
+    private void rimozioneEsamiStudente(String idEsame) {
+        db.collection("esamiStudente")
+                .whereEqualTo("idEsame", idEsame)
+                .get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())){
+                    rimozioniProgetti(idEsame);
+                    db.collection("esamiStudente").document(document.getId()).delete();
+                }
+            }
+        });
+    }
+
+    private void rimozioniProgetti(String idEsame) {
+        db.collection("progetti")
+                .whereEqualTo("codiceEsame", idEsame)
+                .get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+
+                for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())){
+                    rimozioniFileProgetto(storage, document.getId());
+                    db.collection("progetti").document(document.getId()).delete();
+                }
+            }
+        });
+    }
+
+    private void rimozioniFileProgetto(FirebaseStorage storage, String idProgetto) {
+        StorageReference listRef = storage.getReference().child("progetti/" + idProgetto);
+        listRef.listAll()
+                .addOnSuccessListener(listResult -> {
+                    for (StorageReference prefix : listResult.getPrefixes()) {
+                        prefix.delete();
+                    }
+
+                    for (StorageReference item : listResult.getItems()) {
+                        item.delete();
+                    }
+
+                    getActivity().finish();
+                    getActivity().startActivity(getActivity().getIntent());
+                })
+                .addOnFailureListener(e -> Toast.makeText(requireActivity().getApplicationContext(), "File project: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     @Override
