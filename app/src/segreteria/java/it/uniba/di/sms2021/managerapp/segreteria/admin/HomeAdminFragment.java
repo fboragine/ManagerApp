@@ -39,6 +39,8 @@ public class HomeAdminFragment extends Fragment {
         TabLayout tabLayout = viewHome.findViewById(R.id.tabLayout);
         viewPager = viewHome.findViewById(R.id.viewPager);
 
+        ((HomeAdminActivity)requireActivity()).disableBackArrow();
+
         tabLayout.addTab(tabLayout.newTab().setText(R.string.teachers));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.students));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.exams));

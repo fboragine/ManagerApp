@@ -51,7 +51,6 @@ public class StudentsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewStudentList = inflater.inflate(R.layout.fragment_students_list, container, false);
-        ((HomeAdminActivity) requireActivity()).disableBackArrow();
 
         return viewStudentList;
     }

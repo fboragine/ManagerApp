@@ -52,8 +52,6 @@ public class CoursesListFragment extends Fragment {
                              Bundle savedInstanceState) {
         viewCoursesList = inflater.inflate(R.layout.fragment_courses_list, container, false);
 
-        ((HomeAdminActivity)requireActivity()).disableBackArrow();
-
         return viewCoursesList;
     }
 

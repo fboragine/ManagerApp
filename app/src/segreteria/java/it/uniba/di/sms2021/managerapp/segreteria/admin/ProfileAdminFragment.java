@@ -38,6 +38,7 @@ public class ProfileAdminFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View vistaProfilo = inflater.inflate(R.layout.fragment_profile_admin, container, false);
+        ((HomeAdminActivity) requireActivity()).disableBackArrow();
 
         TextView label = vistaProfilo.findViewById(R.id.profile_email);
         label.setText(HomeAdminActivity.getLoggedAdmin().getEmail());

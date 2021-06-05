@@ -52,6 +52,8 @@ public class EditExamFragment extends Fragment {
         // Inflate the layout for this fragment
         View vistaModifica = inflater.inflate(R.layout.fragment_edit_exam, container, false);
 
+        ((HomeAdminActivity)requireActivity()).enableBackArrow();
+
         editName = vistaModifica.findViewById(R.id.name_exam);
         editName.setText(examSelected.getNome());
 

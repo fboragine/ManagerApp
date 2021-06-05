@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -52,6 +51,8 @@ public class EditCourseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View vistaModifica = inflater.inflate(R.layout.fragment_edit_course, container, false);
+
+        ((HomeAdminActivity)requireActivity()).enableBackArrow();
 
         editName = vistaModifica.findViewById(R.id.name_course);
         editName.setText(cDsSelected.getNome());

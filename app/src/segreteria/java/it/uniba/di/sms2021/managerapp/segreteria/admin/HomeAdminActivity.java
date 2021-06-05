@@ -30,6 +30,7 @@ public class HomeAdminActivity extends AppCompatActivity {
     public static final int EDIT_ITEM_ID = View.generateViewId();
     public static final int SAVE_ITEM_ID = View.generateViewId();
     public static final int CANCEL_ITEM_ID = View.generateViewId();
+    public static final int DELETE_ITEM_ID = View.generateViewId();
     public static final int LOGOUT_ITEM_ID = View.generateViewId();
     private static final String filename = "segreteria.srl";
     private static File loginFile;
@@ -91,5 +92,19 @@ public class HomeAdminActivity extends AppCompatActivity {
 
     public void disableBackArrow() {
         toolbar.setNavigationIcon(null);
+    }
+
+    public void enableBackArrow() {
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
+        toolbar.setNavigationOnClickListener(view -> goBackFragment());
+    }
+
+    public void goBackFragment() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 }

@@ -51,8 +51,6 @@ public class TeachersListFragment extends Fragment {
                              Bundle savedInstanceState) {
         viewTeachersList = inflater.inflate(R.layout.fragment_teachers_list, container, false);
 
-        ((HomeAdminActivity)requireActivity()).disableBackArrow();
-
         return viewTeachersList;
     }
 
@@ -75,8 +73,6 @@ public class TeachersListFragment extends Fragment {
 
                 //bind the adapter to the listView
                 teacherListView.setAdapter(adapter);
-
-
 
                 teacherListView.setOnItemClickListener((parent, view, position, id) -> {
                     ProfileFragmentSegreteria profileFragment = new ProfileFragmentSegreteria(docenti.get(position), false);
