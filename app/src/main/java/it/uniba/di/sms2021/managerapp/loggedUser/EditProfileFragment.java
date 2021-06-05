@@ -127,9 +127,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
-
-        menuItem = menu.findItem(R.id.action_search);
-        menuItem.setVisible(false);
     }
 
     @SuppressLint("NonConstantResourceId")

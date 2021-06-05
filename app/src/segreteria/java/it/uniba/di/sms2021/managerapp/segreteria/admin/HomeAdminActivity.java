@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,7 +24,8 @@ import java.io.ObjectInputStream;
 import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
+import it.uniba.di.sms2021.managerapp.segreteria.addItem.AddActivity;
+import it.uniba.di.sms2021.managerapp.segreteria.entities.Segreteria;
 
 public class HomeAdminActivity extends AppCompatActivity {
 
@@ -35,6 +37,7 @@ public class HomeAdminActivity extends AppCompatActivity {
     private static File loginFile;
     private static Segreteria loggedAdmin;
     private Toolbar toolbar;
+    private FloatingActionButton btnAddItem;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -62,6 +65,14 @@ public class HomeAdminActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+        btnAddItem = findViewById(R.id.btnAddItem);
+        btnAddItem.setOnClickListener(v -> {
+            if (v.getId() == R.id.btnAddItem) {
+                Intent intent = new Intent(getApplicationContext(), AddActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     protected void readFile(){

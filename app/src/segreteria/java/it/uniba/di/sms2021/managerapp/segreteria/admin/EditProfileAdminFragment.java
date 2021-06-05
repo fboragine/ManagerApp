@@ -1,6 +1,5 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,7 +30,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.service.Settings;
+import it.uniba.di.sms2021.managerapp.segreteria.entities.Segreteria;
 
 public class EditProfileAdminFragment extends Fragment {
 
@@ -56,40 +55,25 @@ public class EditProfileAdminFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View editView = inflater.inflate(R.layout.fragment_edit_profile_admin, container, false);
+        View vistaModifica = inflater.inflate(R.layout.fragment_edit_profile_admin, container, false);
+        ((HomeAdminActivity) requireActivity()).disableBackArrow();
+        editPassword = vistaModifica.findViewById(R.id.pw_txt);
 
-        editPassword = editView.findViewById(R.id.pw_txt);
-
-        editEmail = editView.findViewById(R.id.email_txt);
+        editEmail = vistaModifica.findViewById(R.id.email_txt);
         editEmail.setText(HomeAdminActivity.getLoggedAdmin().getEmail());
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        return editView;
+        return vistaModifica;
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.toolbar_menu, menu);
+
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent(getActivity().getApplicationContext(), Settings.class);
-                startActivity(intent);
-                return true;
-            case android.R.id.home:
-                Navigation.findNavController(requireActivity(), R.id.fragment).navigate(R.id.action_editProfileAdminFragment_to_profileAdminFragment);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

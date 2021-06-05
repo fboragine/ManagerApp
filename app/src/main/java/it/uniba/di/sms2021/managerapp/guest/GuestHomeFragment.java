@@ -56,8 +56,7 @@ public class GuestHomeFragment extends Fragment {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     CorsoDiStudio corsoDiStudio = new CorsoDiStudio(document.getString("id"),
                                                                     document.getString("nome"),
-                                                                    document.getString("descrizione"),
-                                                                    (ArrayList<String>) document.get("idEsami"));
+                                                                    document.getString("descrizione"));
                     corsiDiStudio.add(corsoDiStudio);
                 }
 

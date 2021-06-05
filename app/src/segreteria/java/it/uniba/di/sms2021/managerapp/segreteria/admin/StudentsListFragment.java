@@ -1,6 +1,12 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,9 +18,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -22,18 +25,22 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.entities.Esame;
-import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
+import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.entities.Utente;
+import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
+import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
+import it.uniba.di.sms2021.managerapp.segreteria.service.UserListAdapter;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
-public class ExamsListFragment extends Fragment {
+public class StudentsListFragment extends Fragment {
 
-    private View viewExamsList;
-    private ListView examListView;
-    private ExamListAdapter adapter;
+    private View viewStudentList;
+    private ListView studentListView;
+    private UserListAdapter adapter;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ArrayList<Esame> esami;
+    private ArrayList<Utente> studenti;
 
-    public ExamsListFragment() {
+    public StudentsListFragment() {
         // Required empty public constructor
     }
 
@@ -46,43 +53,41 @@ public class ExamsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        viewExamsList = inflater.inflate(R.layout.fragment_exams_list, container, false);
+        viewStudentList = inflater.inflate(R.layout.fragment_students_list, container, false);
+        ((HomeAdminActivity) requireActivity()).disableBackArrow();
+        studenti = new ArrayList<>();
 
-        ((HomeAdminActivity)requireActivity()).disableBackArrow();
-        esami = new ArrayList<>();
-
-        db.collection("esami").get().addOnCompleteListener(task -> {
+        db.collection("studenti").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                    Esame esame = new Esame(document.getString("id"),
+                    Studente studente = new Studente(document.getString("id"),
+                            document.getString("matricola"),
                             document.getString("nome"),
-                            document.getString("commento"),
-                            document.getString("descrizione"),
-                            document.getString("cDs"),
-                            (ArrayList<String>) document.get("idDocenti"));
-                    esami.add(esame);
+                            document.getString("cognome"),
+                            document.getString("email"),
+                            document.getString("cDs"));
+                    studenti.add(studente);
                 }
 
-                examListView = viewExamsList.findViewById(R.id.examListView);
+                studentListView = viewStudentList.findViewById(R.id.studentListView);
 
                 //pass results to listViewAdapter class
-                adapter = new ExamListAdapter(requireActivity().getApplicationContext(), esami);
+                adapter = new UserListAdapter(requireActivity().getApplicationContext(), studenti);
 
                 //bind the adapter to the listView
-                examListView.setAdapter(adapter);
+                studentListView.setAdapter(adapter);
 
-                examListView.setOnItemClickListener((parent, view, position, id) -> {
-                    // TODO implementare la logica per il click sul docente
-//                    ExamListFragment examListFragment = new ExamListFragment(corsiDiStudio.get(i).getIdCorsoDiStudio());
-//                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.fragment, examListFragment);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
+                studentListView.setOnItemClickListener((parent, view, position, id) -> {
+                    ProfileFragmentSegreteria profileFragment = new ProfileFragmentSegreteria(studenti.get(position), true);
+                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment, profileFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 });
             }
         });
 
-        return viewExamsList;
+        return viewStudentList;
     }
 
     @Override
@@ -102,7 +107,7 @@ public class ExamsListFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 if(TextUtils.isEmpty(newText)) {
                     adapter.filter("");
-                    examListView.clearTextFilter();
+                    studentListView.clearTextFilter();
                 } else {
                     adapter.filter(newText);
                 }
@@ -115,7 +120,8 @@ public class ExamsListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(requireActivity().getApplicationContext(), item.getTitle() + " Clicked!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsAdmin.class);
+            startActivity(intent);
             return true;
         }
 

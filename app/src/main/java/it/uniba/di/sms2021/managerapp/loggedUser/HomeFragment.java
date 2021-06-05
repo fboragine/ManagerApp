@@ -2,16 +2,7 @@ package it.uniba.di.sms2021.managerapp.loggedUser;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,13 +13,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -42,13 +33,10 @@ import java.util.Locale;
 import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
-import it.uniba.di.sms2021.managerapp.entities.Studente;
-import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
+import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.project.AddNewProjectActivity;
 import it.uniba.di.sms2021.managerapp.service.RecyclerViewAdapter;
-import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
@@ -65,7 +53,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private File loggedStudente;
     private File loggedDocente;
 
-    private Locale lingua = Locale.ITALIAN;
+    private final Locale lingua = Locale.ITALIAN;
     private TextView testo;
 
     @Override
@@ -75,11 +63,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         File file = new File(getActivity().getApplicationContext().getExternalFilesDir(null), "IT");
 
-        if(file.exists()) {
-            traduci(true);
-        } else {
-            traduci(false);
-        }
+        traduci(file.exists());
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -142,7 +126,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         Esame esame = new Esame(document.getString("id"),
                                 document.getString("nome"),
                                 document.getString("commento"),
-                                document.getString("descrizione"),
                                 document.getString("cDs"),
                                 (ArrayList<String>) document.get("idDocenti"));
                         getDocentProject(esame);

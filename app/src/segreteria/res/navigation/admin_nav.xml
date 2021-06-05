@@ -7,12 +7,16 @@
 
     <fragment
         android:id="@+id/homeAdminFragment"
-        android:name="it.uniba.di.sms2021.managerapp.segreteria.HomeAdminFragment"
+        android:name="it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_home_admin" />
+        tools:layout="@layout/fragment_home_admin" >
+        <action
+            android:id="@+id/action_homeAdminFragment_to_profileAdminFragment"
+            app:destination="@id/profileAdminFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileAdminFragment"
-        android:name="it.uniba.di.sms2021.managerapp.segreteria.ProfileAdminFragment"
+        android:name="it.uniba.di.sms2021.managerapp.segreteria.admin.ProfileAdminFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile_admin" >
         <action
@@ -21,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/editProfileAdminFragment"
-        android:name="it.uniba.di.sms2021.managerapp.segreteria.EditProfileAdminFragment"
+        android:name="it.uniba.di.sms2021.managerapp.segreteria.admin.EditProfileAdminFragment"
         android:label="@string/edit"
         tools:layout="@layout/fragment_edit_profile_admin" >
         <action

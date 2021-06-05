@@ -49,42 +49,53 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="55dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="65dp"
                     android:src="@drawable/ic_baseline_person_24"
                     android:contentDescription="@string/profile_image" />
 
-                <EditText
-                    android:id="@+id/name"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="100dp"
-                    android:autofillHints="@string/name"
-                    android:hint="@string/name"
-                    android:inputType="textPersonName"
-                    android:backgroundTint="@color/blue_700"/>
+                    android:hint="@string/name">
 
-                <EditText
-                    android:id="@+id/surname"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
                     android:layout_marginStart="100dp"
-                    android:autofillHints="@string/surname"
-                    android:hint="@string/surname"
-                    android:inputType="textPersonName"
-                    android:backgroundTint="@color/blue_700"/>
+                    android:hint="@string/surname">
 
-                <EditText
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/surname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    android:id="@+id/serial_number"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="100dp"
                     android:layout_marginStart="100dp"
-                    android:autofillHints="Matricola"
-                    android:hint="@string/matricola_txtLabel"
-                    android:inputType="number"
-                    android:backgroundTint="@color/blue_700"/>
+                    android:hint="@string/matricola_txtLabel">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/serial_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </RelativeLayout>
 
@@ -147,20 +158,22 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:layout_marginTop="15dp"
                         android:contentDescription="@string/email"
                         android:src="@drawable/ic_baseline_email_24" />
 
-                    <EditText
-                        android:id="@+id/email"
-                        android:layout_width="250dp"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:textSize="18sp"
-                        tools:ignore="RtlSymmetry"
-                        android:autofillHints="@string/e_mail"
-                        android:hint="@string/e_mail"
-                        android:inputType="textEmailAddress"
-                        android:backgroundTint="@color/blue_700"/>
+                        android:hint="@string/e_mail">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"/>
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -176,19 +189,24 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:layout_marginTop="15dp"
                         android:contentDescription="@string/course"
                         android:src="@drawable/ic_baseline_vpn_key_24" />
 
-                    <EditText
-                        android:id="@+id/password"
-                        android:layout_width="250dp"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/passwordTxtIn"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:textSize="18sp"
-                        android:autofillHints="@string/password"
                         android:hint="@string/password"
-                        android:inputType="textPassword"
-                        android:backgroundTint="@color/blue_700"/>
+                        app:errorEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </RelativeLayout>
         </RelativeLayout>

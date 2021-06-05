@@ -83,6 +83,8 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setTitle(progetto.getNome());
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         // Get the default bucket from a custom FirebaseApp
         storage = FirebaseStorage.getInstance();
@@ -299,20 +301,21 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        //Nascondo pulsante ricerca
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        menuItem.setVisible(false);
+
         return true;
     }
 
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-            case R.id.action_search:
-                Intent intent = new Intent(getApplicationContext(), Settings.class);
-                startActivity(intent);
-                return true;
+        if (item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), Settings.class);
+            startActivity(intent);
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

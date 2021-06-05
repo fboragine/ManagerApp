@@ -66,7 +66,7 @@
     <string name="donwload_stop">Scaricamento in pausa!</string>
     <string name="upload_stop">Caricamento in pausa!</string>
     <string name="btn_goto_login">Torna alla pagina di accesso</string>
-    <string name="exam_name">Esame 1</string>
+    <string name="exam_name">Nome esame</string>
     <string name="teachers">Professori</string>
     <string name="teacher">Professore</string>
     <string name="add_new_project">Aggiungi un nuovo progetto</string>
@@ -128,4 +128,15 @@
     <string name="project_name_label">Nome Progetto</string>
     <string name="project_exam_label">Nome Esame</string>
     <string name="selected_file_example">File Selezionato</string>
+    <string name="secretariat">Segreteria</string>
+    <string name="courses">Corsi</string>
+    <string name="exam_description">Descrizione esame</string>
+    <string name="select_teacher">Seleziona Professore</string>
+    <string name="add_teacher">Aggiungi Professore</string>
+    <string name="course_name">Nome corso</string>
+    <string name="course_description">Descrizione corso</string>
+    <string name="cds_dialog_title">Scegli un corso</string>
+    <string name="teacher_dialog_title">Seleziona i professori</string>
+    <string name="change_select_teachers">Cambia professori selezionati</string>
+    <string name="add">Aggiungi</string>
 </resources>

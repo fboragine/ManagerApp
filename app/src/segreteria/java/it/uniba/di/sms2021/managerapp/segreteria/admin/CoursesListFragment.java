@@ -1,20 +1,16 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,68 +23,66 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.entities.Docente;
-import it.uniba.di.sms2021.managerapp.entities.Utente;
-import it.uniba.di.sms2021.managerapp.segreteria.service.UserListAdapter;
+import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
+import it.uniba.di.sms2021.managerapp.segreteria.EditCourseFragment;
+import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
+import it.uniba.di.sms2021.managerapp.service.ListViewAdapter;
 
-public class TeachersListFragment extends Fragment {
+public class CoursesListFragment extends Fragment {
 
-    private View viewTeachersList;
-    private ListView teacherListView;
-    private UserListAdapter adapter;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ArrayList<Utente> docenti;
+    private View viewCoursesList;
+    private ListView courseListView;
+    private ListViewAdapter adapter;
+    private FirebaseFirestore db;
+    private ArrayList<CorsoDiStudio> corsi;
 
-    public TeachersListFragment() {
+    public CoursesListFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
         setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        viewTeachersList = inflater.inflate(R.layout.fragment_teachers_list, container, false);
+        viewCoursesList = inflater.inflate(R.layout.fragment_courses_list, container, false);
 
         ((HomeAdminActivity)requireActivity()).disableBackArrow();
-        docenti = new ArrayList<>();
+        corsi = new ArrayList<>();
 
-        db.collection("docenti").get().addOnCompleteListener(task -> {
+        db.collection("corsiDiStudio").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                    Docente docente = new Docente(document.getString("id"),
-                                                document.getString("matricola"),
-                                                document.getString("nome"),
-                                                document.getString("cognome"),
-                                                document.getString("email"));
-                    docenti.add(docente);
+                    CorsoDiStudio corsoDiStudio = new CorsoDiStudio(document.getString("id"),
+                            document.getString("nome"),
+                            document.getString("descrizione"));
+                    corsi.add(corsoDiStudio);
                 }
 
-                teacherListView = viewTeachersList.findViewById(R.id.teacherListView);
+                courseListView = viewCoursesList.findViewById(R.id.courseListView);
 
                 //pass results to listViewAdapter class
-                adapter = new UserListAdapter(requireActivity().getApplicationContext(), docenti);
+                adapter = new ListViewAdapter(requireActivity().getApplicationContext(), corsi);
 
                 //bind the adapter to the listView
-                teacherListView.setAdapter(adapter);
+                courseListView.setAdapter(adapter);
 
-
-
-                teacherListView.setOnItemClickListener((parent, view, position, id) -> {
-                    ProfileFragmentSegreteria profileFragment = new ProfileFragmentSegreteria(docenti.get(position), false);
+                courseListView.setOnItemClickListener((parent, view, position, id) -> {
+                    EditCourseFragment examListFragment = new EditCourseFragment(corsi.get(position));
                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, profileFragment);
+                    fragmentTransaction.replace(R.id.fragment, examListFragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 });
             }
         });
 
-        return viewTeachersList;
+        return viewCoursesList;
     }
 
     @Override
@@ -108,7 +102,7 @@ public class TeachersListFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 if(TextUtils.isEmpty(newText)) {
                     adapter.filter("");
-                    teacherListView.clearTextFilter();
+                    courseListView.clearTextFilter();
                 } else {
                     adapter.filter(newText);
                 }
@@ -121,7 +115,8 @@ public class TeachersListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(requireActivity().getApplicationContext(), item.getTitle() + " Clicked!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsAdmin.class);
+            startActivity(intent);
             return true;
         }
 
