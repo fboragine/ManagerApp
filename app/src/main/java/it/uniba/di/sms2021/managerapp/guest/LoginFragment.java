@@ -30,6 +30,7 @@ import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
+import it.uniba.di.sms2021.managerapp.segreteria.HomeAdminActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -153,12 +154,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 FirebaseUser user;
 
                 user = mAuth.getCurrentUser();
+
                 if(studenteLogin.isChecked()){
                     getDataFromFireStore(user.getUid(),"studenti");
                 }else {
                     getDataFromFireStore(user.getUid(),"docenti");
                 }
-
             }
             else {
                 // If sign in fails, display a message to the user.
@@ -200,6 +201,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), R.string.doc_not_found, Toast.LENGTH_LONG).show();
+                    FirebaseUser userDelete = FirebaseAuth.getInstance().getCurrentUser();
+                    userDelete.delete();
+
+                    Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
+                    startActivity(intent);
                 }
             } else {
                 Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();

@@ -23,6 +23,7 @@ import java.io.ObjectInputStream;
 import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 
 public class HomeAdminActivity extends AppCompatActivity {
 

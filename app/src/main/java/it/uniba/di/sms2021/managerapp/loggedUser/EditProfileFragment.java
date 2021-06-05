@@ -50,14 +50,14 @@ import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class EditProfileFragment extends Fragment implements View.OnClickListener{
 
-    View vistaModifica;
-    EditText editName;
-    EditText editSurname;
-    EditText editMatricola;
-    EditText editEmail;
-    EditText editPassword;
-    ImageView profileImg;
-    Button btnEdit;
+    private View vistaModifica;
+    private EditText editName;
+    private EditText editSurname;
+    private EditText editMatricola;
+    private EditText editEmail;
+    private EditText editPassword;
+    private ImageView profileImg;
+    private Button btnEdit;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
