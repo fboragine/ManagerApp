@@ -140,4 +140,7 @@
     <string name="teacher_dialog_title">Select the teachers</string>
     <string name="change_select_teachers">Change selected teachers</string>
     <string name="add">Add</string>
+    <string name="cds_with_student_error">This CDS have some student registered, it cannot be delete</string>
+    <string name="label_cDs">Select CDS</string>
+    <string name="label_teacher">Select Teachers</string>
 </resources>

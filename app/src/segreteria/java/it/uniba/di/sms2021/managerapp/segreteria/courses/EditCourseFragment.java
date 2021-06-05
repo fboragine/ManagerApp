@@ -1,4 +1,4 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.courses;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -68,12 +67,14 @@ public class EditCourseFragment extends Fragment {
     }
 
     /**
+     * La rimozione del CDS NON VIENE EFFETTUATA se vi è la presenza di studenti iscritti al CDS
      * La rimozione del CDS causa le seguenti modifiche:
      * - Cancellazione del document dalla tabella corsiDiStudio;
      * - Cancellazione di tutti gli esami appartenenti al corso di studio;
-     * - Annullamento del corso di studio a cui partecipa lo studente (cDs = "")
+     * - Cancellazione di tutti i progetti e le relative cartelle collegati agli esami rimossi;
      */
     private void deleteCds() {
+
         db.collection("studenti")
                 .whereEqualTo("cDs", this.cDsSelected.getIdCorsoDiStudio())
                 .get().addOnCompleteListener(task -> {
