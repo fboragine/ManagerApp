@@ -58,37 +58,42 @@
                 android:layout_below="@id/presentation"
                 android:layout_marginTop="10dp">
 
-                <EditText
-                    android:id="@+id/name_new_project"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="100dp"
-                    android:layout_marginTop="20dp"
-                    android:autofillHints="@string/name_project"
-                    android:ems="10"
-                    android:hint="@string/name_project"
-                    android:inputType="textPersonName" />
+                    android:hint="@string/name_project">
 
-                <EditText
-                    android:id="@+id/project_description"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/name_new_project"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:ems="10" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/name_new_project"
                     android:layout_marginStart="100dp"
-                    android:layout_marginTop="20dp"
-                    android:autofillHints="@string/description_project"
-                    android:ems="10"
-                    android:gravity="start|top"
-                    android:hint="@string/description_project"
-                    android:inputType="textMultiLine" />
+                    android:layout_marginTop="50dp"
+                    android:hint="@string/description_project">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/project_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:gravity="start|top"
+                        android:ems="10" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/label_exams"
                     android:layout_width="250dp"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/project_description"
                     android:layout_marginStart="100dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="120dp"
                     android:elegantTextHeight="true"
                     android:text="@string/label_exams"
                     android:textColor="@color/black"

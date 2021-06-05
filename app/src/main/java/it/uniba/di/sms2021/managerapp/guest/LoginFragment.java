@@ -20,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -45,6 +46,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     Button btnConfirmResetPw;
     EditText email;
     EditText password;
+    TextInputLayout passwordIn;
     RadioButton studenteLogin;
     ImageView passwordIco;
 
@@ -72,6 +74,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         btnResetPw = (Button) vistaLogin.findViewById(R.id.btn_reset_password);
         email = (EditText)vistaLogin.findViewById(R.id.emailTxt);
         password = (EditText)vistaLogin.findViewById(R.id.passwordTxt);
+        passwordIn = (TextInputLayout)vistaLogin.findViewById(R.id.passwordTxtIn);
         studenteLogin = (RadioButton) vistaLogin.findViewById(R.id.radio_student);
         btnConfirmResetPw = (Button) vistaLogin.findViewById(R.id.reset_password_btn);
         passwordIco = (ImageView) vistaLogin.findViewById(R.id.passwordIcon);
@@ -98,6 +101,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         else if(view.getId() == R.id.btn_reset_password)    //Click sul pulsante di reset della pw
         {
             if(btnConfirmResetPw.getVisibility() == View.GONE){
+                passwordIn.setVisibility(View.INVISIBLE);
                 password.setVisibility(View.INVISIBLE);
                 passwordIco.setVisibility(View.INVISIBLE);
 
@@ -108,6 +112,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                 Toast.makeText(getActivity().getApplicationContext(),getString(R.string.msg_reset), Toast.LENGTH_LONG).show();
             }else {
+                passwordIn.setVisibility(View.VISIBLE);
                 password.setVisibility(View.VISIBLE);
                 passwordIco.setVisibility(View.VISIBLE);
 
