@@ -142,6 +142,8 @@
     <string name="cds_with_student_error">Questo corso di studio possiede almeno uno studente registrato, non è possibile eliminarlo!</string>
     <string name="label_cDs">Seleziona il corso di studio</string>
     <string name="label_teacher">Seleziona il docente</string>
+    <string name="err_delete_tea">Prima di eliminare il docente assicurarsi che tutti gli esami correlati abbiano almeno un altro docente.</string>
+    <string name="teach_miss">Nessun docente è stao assegnato</string>
     <string name="exam_delete_error">Alcuni studenti devono completare questo esame, quindi non è possibile eliminarlo</string>
     <string name="no_exam_linked_error">Nessun studente è collegato a questo esame</string>
     <string name="no_project_linked_error">Nessun esame è collegato a questo progetto</string>

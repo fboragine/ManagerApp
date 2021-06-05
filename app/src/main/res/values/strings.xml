@@ -146,4 +146,6 @@
     <string name="exam_delete_error">Some student have to do this exam so it cannot be deleted</string>
     <string name="no_exam_linked_error">There is no student linked to this exam</string>
     <string name="no_project_linked_error">There is no exam linked to some project</string>
+    <string name="err_delete_tea">Before deleting the teacher make sure that all related exams have at least one other teacher.</string>
+    <string name="teach_miss">No teacher has been assigned</string>
 </resources>
