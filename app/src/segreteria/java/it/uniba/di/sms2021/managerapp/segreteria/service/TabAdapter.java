@@ -14,7 +14,7 @@ import it.uniba.di.sms2021.managerapp.segreteria.admin.TeachersListFragment;
 
 public class TabAdapter extends FragmentPagerAdapter {
     private Context context;
-    private int totalTabs;
+    private final int totalTabs;
 
     public TabAdapter(Context context, @NonNull FragmentManager fm, int totalTabs) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -32,10 +32,8 @@ public class TabAdapter extends FragmentPagerAdapter {
                 return new StudentsListFragment();
             case 2:
                 return new ExamsListFragment();
-            case 3:
-                return new CoursesListFragment();
             default:
-                return null;
+                return new CoursesListFragment();
         }
     }
 

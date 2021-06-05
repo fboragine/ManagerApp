@@ -37,7 +37,6 @@ public class HomeAdminActivity extends AppCompatActivity {
     private static File loginFile;
     private static Segreteria loggedAdmin;
     private Toolbar toolbar;
-    private FloatingActionButton btnAddItem;
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
@@ -66,7 +65,7 @@ public class HomeAdminActivity extends AppCompatActivity {
             finish();
         }
 
-        btnAddItem = findViewById(R.id.btnAddItem);
+        FloatingActionButton btnAddItem = findViewById(R.id.btnAddItem);
         btnAddItem.setOnClickListener(v -> {
             if (v.getId() == R.id.btnAddItem) {
                 Intent intent = new Intent(getApplicationContext(), AddActivity.class);
