@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,21 +15,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Progetto;
+import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
+import it.uniba.di.sms2021.managerapp.project.ProjectActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
+import it.uniba.di.sms2021.managerapp.service.ProjectListAdapter;
 import it.uniba.di.sms2021.managerapp.service.Settings;
 
 
@@ -159,6 +171,7 @@ public class ProfileFragmentSegreteria extends Fragment {
         userModify.put("id",utente.getId());
 
         if(isStudent) {
+            rimozioneEsamiStudente(utente.getId());
             docUpdate = db.collection("studenti").document(utente.getId());
         }else if(!isStudent) {
             docUpdate = db.collection("docenti").document(utente.getId());
@@ -171,5 +184,75 @@ public class ProfileFragmentSegreteria extends Fragment {
 
         Intent intent = new Intent(getActivity().getApplicationContext(), HomeAdminActivity.class);
         startActivity(intent);
+    }
+
+    private void rimozioneEsamiStudente(String idStudente) {
+        db.collection("esamiStudente")
+                .whereEqualTo("idStudente", idStudente)
+                .get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())){
+                    rimozioniProgetti(idStudente);
+                    db.collection("esamiStudente").document(document.getId()).delete();
+                }
+            }
+        });
+    }
+
+    private void rimozioniProgetti(String idStudente) {
+        db.collection("progetti").get().addOnCompleteListener((OnCompleteListener<QuerySnapshot>) task -> {
+            if(task.isSuccessful()) {
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                        Progetto progetto = new Progetto(document.getString("id"),
+                                document.getString("nome"),
+                                document.getString("descrizione"),
+                                document.getString("codiceEsame"),
+                                document.getString("data"),
+                                (ArrayList<String>) document.get("idStudenti"),
+                                document.getBoolean("stato"),
+                                document.getBoolean("valutato"));
+
+                        for (int i = 0; i < progetto.getIdStudenti().size(); i++) {
+                            if((progetto.getIdStudenti().get(i)).equals(idStudente)) {
+                                if(progetto.getIdStudenti().size() == 1) {
+                                    rimozioniFileProgetto(storage, document.getId());
+                                    db.collection("progetti").document(document.getId()).delete();
+                                } else {
+                                    progetto.getIdStudenti().remove(i);
+                                    Map<String ,Object> project = new HashMap<>();
+
+                                    project.put("codiceEsame",progetto.getCodiceEsame());
+                                    project.put("data",progetto.getDataCreazione());
+                                    project.put("descrizione",progetto.getDescrizione());
+                                    project.put("id",progetto.getId());
+                                    project.put("idStudenti",progetto.getIdStudenti());
+                                    project.put("nome", progetto.getNome());
+                                    project.put("stato", progetto.getStato());
+                                    project.put("valutato", progetto.isValutato());
+
+                                    db.collection("progetti").document(document.getId()).update(project);
+                                }
+                            }
+                        }
+                }
+            }
+        });
+    }
+
+    private void rimozioniFileProgetto(FirebaseStorage storage, String idProgetto) {
+        StorageReference listRef = storage.getReference().child("progetti/" + idProgetto);
+        listRef.listAll()
+                .addOnSuccessListener(listResult -> {
+                    for (StorageReference prefix : listResult.getPrefixes()) {
+                        prefix.delete();
+                    }
+
+                    for (StorageReference item : listResult.getItems()) {
+                        item.delete();
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(requireActivity().getApplicationContext(), "File project: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }
