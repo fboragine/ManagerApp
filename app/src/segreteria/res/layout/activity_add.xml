@@ -32,16 +32,16 @@
             android:id="@+id/selectText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add:"
+            android:text="@string/add"
             android:textStyle="bold"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
         <Spinner
             android:id="@+id/itemSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
             android:layout_alignBottom="@id/selectText"
-            android:layout_toRightOf="@id/selectText"/>
+            android:layout_toEndOf="@id/selectText"/>
     </RelativeLayout>
 
 
