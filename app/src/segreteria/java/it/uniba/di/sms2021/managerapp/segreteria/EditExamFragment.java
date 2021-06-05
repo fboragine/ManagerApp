@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -110,8 +112,9 @@ public class EditExamFragment extends Fragment {
                 .get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 if(Objects.requireNonNull(task.getResult()).size() != 0) {
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
                     for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())){
-                        db.collection("progetti").document(document.getId()).delete();
+                        rimozioniFileProgetto(storage, document.getId());
                     }
                 }else {
                     Toast.makeText(requireActivity().getApplicationContext(), R.string.no_project_linked_error, Toast.LENGTH_SHORT).show();
@@ -122,6 +125,26 @@ public class EditExamFragment extends Fragment {
                 getActivity().startActivity(getActivity().getIntent());
             }
         });
+    }
+
+    private synchronized void rimozioniFileProgetto(FirebaseStorage storage, String idProgetto) {
+        StorageReference listRef = storage.getReference().child("progetti/" + idProgetto);
+        listRef.listAll()
+                .addOnSuccessListener(listResult -> {
+                    for (StorageReference prefix : listResult.getPrefixes()) {
+                        prefix.delete();
+                    }
+
+                    for (StorageReference item : listResult.getItems()) {
+                        item.delete();
+                    }
+
+                    db.collection("progetti").document(idProgetto).delete();
+
+                    getActivity().finish();
+                    getActivity().startActivity(getActivity().getIntent());
+                })
+                .addOnFailureListener(e -> Toast.makeText(requireActivity().getApplicationContext(), "File project: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     @Override
