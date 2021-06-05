@@ -148,4 +148,5 @@
     <string name="no_project_linked_error">There is no exam linked to some project</string>
     <string name="err_delete_tea">Before deleting the teacher make sure that all related exams have at least one other teacher.</string>
     <string name="teach_miss">No teacher has been assigned</string>
+    <string name="add_btn_description">Add button</string>
 </resources>

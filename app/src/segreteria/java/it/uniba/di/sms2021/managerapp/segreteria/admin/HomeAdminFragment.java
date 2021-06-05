@@ -1,5 +1,6 @@
 package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,14 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.segreteria.addItem.AddActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.service.TabAdapter;
 
 public class HomeAdminFragment extends Fragment {
 
-    private TabLayout tabLayout;
     private ViewPager viewPager;
 
     public HomeAdminFragment() {
@@ -34,7 +36,7 @@ public class HomeAdminFragment extends Fragment {
         // Inflate the layout for this fragment
         View viewHome = inflater.inflate(R.layout.fragment_home_admin, container, false);
 
-        tabLayout = viewHome.findViewById(R.id.tabLayout);
+        TabLayout tabLayout = viewHome.findViewById(R.id.tabLayout);
         viewPager = viewHome.findViewById(R.id.viewPager);
 
         tabLayout.addTab(tabLayout.newTab().setText(R.string.teachers));
@@ -58,6 +60,14 @@ public class HomeAdminFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+        FloatingActionButton btnAddItem = viewHome.findViewById(R.id.btnAddItem);
+        btnAddItem.setOnClickListener(v -> {
+            if (v.getId() == R.id.btnAddItem) {
+                Intent intent = new Intent(requireActivity().getApplicationContext(), AddActivity.class);
+                startActivity(intent);
             }
         });
 

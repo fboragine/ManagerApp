@@ -147,4 +147,5 @@
     <string name="exam_delete_error">Alcuni studenti devono completare questo esame, quindi non è possibile eliminarlo</string>
     <string name="no_exam_linked_error">Nessun studente è collegato a questo esame</string>
     <string name="no_project_linked_error">Nessun esame è collegato a questo progetto</string>
+    <string name="add_btn_description">Tasto di aggiunta</string>
 </resources>
