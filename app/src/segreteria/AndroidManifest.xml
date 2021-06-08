@@ -11,9 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".segreteria.admin.HomeAdminActivity"/>
-        <activity android:name=".segreteria.service.SettingsAdmin"/>
-        <activity android:name=".segreteria.addItem.AddActivity"/>
+        <activity android:name=".segreteria.editItem.EditProfileActivity"></activity>
+        <activity android:name=".segreteria.editItem.EditExamActivity" />
+        <activity android:name=".segreteria.editItem.EditCourseActivity" />
+        <activity android:name=".segreteria.admin.HomeAdminActivity" />
+        <activity android:name=".segreteria.service.SettingsAdmin" />
+        <activity android:name=".segreteria.addItem.AddActivity" />
         <activity android:name=".segreteria.admin.LoginAdminActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

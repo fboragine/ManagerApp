@@ -2,6 +2,7 @@ package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +15,6 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,7 +25,7 @@ import java.util.Objects;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
-import it.uniba.di.sms2021.managerapp.segreteria.ProfileFragmentSegreteria;
+import it.uniba.di.sms2021.managerapp.segreteria.editItem.EditProfileActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 import it.uniba.di.sms2021.managerapp.segreteria.service.UserListAdapter;
 
@@ -55,6 +55,7 @@ public class TeachersListFragment extends Fragment {
     }
 
     private synchronized void getTeachers() {
+        docenti = new ArrayList<>();
         db.collection("docenti").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
@@ -75,11 +76,10 @@ public class TeachersListFragment extends Fragment {
                 teacherListView.setAdapter(adapter);
 
                 teacherListView.setOnItemClickListener((parent, view, position, id) -> {
-                    ProfileFragmentSegreteria profileFragment = new ProfileFragmentSegreteria(docenti.get(position), false);
-                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, profileFragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                    Intent intent = new Intent(requireActivity().getApplicationContext(), EditProfileActivity.class);
+                    intent.putExtra("utente", (Parcelable) docenti.get(position));
+                    intent.putExtra("isStudent", false);
+                    startActivity(intent);
                 });
             }
         });
@@ -87,9 +87,8 @@ public class TeachersListFragment extends Fragment {
 
     @Override
     public void onResume() {
-        super.onResume();
-        docenti = new ArrayList<>();
         getTeachers();
+        super.onResume();
     }
 
     @Override

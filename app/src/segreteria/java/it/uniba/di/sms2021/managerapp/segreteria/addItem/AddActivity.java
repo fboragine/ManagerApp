@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
@@ -109,7 +110,7 @@ public class AddActivity extends AppCompatActivity {
                 switch (spinner.getSelectedItemPosition()) {
                     case 0:
                         Docente newTeacher = teacherFragment.getDocente();
-                        EditText teacherPassword = teacherFragment.getView().findViewById(R.id.teacher_password);
+                        EditText teacherPassword = teacherFragment.requireView().findViewById(R.id.teacher_password);
 
                         //Controllo che l'utente non abbia lasciato valori nulli
                         if( !newTeacher.getNome().equals("")
@@ -132,11 +133,11 @@ public class AddActivity extends AppCompatActivity {
                             mAuth.createUserWithEmailAndPassword(newTeacher.getEmail(), teacherPassword.getText().toString()).addOnCompleteListener(task -> {
                                 if(task.isSuccessful()) {
 
-                                    teacher.put("id", mAuth.getCurrentUser().getUid());
+                                    teacher.put("id", Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                                     DocumentReference documentReference = db.collection("docenti").document(mAuth.getCurrentUser().getUid());
                                     documentReference.set(teacher);
                                 }else {
-                                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
                             finish();
@@ -148,7 +149,7 @@ public class AddActivity extends AppCompatActivity {
                         Esame newExam = examFragment.getExam();
 
                         // Controllo che l'utente non abbia lasciato valori nulli
-                        if (!newExam.getcDs().equals("") && !newExam.getDescrizione().equals("") && !newExam.getNome().equals("") && newExam.getIdDocenti() != null) {
+                        if (!newExam.getcDs().equals("") && !newExam.getDescrizione().equals("") && !newExam.getNome().equals("")) {
                             //Creazione dell'hash map per inserire l'esame nel DB
                             Map<String ,Object> exam = new HashMap<>();
 

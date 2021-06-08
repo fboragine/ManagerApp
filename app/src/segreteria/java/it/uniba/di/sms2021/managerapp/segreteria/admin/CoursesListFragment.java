@@ -14,7 +14,6 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -24,7 +23,7 @@ import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
-import it.uniba.di.sms2021.managerapp.segreteria.EditCourseFragment;
+import it.uniba.di.sms2021.managerapp.segreteria.editItem.EditCourseActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 import it.uniba.di.sms2021.managerapp.service.ListViewAdapter;
 
@@ -51,13 +50,13 @@ public class CoursesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewCoursesList = inflater.inflate(R.layout.fragment_courses_list, container, false);
-
         return viewCoursesList;
     }
 
     private synchronized void getCourses() {
         db.collection("corsiDiStudio").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
+                corsi = new ArrayList<>();
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                     CorsoDiStudio corsoDiStudio = new CorsoDiStudio(document.getString("id"),
                             document.getString("nome"),
@@ -74,11 +73,15 @@ public class CoursesListFragment extends Fragment {
                 courseListView.setAdapter(adapter);
 
                 courseListView.setOnItemClickListener((parent, view, position, id) -> {
-                    EditCourseFragment courseEditFragment = new EditCourseFragment(corsi.get(position));
-                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, courseEditFragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+//                    EditCourseFragment courseEditFragment = new EditCourseFragment(corsi.get(position));
+//                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+//                    fragmentTransaction.hide(Objects.requireNonNull(getParentFragmentManager().getPrimaryNavigationFragment()));
+//                    fragmentTransaction.add(R.id.fragment, courseEditFragment);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
+                    Intent intent = new Intent(requireActivity().getApplicationContext(), EditCourseActivity.class);
+                    intent.putExtra("cDs",corsi.get(position));
+                    startActivity(intent);
                 });
             }
         });
@@ -86,9 +89,8 @@ public class CoursesListFragment extends Fragment {
 
     @Override
     public void onResume() {
-        super.onResume();
-        corsi = new ArrayList<>();
         getCourses();
+        super.onResume();
     }
 
     @Override

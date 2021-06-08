@@ -149,4 +149,7 @@
     <string name="err_delete_tea">Before deleting the teacher make sure that all related exams have at least one other teacher.</string>
     <string name="teach_miss">No teacher has been assigned</string>
     <string name="add_btn_description">Add button</string>
+    <string name="delete">Delete</string>
+    <string name="course_deleted">Course deleted</string>
+    <string name="exam_deleted">Exam deleted</string>
 </resources>

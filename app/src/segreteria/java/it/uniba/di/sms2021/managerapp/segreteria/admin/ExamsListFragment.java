@@ -14,7 +14,6 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -24,7 +23,7 @@ import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
-import it.uniba.di.sms2021.managerapp.segreteria.EditExamFragment;
+import it.uniba.di.sms2021.managerapp.segreteria.editItem.EditExamActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
 
@@ -55,6 +54,7 @@ public class ExamsListFragment extends Fragment {
     }
 
     private synchronized void getExams() {
+        esami = new ArrayList<>();
         db.collection("esami").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
@@ -75,11 +75,9 @@ public class ExamsListFragment extends Fragment {
                 examListView.setAdapter(adapter);
 
                 examListView.setOnItemClickListener((parent, view, position, id) -> {
-                    EditExamFragment examEditFragment = new EditExamFragment(esami.get(position));
-                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment, examEditFragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                    Intent intent = new Intent(requireActivity().getApplicationContext(), EditExamActivity.class);
+                    intent.putExtra("esame",esami.get(position));
+                    startActivity(intent);
                 });
             }
         });
@@ -129,8 +127,7 @@ public class ExamsListFragment extends Fragment {
 
     @Override
     public void onResume() {
-        super.onResume();
-        esami = new ArrayList<>();
         getExams();
+        super.onResume();
     }
 }
