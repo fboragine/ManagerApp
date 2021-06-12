@@ -93,7 +93,6 @@ public class TeachersListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_search);
@@ -115,6 +114,8 @@ public class TeachersListFragment extends Fragment {
                 return true;
             }
         });
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

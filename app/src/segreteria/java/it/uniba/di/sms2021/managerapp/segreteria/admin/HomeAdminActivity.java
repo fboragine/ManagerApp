@@ -3,9 +3,11 @@ package it.uniba.di.sms2021.managerapp.segreteria.admin;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,13 +26,13 @@ import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.segreteria.entities.Segreteria;
+import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 
 public class HomeAdminActivity extends AppCompatActivity {
 
     public static final int EDIT_ITEM_ID = View.generateViewId();
     public static final int SAVE_ITEM_ID = View.generateViewId();
     public static final int CANCEL_ITEM_ID = View.generateViewId();
-    public static final int DELETE_ITEM_ID = View.generateViewId();
     public static final int LOGOUT_ITEM_ID = View.generateViewId();
     private static final String filename = "segreteria.srl";
     private static File loginFile;
@@ -106,5 +108,16 @@ public class HomeAdminActivity extends AppCompatActivity {
         else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), SettingsAdmin.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
