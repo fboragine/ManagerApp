@@ -22,35 +22,44 @@
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/name_new_exam"
-                android:layout_width="250dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/exam_name_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_centerHorizontal="true"
-                android:autofillHints="@string/exam_name"
-                android:ems="10"
-                android:hint="@string/exam_name"
-                android:inputType="text" />
+                android:hint="@string/exam_name">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name_new_exam"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:ems="10"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/exam_description"
-                android:layout_width="250dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/exam_description_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/name_new_exam"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:autofillHints="@string/exam_description"
-                android:ems="10"
-                android:gravity="start|top"
                 android:hint="@string/exam_description"
-                android:inputType="textMultiLine" />
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/exam_name_layout">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/exam_description"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:autofillHints="@string/exam_description"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/label_cds"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/exam_description"
+                android:layout_below="@id/exam_description_layout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:elegantTextHeight="true"
@@ -66,7 +75,6 @@
                 android:layout_below="@id/label_cds"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:text="TextView"
                 android:textSize="18sp"
                 android:typeface="normal"
                 tools:visibility="gone" />
@@ -106,7 +114,6 @@
                 android:layout_centerHorizontal="true"
                 android:visibility="gone"
                 tools:visibility="gone">
-
                 <ListView
                     android:id="@+id/teacher_list"
                     style="@style/Widget.AppCompat.ListView.DropDown"

@@ -69,18 +69,23 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:contentDescription="@string/email"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_baseline_email_24" />
 
-                <EditText
-                    android:id="@+id/email_txt"
-                    android:layout_width="250dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="E-mail"
-                    android:hint="@string/e_mail"
-                    android:inputType="textEmailAddress"
+                    android:layout_gravity="center_vertical"
                     android:paddingStart="20dp"
-                    android:textSize="18sp"
-                    tools:ignore="RtlSymmetry" />
+                    android:paddingEnd="20dp"
+                    android:hint="@string/e_mail">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/email_txt"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:textSize="18sp"/>
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -96,19 +101,23 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:contentDescription="@string/password"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_baseline_vpn_key_24" />
 
-                <EditText
-                    android:id="@+id/pw_txt"
-                    android:layout_width="250dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:autofillHints="Password"
                     android:hint="@string/password"
-                    android:inputType="textPassword"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
-                    android:textSize="18sp" />
+                    android:layout_gravity="center_vertical">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/pw_txt"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:textSize="18sp" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

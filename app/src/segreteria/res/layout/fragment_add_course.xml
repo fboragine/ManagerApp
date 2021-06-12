@@ -22,29 +22,36 @@
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/course_name"
-                android:layout_width="250dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/course_name_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_centerHorizontal="true"
-                android:autofillHints="@string/course_name"
-                android:ems="10"
-                android:hint="@string/course_name"
-                android:inputType="text" />
+                android:hint="@string/course_name">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/course_name"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:ems="10"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/course_description"
-                android:layout_width="250dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/course_name"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:autofillHints="@string/course_description"
-                android:ems="10"
-                android:gravity="start|top"
-                android:hint="@string/course_description"
-                android:inputType="textMultiLine" />
+                android:layout_below="@id/course_name_layout"
+                android:hint="@string/course_description">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/course_description"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine" />
+            </com.google.android.material.textfield.TextInputLayout>
         </RelativeLayout>
     </ScrollView>
 
