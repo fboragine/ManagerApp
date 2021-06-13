@@ -85,9 +85,7 @@
             android:text="@string/add_new_project"
             android:layout_centerInParent="true"
             android:backgroundTint="?attr/colorSecondary"
-            android:textColor="?attr/colorOnSecondary"
-            android:textStyle="bold"
-            android:typeface="normal"/>
+            android:textColor="?attr/colorOnSecondary"/>
     </RelativeLayout>
 
 </RelativeLayout>

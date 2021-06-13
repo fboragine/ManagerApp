@@ -33,7 +33,6 @@
                         android:id="@+id/ic_action_name"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_centerVertical="true"
                         android:contentDescription="@string/profile_image"
                         android:src="@drawable/ic_action_name" />
 
@@ -41,8 +40,7 @@
                         android:id="@+id/edit_img_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="135dp"
+                        android:layout_below="@id/ic_action_name"
                         android:backgroundTint="?attr/colorSecondary"
                         android:text="@string/edit_image"
                         android:textColor="?attr/colorOnSecondary" />

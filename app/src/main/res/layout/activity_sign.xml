@@ -143,16 +143,13 @@
                 <Button
                     android:id="@+id/add_course"
                     android:layout_below="@id/corso"
-                    android:layout_width="250dp"
+                    android:layout_width="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_height="wrap_content"
                     android:text="@string/add_course"
                     android:layout_centerHorizontal="true"
                     android:backgroundTint="?attr/colorSecondary"
-                    android:textColor="?attr/colorOnSecondary"
-                    android:textStyle="bold"
-                    android:typeface="normal"
-                />
+                    android:textColor="?attr/colorOnSecondary"/>
 
                 <LinearLayout
                     android:id="@+id/email_layout"

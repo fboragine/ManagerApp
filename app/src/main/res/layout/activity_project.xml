@@ -117,10 +117,10 @@
             android:id="@+id/project_files"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/documents"
-            android:drawableLeft="@drawable/ic_folder"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
+            android:text="@string/documents"
+            android:drawableLeft="@drawable/ic_folder"
             android:backgroundTint="?attr/colorSecondary"
             android:textColor="?attr/colorOnSecondary"
             android:onClick="go_to_documents"/>
@@ -134,9 +134,7 @@
             android:layout_marginTop="25dp"
             android:background="?attr/colorSecondary"
             android:text="@string/set_result"
-            android:textColor="?attr/colorOnSecondary"
-            android:textStyle="bold"
-            android:typeface="normal"/>
+            android:textColor="?attr/colorOnSecondary"/>
       </RelativeLayout>
     </LinearLayout>
   </ScrollView>

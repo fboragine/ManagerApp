@@ -3,10 +3,6 @@ package it.uniba.di.sms2021.managerapp.guest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,28 +11,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import it.uniba.di.sms2021.managerapp.R;
-import it.uniba.di.sms2021.managerapp.entities.Docente;
-import it.uniba.di.sms2021.managerapp.entities.Studente;
-import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+
+import it.uniba.di.sms2021.managerapp.R;
+import it.uniba.di.sms2021.managerapp.entities.Docente;
+import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
@@ -46,9 +44,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     Button btnConfirmResetPw;
     EditText email;
     EditText password;
-    TextInputLayout passwordIn;
     RadioButton studenteLogin;
-    ImageView passwordIco;
+    LinearLayout passwordLayout;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -74,10 +71,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         btnResetPw = (Button) vistaLogin.findViewById(R.id.btn_reset_password);
         email = (EditText)vistaLogin.findViewById(R.id.emailTxt);
         password = (EditText)vistaLogin.findViewById(R.id.passwordTxt);
-        passwordIn = (TextInputLayout)vistaLogin.findViewById(R.id.passwordTxtIn);
         studenteLogin = (RadioButton) vistaLogin.findViewById(R.id.radio_student);
         btnConfirmResetPw = (Button) vistaLogin.findViewById(R.id.reset_password_btn);
-        passwordIco = (ImageView) vistaLogin.findViewById(R.id.passwordIcon);
+        passwordLayout = vistaLogin.findViewById(R.id.password_layout);
 
         btnLogin.setOnClickListener(this);
         btnResetPw.setOnClickListener(this);
@@ -101,20 +97,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         else if(view.getId() == R.id.btn_reset_password)    //Click sul pulsante di reset della pw
         {
             if(btnConfirmResetPw.getVisibility() == View.GONE){
-                passwordIn.setVisibility(View.INVISIBLE);
-                password.setVisibility(View.INVISIBLE);
-                passwordIco.setVisibility(View.INVISIBLE);
+                passwordLayout.setVisibility(View.INVISIBLE);
 
                 btnConfirmResetPw.setVisibility(View.VISIBLE);
                 btnLogin.setVisibility(View.GONE);
 
-                btnResetPw.setText(R.string.btn_goto_login);
+                btnResetPw.setText(R.string.login);
 
                 Toast.makeText(getActivity().getApplicationContext(),getString(R.string.msg_reset), Toast.LENGTH_LONG).show();
             }else {
-                passwordIn.setVisibility(View.VISIBLE);
-                password.setVisibility(View.VISIBLE);
-                passwordIco.setVisibility(View.VISIBLE);
+                passwordLayout.setVisibility(View.VISIBLE);
 
                 btnConfirmResetPw.setVisibility(View.GONE);
                 btnLogin.setVisibility(View.VISIBLE);
