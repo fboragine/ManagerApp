@@ -152,4 +152,8 @@
     <string name="delete">Delete</string>
     <string name="course_deleted">Course deleted</string>
     <string name="exam_deleted">Exam deleted</string>
+    <string name="projects">Projects</string>
+    <string name="documents">Documents</string>
+    <string name="english">English</string>
+    <string name="italian">Italian</string>
 </resources>

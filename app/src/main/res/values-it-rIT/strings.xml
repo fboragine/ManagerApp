@@ -151,4 +151,8 @@
     <string name="delete">Elimina</string>
     <string name="course_deleted">Corso eliminato</string>
     <string name="exam_deleted">Esame eliminato</string>
+    <string name="projects">Progetti</string>
+    <string name="documents">Documenti</string>
+    <string name="english">Inglese</string>
+    <string name="italian">Italiano</string>
 </resources>

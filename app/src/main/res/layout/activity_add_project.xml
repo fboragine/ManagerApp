@@ -47,7 +47,8 @@
                     android:layout_height="100dp"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/ic_launcher"
+                    android:contentDescription="@string/app_name" />
 
             </RelativeLayout>
 
@@ -56,12 +57,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/presentation"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="250dp"
+                    android:id="@+id/name_new_project_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="100dp"
+                    app:boxBackgroundColor="?attr/colorOnPrimary"
                     android:hint="@string/name_project">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -73,10 +77,12 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="250dp"
+                    android:id="@+id/project_description_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_below="@id/name_new_project_layout"
+                    app:boxBackgroundColor="?attr/colorOnPrimary"
                     android:hint="@string/description_project">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -90,24 +96,23 @@
 
                 <TextView
                     android:id="@+id/label_exams"
-                    android:layout_width="250dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginTop="120dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
                     android:elegantTextHeight="true"
                     android:text="@string/label_exams"
                     android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:typeface="normal" />
+                    android:typeface="normal"
+                    android:layout_below="@id/project_description_layout"/>
 
                 <TextView
                     android:id="@+id/exam_selected"
-                    android:layout_width="250dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/label_exams"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginTop="10dp"
-                    android:text="TextView"
+                    android:layout_centerHorizontal="true"
                     android:textSize="18sp"
                     android:typeface="normal"
                     tools:visibility="gone" />
@@ -117,22 +122,20 @@
                     android:layout_below="@id/exam_selected"
                     android:layout_width="250dp"
                     android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
                     android:text="@string/add_exam"
                     android:layout_marginTop="10dp"
-                    android:layout_marginStart="100dp"
-                    android:background="@color/success_green"
-                    android:textColor="@color/white"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:textColor="?attr/colorOnSecondary"
                     android:textStyle="bold"
-                    android:typeface="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:typeface="normal"/>
 
                 <TextView
                     android:id="@+id/label_attendees"
-                    android:layout_width="250dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/add_exam_btn"
-                    android:layout_marginStart="100dp"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:elegantTextHeight="true"
                     android:text="@string/label_attendees"
@@ -142,10 +145,10 @@
 
                 <LinearLayout
                     android:id="@+id/attendees_list_view"
-                    android:layout_width="250dp"
-                    android:layout_height="120dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/label_attendees"
-                    android:layout_marginStart="100dp"
+                    android:layout_centerHorizontal="true"
                     android:visibility="gone"
                     tools:visibility="gone">
 
@@ -165,13 +168,11 @@
                     android:layout_height="40dp"
                     android:text="@string/add_attendees"
                     android:layout_marginTop="10dp"
-                    android:layout_marginStart="100dp"
-                    android:background="@color/success_green"
-                    android:textColor="@color/white"
+                    android:layout_centerHorizontal="true"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:textColor="?attr/colorOnSecondary"
                     android:textStyle="bold"
-                    android:typeface="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:typeface="normal"/>
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
