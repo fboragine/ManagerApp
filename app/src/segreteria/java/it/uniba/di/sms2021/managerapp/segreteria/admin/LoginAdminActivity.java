@@ -71,17 +71,15 @@ public class LoginAdminActivity extends AppCompatActivity {
                     }
                 } else if (v.getId() == R.id.btn_reset_password_admin) {
                     if(layout.getVisibility() == View.VISIBLE) {
-                        layout.setVisibility(View.GONE);
-                        btnResetPsw.setText(R.string.btn_goto_login);
+                        layout.setVisibility(View.INVISIBLE);
+                        btnResetPsw.setText(R.string.login);
                         btnLogin.setVisibility(View.GONE);
                         btnResetPswConfirm.setVisibility(View.VISIBLE);
-                        Toast.makeText(getApplicationContext(),getString(R.string.msg_reset), Toast.LENGTH_LONG).show();
-
                     }else {
                         layout.setVisibility(View.VISIBLE);
                         btnLogin.setVisibility(View.VISIBLE);
                         btnResetPswConfirm.setVisibility(View.GONE);
-                        btnResetPsw.setText(R.string.reset_password);
+                        btnResetPsw.setText(R.string.btn_forgot_password);
                         email.setText("");
                         password.setText("");
                     }

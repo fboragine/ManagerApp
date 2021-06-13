@@ -105,35 +105,37 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="40dp"
-                android:orientation="vertical">
+                android:layout_gravity="end"
+                style="?android:attr/buttonBarButtonStyle"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_reset_password_admin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_forgot_password"
+                    android:textAllCaps="false"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:textColor="?attr/colorSecondary"/>
 
                 <Button
                     android:id="@+id/buttonLogin"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:backgroundTint="?attr/colorSecondary"
                     android:textColor="?attr/colorOnSecondary"
                     android:text="@string/login" />
 
                 <Button
                     android:id="@+id/btn_reset_password_confirm"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
                     android:text="@string/reset_password"
-                    android:textAllCaps="false"
                     android:backgroundTint="?attr/colorSecondary"
                     android:textColor="?attr/colorOnSecondary"
                     android:visibility="gone"/>
-
-                <Button
-                    android:id="@+id/btn_reset_password_admin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/btn_forgot_password"
-                    android:textAllCaps="false"
-                    android:backgroundTint="@color/blue_200"/>
             </LinearLayout>
 
         </LinearLayout>

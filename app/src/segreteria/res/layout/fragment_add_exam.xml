@@ -85,17 +85,14 @@
 
             <Button
                 android:id="@+id/add_cds_btn"
-                android:layout_width="250dp"
-                android:layout_height="60dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/cds_selected"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:elevation="2dp"
                 android:text="@string/add_course"
-                android:textStyle="bold"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textColor="?attr/colorOnSecondary"
-                android:typeface="normal"/>
+                android:textColor="?attr/colorOnSecondary"/>
 
             <TextView
                 android:id="@+id/label_teacher"
@@ -130,16 +127,13 @@
             <Button
                 android:id="@+id/add_teacher_btn"
                 android:layout_below="@id/teacher_list_view"
-                android:layout_width="250dp"
-                android:layout_height="60dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/add_teacher"
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
-                android:elevation="2dp"
                 android:backgroundTint="?attr/colorSecondary"
-                android:textColor="?attr/colorOnSecondary"
-                android:textStyle="bold"
-                android:typeface="normal" />
+                android:textColor="?attr/colorOnSecondary"/>
         </RelativeLayout>
     </ScrollView>
 
