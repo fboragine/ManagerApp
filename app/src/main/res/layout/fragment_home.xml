@@ -37,7 +37,6 @@
         android:id="@+id/closedContainer"
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:layout_below="@id/inProgressContainer"
         android:layout_marginTop="20dp">
 
         <TextView
@@ -60,23 +59,19 @@
 
     <RelativeLayout
         android:id="@+id/layout_btn"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="280dp">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="60dp"
-            android:layout_marginLeft="300dp">
+            android:layout_height="wrap_content">
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/add_project_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
                 app:backgroundTint="@color/deep_orange_500"
-                android:layout_margin="16dp"
                 android:elevation="8dp"
                 android:src="@drawable/ic_add_24"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
