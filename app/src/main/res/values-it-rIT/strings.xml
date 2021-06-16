@@ -139,4 +139,6 @@
     <string name="teacher_dialog_title">Seleziona i professori</string>
     <string name="change_select_teachers">Cambia professori selezionati</string>
     <string name="add">Aggiungi</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="transition">transition</string>
 </resources>

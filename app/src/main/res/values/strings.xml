@@ -140,4 +140,6 @@
     <string name="teacher_dialog_title">Select the teachers</string>
     <string name="change_select_teachers">Change selected teachers</string>
     <string name="add">Add</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="transition">transition</string>
 </resources>
