@@ -29,11 +29,6 @@ public class Progetto implements Parcelable {
         this.valutato = valutato;
     }
 
-    public Progetto(String nome) {
-        this.nome = nome;
-        this.codiceEsame = "prova";
-    }
-
     public Progetto(String nome, String codiceEsame, ArrayList<String> idStudenti) {
         this.id = idGenerator();
         this.nome = nome;

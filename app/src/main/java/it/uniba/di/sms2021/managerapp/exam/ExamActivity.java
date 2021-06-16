@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -80,36 +81,44 @@ public class ExamActivity extends AppCompatActivity {
 
     public void getDisplayName() {
         ArrayList<String> idDocentiPart = new ArrayList<>(esame.getIdDocenti());
-
         ArrayList<String> displayNameDocenti = new ArrayList<>();
 
-        db.collection("docenti").get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    boolean flag;
-                    int count = 0;
+        if(idDocentiPart.size() != 0) {
+            db.collection("docenti").get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        boolean flag;
+                        int count = 0;
 
-                    do {
-                        flag = false;
+                        do {
+                            flag = false;
 
-                        if(idDocentiPart.get(count).equals(document.getString("id"))) {
-                            Docente docente = new Docente(document.getString("id"),
-                                    document.getString("matricola"),
-                                    document.getString("nome"),
-                                    document.getString("cognome"),
-                                    document.getString("email"));
+                            if(idDocentiPart.get(count).equals(document.getString("id"))) {
+                                Docente docente = new Docente(document.getString("id"),
+                                        document.getString("matricola"),
+                                        document.getString("nome"),
+                                        document.getString("cognome"),
+                                        document.getString("email"));
 
-                            displayNameDocenti.add(docente.getNome() + " " + docente.getCognome());
-                        }
-                        count ++;
-                    }while(!flag  && count < idDocentiPart.size());
+                                displayNameDocenti.add(docente.getNome() + " " + docente.getCognome());
+                            }
+                            count ++;
+                        }while(!flag  && count < idDocentiPart.size());
+                    }
+
+                    listViewEsami = findViewById(R.id.exam_teachers);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, displayNameDocenti);
+                    listViewEsami.setAdapter(adapter);
                 }
+            });
+        } else {
+            listViewEsami = findViewById(R.id.exam_teachers);
+            displayNameDocenti.add(getString(R.string.teach_miss));
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, displayNameDocenti);
+            listViewEsami.setAdapter(adapter);
+        }
 
-                listViewEsami = findViewById(R.id.exam_teachers);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item, displayNameDocenti);
-                listViewEsami.setAdapter(adapter);
-            }
-        });
+
     }
 
     public void go_to_projects(View view) {

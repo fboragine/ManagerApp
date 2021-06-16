@@ -11,4 +11,8 @@ public class Docente extends Utente implements Serializable {
     public Docente(String id, String matricola, String nome, String cognome, String email) {
         super(id, matricola, nome, cognome, email);
     }
+
+    public Docente(String id, String email) {
+        super(id, email);
+    }
 }

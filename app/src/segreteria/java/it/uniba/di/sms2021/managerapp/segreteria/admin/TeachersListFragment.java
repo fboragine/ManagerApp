@@ -3,18 +3,22 @@ package it.uniba.di.sms2021.managerapp.segreteria.admin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,6 +29,7 @@ import java.util.Objects;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
+import it.uniba.di.sms2021.managerapp.segreteria.ProfileFragmentSegreteria;
 import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 import it.uniba.di.sms2021.managerapp.segreteria.service.UserListAdapter;
@@ -39,7 +44,6 @@ public class TeachersListFragment extends Fragment {
     private ArrayList<Utente> docenti;
 
     public TeachersListFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -75,13 +79,14 @@ public class TeachersListFragment extends Fragment {
                 //bind the adapter to the listView
                 teacherListView.setAdapter(adapter);
 
+
+
                 teacherListView.setOnItemClickListener((parent, view, position, id) -> {
-                    // TODO implementare la logica per il click sul docente
-//                    ExamListFragment examListFragment = new ExamListFragment(corsiDiStudio.get(i).getIdCorsoDiStudio());
-//                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.fragment, examListFragment);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
+                    ProfileFragmentSegreteria profileFragment = new ProfileFragmentSegreteria(docenti.get(position), false);
+                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment, profileFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 });
             }
         });

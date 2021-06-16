@@ -55,6 +55,12 @@ public class ExamsListFragment extends Fragment {
         ((HomeAdminActivity)requireActivity()).disableBackArrow();
         esami = new ArrayList<>();
 
+        getExams();
+
+        return viewExamsList;
+    }
+
+    private synchronized void getExams() {
         db.collection("esami").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
@@ -84,8 +90,6 @@ public class ExamsListFragment extends Fragment {
                 });
             }
         });
-
-        return viewExamsList;
     }
 
     @Override
@@ -128,5 +132,11 @@ public class ExamsListFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 }
