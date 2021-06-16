@@ -128,26 +128,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_select_file" />
 
-    <Button
-        android:id="@+id/button_share_file"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="20dp"
-        android:paddingStart="15dp"
-        android:background="@color/success_green"
-        android:drawableStart="@drawable/ic_whatsapp"
-        android:elegantTextHeight="true"
-        android:text="@string/share_file"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_add_file"
-        tools:ignore="RtlSymmetry" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

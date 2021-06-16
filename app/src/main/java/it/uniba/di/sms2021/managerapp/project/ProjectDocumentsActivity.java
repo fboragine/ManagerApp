@@ -53,13 +53,14 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private Progetto progetto;
     private ListView listViewFiles;
     private static List<SpecsFile> files;
+    protected static final int DOWNLOAD_ITEM_ID = View.generateViewId();
+    protected static final int WHATSAPP_ITEM_ID = View.generateViewId();
 
     Button btnDownload;
     Button btnUploadFile;
     Button btnSelectFile;
     Button shareBtn;
     Button deleteBtn;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch switchUpload;
     TextView selectedFileLab;
 
@@ -100,7 +101,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         btnDownload = findViewById(R.id.button_download);
         btnUploadFile = findViewById(R.id.button_add_file);
         btnSelectFile = findViewById(R.id.button_select_file);
-        shareBtn = findViewById(R.id.button_share_file);
+        //shareBtn = findViewById(R.id.button_share_file);
         deleteBtn = findViewById(R.id.button_delete);
 
         switchUpload = findViewById(R.id.switch_upload);
@@ -112,7 +113,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private void createExplorerFile() {
         btnUploadFile.setOnClickListener(v -> uploadFile(fileUri));
         btnSelectFile.setOnClickListener(v -> showChoosingFile());
-        shareBtn.setOnClickListener(v -> shareOnWhatsapp());
+        //shareBtn.setOnClickListener(v -> shareOnWhatsapp());
         
         getFileList(new SpecsCallback() {
             @Override
@@ -305,6 +306,60 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
 
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
+        // Add Download Menu Item
+        int downloadId = DOWNLOAD_ITEM_ID;
+        if (menu.findItem(downloadId) == null) {
+            // If it not exists then add the menu item to menu
+            MenuItem download = menu.add(
+                    Menu.NONE,
+                    downloadId,
+                    1,
+                    getString(R.string.download_bt_doc)
+            );
+
+            // Set an icon for the new menu item
+            download.setIcon(R.drawable.ic_baseline_download_24);
+
+            // Set the show as action flags for new menu item
+            download.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            // Set a click listener for the new menu item
+            download.setOnMenuItemClickListener(item -> {
+
+                return true;
+            });
+        }
+
+        // Add Whatsapp Menu Item
+        int whatsappId = WHATSAPP_ITEM_ID;
+        if (menu.findItem(whatsappId) == null) {
+            // If it not exists then add the menu item to menu
+            MenuItem whatsapp = menu.add(
+                    Menu.NONE,
+                    whatsappId,
+                    2,
+                    getString(R.string.whatsapp)
+            );
+
+            // Set an icon for the new menu item
+            whatsapp.setIcon(R.drawable.ic_whatsapp);
+
+            // Set the show as action flags for new menu item
+            whatsapp.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            // Set a click listener for the new menu item
+            whatsapp.setOnMenuItemClickListener(item -> {
+                shareOnWhatsapp();
+                return true;
+            });
+        }
+
+        super.onPrepareOptionsMenu(menu);
         return true;
     }
 

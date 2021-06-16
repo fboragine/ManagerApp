@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -79,7 +80,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         inProgressProject = new ArrayList<>();
         closedProject = new ArrayList<>();
 
-        Button addProjectBtn = viewHome.findViewById(R.id.add_project_btn);
+        FloatingActionButton addProjectBtn = viewHome.findViewById(R.id.add_project_btn);
 
         String pathStudente = getActivity().getExternalFilesDir(null).getPath() + "/studenti.srl";
         String pathDocente = getActivity().getExternalFilesDir(null).getPath() + "/docenti.srl";

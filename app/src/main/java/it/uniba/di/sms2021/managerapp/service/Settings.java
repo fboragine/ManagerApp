@@ -52,9 +52,6 @@ public class Settings extends AppCompatActivity {
 
         toolbar.setNavigationOnClickListener(view -> goBackFragment());
 
-
-
-
         if(getBaseContext().getResources().getConfiguration().getLocales().get(0).equals(Locale.ITALIAN) || getBaseContext().getResources().getConfiguration().getLocales().get(0).equals(Locale.ITALY)) {
             linguaIta.setChecked(true);
         }

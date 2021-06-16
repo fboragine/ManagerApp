@@ -73,25 +73,25 @@
         android:id="@+id/layout_btn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/scroll_home"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp">
+        android:layout_below="@+id/scroll_home">
 
-        <Button
-            android:id="@+id/add_project_btn"
-            android:layout_width="match_parent"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_new_project"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/success_green"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:typeface="normal"
+            app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            android:layout_marginTop="70dp"
+            android:layout_marginLeft="300dp">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_project_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                app:backgroundTint="@color/deep_orange_500"
+                android:layout_margin="16dp"
+                android:elevation="8dp"
+                android:src="@drawable/ic_add_24"/>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>
 
 </RelativeLayout>
