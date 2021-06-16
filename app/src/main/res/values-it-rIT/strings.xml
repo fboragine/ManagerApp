@@ -94,7 +94,7 @@
     <string name="registration">Registrazione</string>
     <string name="signin_success">Registazione avvenuta con successo</string>
     <string name="img_upload">Immagine caricata</string>
-    <string name="imgProfile_msg">Inserire l\'immagine del profilo, all\'interno della cartella ManagerApp, situata nel seguente percorso: Android/data/it.uniba.sms.2021.managerapp/files</string>
+    <string name="imgProfile_msg">Inserire la nuova immagine all\'interno della cartella Android per modificare la foto del profilo</string>
     <string name="esami_passati">Esami passati</string>
     <string name="esami_da_svolgere">Esami non passati</string>
     <string name="set_result">Vota il progetto</string>

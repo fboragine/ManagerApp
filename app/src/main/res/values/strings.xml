@@ -95,7 +95,7 @@
     <string name="registration">Registration</string>
     <string name="signin_success">Registration successfully completed</string>
     <string name="img_upload">Image uploaded</string>
-    <string name="imgProfile_msg">Insert the profile image, inside to ManagerApp folder, located in the following path: \nAndroid/data/it.uniba.sms.2021.managerapp/files</string>
+    <string name="imgProfile_msg">Insert the new image in the Android folder to modify the profile image</string>
     <string name="esami_passati">Passed exams</string>
     <string name="esami_da_svolgere">Not passed exams</string>
     <string name="set_result">Rate this project</string>

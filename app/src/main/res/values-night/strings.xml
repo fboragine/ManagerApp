@@ -28,7 +28,7 @@
     <string name="edit_image">Edit Image</string>
     <string name="in_progress">In Progress</string>
     <string name="closed">Closed</string>
-    <string name="logout">Logout successful</string>
+    <string name="logout">Logout</string>
     <string name="serial_number">705624</string>
     <string name="description">Description</string>
     <string name="search_a_course">Search a Course</string>
@@ -43,7 +43,7 @@
     <string name="change_select_course">Change selected course</string>
     <string name="signin_success">Registration successfully completed</string>
     <string name="img_upload">Image uploaded</string>
-    <string name="imgProfile_msg">Insert the profile image, inside to ManagerApp folder, located in the following path:  Android/data/it.uniba.sms.2021.managerapp/files</string>
+    <string name="imgProfile_msg">Insert the new image in the Android folder to modify the profile image</string>
     <string name="set_result">Rate this project</string>
     <string name="project_rate_title_dialog">Project rating</string>
     <string name="project_rate_message_dialog">Rate the project using value between 0 and 33.</string>
