@@ -145,6 +145,6 @@
     <string name="add">Add</string>
     <string name="err_delete_tea">Before deleting the teacher make sure that all related exams have at least one other teacher.</string>
     <string name="teach_miss">No teacher has been assigned</string>
-    <string name="whatsapp">Whatsapp</string>
+    <string name="whatsapp">Share on Whatsapp</string>
     <string name="transition">transition</string>
 </resources>

@@ -10,77 +10,66 @@
     android:orientation="vertical"
     tools:context=".loggedUser.HomeFragment">
 
-    <ScrollView
-        android:id="@+id/scroll_home"
+    <RelativeLayout
+        android:id="@+id/inProgressContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="220dp">
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/inProgressTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingEnd="2dp"
+            android:text="@string/in_progress_projects"
+            android:textSize="20sp" />
 
-            <RelativeLayout
-                android:id="@+id/inProgressContainer"
-                android:layout_width="match_parent"
-                android:layout_height="220dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/inProgressRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/inProgressTextView"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/inProgressTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="2dp"
-                    android:text="@string/in_progress_projects"
-                    android:textSize="20sp" />
+    <RelativeLayout
+        android:id="@+id/closedContainer"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_below="@id/inProgressContainer"
+        android:layout_marginTop="20dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/inProgressRecyclerView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/inProgressTextView"
-                    android:layout_centerHorizontal="true" />
-            </RelativeLayout>
+        <TextView
+            android:id="@+id/closedTextView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingEnd="2dp"
+            android:text="@string/closed_projects"
+            android:textSize="20sp" />
 
-            <RelativeLayout
-                android:id="@+id/closedContainer"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:layout_below="@id/inProgressContainer"
-                android:layout_marginTop="20dp">
-
-                <TextView
-                    android:id="@+id/closedTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="2dp"
-                    android:text="@string/closed_projects"
-                    android:textSize="20sp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/closedRecyclerView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/closedTextView"
-                    android:layout_centerHorizontal="true" />
-            </RelativeLayout>
-        </RelativeLayout>
-    </ScrollView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/closedRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/closedTextView"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layout_btn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/scroll_home">
+        android:layout_below="@+id/closedContainer">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="60dp"
             android:layout_marginLeft="300dp">
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/add_project_btn"
@@ -93,5 +82,4 @@
                 android:src="@drawable/ic_add_24"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>
-
 </RelativeLayout>

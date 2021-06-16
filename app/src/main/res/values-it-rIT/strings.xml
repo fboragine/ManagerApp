@@ -139,7 +139,7 @@
     <string name="teacher_dialog_title">Seleziona i professori</string>
     <string name="change_select_teachers">Cambia professori selezionati</string>
     <string name="add">Aggiungi</string>
-    <string name="whatsapp">Whatsapp</string>
+    <string name="whatsapp">Condividi con Whatsapp</string>
     <string name="transition">transition</string>
     <string name="cds_with_student_error">Questo corso di studio possiede almeno uno studente registrato, non è possibile eliminarlo!</string>
     <string name="label_cDs">Seleziona il corso di studio</string>

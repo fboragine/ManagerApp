@@ -52,15 +52,14 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     FirebaseStorage storage;
     private Progetto progetto;
     private ListView listViewFiles;
+    private FileListAdapter adapter;
     private static List<SpecsFile> files;
     protected static final int DOWNLOAD_ITEM_ID = View.generateViewId();
     protected static final int WHATSAPP_ITEM_ID = View.generateViewId();
+    protected static final int DELETE_ITEM_ID = View.generateViewId();
 
-    Button btnDownload;
     Button btnUploadFile;
     Button btnSelectFile;
-    Button shareBtn;
-    Button deleteBtn;
     Switch switchUpload;
     TextView selectedFileLab;
 
@@ -98,11 +97,8 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getString(R.string.dir_create), Toast.LENGTH_SHORT).show();
         }
 
-        btnDownload = findViewById(R.id.button_download);
         btnUploadFile = findViewById(R.id.button_add_file);
         btnSelectFile = findViewById(R.id.button_select_file);
-        //shareBtn = findViewById(R.id.button_share_file);
-        deleteBtn = findViewById(R.id.button_delete);
 
         switchUpload = findViewById(R.id.switch_upload);
         selectedFileLab = findViewById(R.id.selected_file);
@@ -113,7 +109,6 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private void createExplorerFile() {
         btnUploadFile.setOnClickListener(v -> uploadFile(fileUri));
         btnSelectFile.setOnClickListener(v -> showChoosingFile());
-        //shareBtn.setOnClickListener(v -> shareOnWhatsapp());
         
         getFileList(new SpecsCallback() {
             @Override
@@ -121,30 +116,8 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                 files.add(specsFile);
                 if(flag) {
                     listViewFiles = findViewById(R.id.project_files);
-                    FileListAdapter adapter = new FileListAdapter(getApplicationContext(), files);
+                    adapter = new FileListAdapter(getApplicationContext(), files);
                     listViewFiles.setAdapter(adapter);
-
-                    btnDownload.setOnClickListener(v -> {
-                        if(adapter.selectedItem.size() == 0) {
-                            Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
-                        }else {
-                            for(int i = 0; i< adapter.selectedItem.size(); i++) {
-                                downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
-                                                     adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
-                            }
-                        }
-                    });
-
-                    deleteBtn.setOnClickListener(v -> {
-                        if (adapter.selectedItem.size() == 0) {
-                            Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
-                        } else {
-                            for (int i = 0; i < adapter.selectedItem.size(); i++) {
-                                deleteSelectedFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
-                                        adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
-                            }
-                        }
-                    });
                 }
             }
         });
@@ -330,7 +303,45 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
 
             // Set a click listener for the new menu item
             download.setOnMenuItemClickListener(item -> {
+                if(adapter.selectedItem.size() == 0) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
+                }else {
+                    for(int i = 0; i< adapter.selectedItem.size(); i++) {
+                        downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
+                                adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
+                    }
+                }
+                return true;
+            });
+        }
 
+        // Add Delete Menu Item
+        int deleteId = DELETE_ITEM_ID;
+        if (menu.findItem(deleteId) == null) {
+            // If it not exists then add the menu item to menu
+            MenuItem delete = menu.add(
+                    Menu.NONE,
+                    deleteId,
+                    2,
+                    getString(R.string.delete_bt_doc)
+            );
+
+            // Set an icon for the new menu item
+            delete.setIcon(R.drawable.ic_baseline_delete_24);
+
+            // Set the show as action flags for new menu item
+            delete.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            // Set a click listener for the new menu item
+            delete.setOnMenuItemClickListener(item -> {
+                if (adapter.selectedItem.size() == 0) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
+                } else {
+                    for (int i = 0; i < adapter.selectedItem.size(); i++) {
+                        deleteSelectedFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
+                                adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
+                    }
+                }
                 return true;
             });
         }
@@ -342,7 +353,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             MenuItem whatsapp = menu.add(
                     Menu.NONE,
                     whatsappId,
-                    2,
+                    3,
                     getString(R.string.whatsapp)
             );
 

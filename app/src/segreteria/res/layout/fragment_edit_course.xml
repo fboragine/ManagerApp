@@ -121,7 +121,6 @@
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:typeface="normal"
-                    app:layout_constraintStart_toEndOf="@id/button_download"
                     app:layout_constraintTop_toBottomOf="@id/project_files"
                     />
             </LinearLayout>
