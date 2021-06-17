@@ -54,7 +54,6 @@ public class FileListAdapter extends BaseAdapter {
             viewHolder.fileSize = (TextView) view.findViewById(R.id.file_size);
             viewHolder.fileIcon = (ImageView) view.findViewById(R.id.file_icon);
             viewHolder.fileCb = (CheckBox) view.findViewById(R.id.file_cb);
-            viewHolder.viewBtnDownload = (Button) view.findViewById(R.id.button_download);
             view.setTag(viewHolder);
         } else {
             view = convertView;
@@ -82,7 +81,6 @@ public class FileListAdapter extends BaseAdapter {
         TextView fileName;
         TextView fileDate;
         TextView fileSize;
-        Button viewBtnDownload;
     }
 
     private int setFileImageType(File file)

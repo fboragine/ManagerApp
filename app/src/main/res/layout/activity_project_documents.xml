@@ -31,38 +31,6 @@
     </ListView>
 
     <Button
-        android:id="@+id/button_download"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@color/blue_500"
-        android:text="@string/download_bt_doc"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:typeface="normal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_delete"
-        app:layout_constraintTop_toBottomOf="@id/project_files" />
-
-    <Button
-        android:id="@+id/button_delete"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"
-        android:background="#D30000"
-        android:text="@string/delete_bt_doc"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:typeface="normal"
-        app:layout_constraintStart_toEndOf="@id/button_download"
-        app:layout_constraintTop_toBottomOf="@id/project_files"
-        />
-
-    <Button
         android:id="@+id/button_select_file"
         android:layout_width="150dp"
         android:layout_height="43dp"
@@ -75,7 +43,7 @@
         android:textStyle="bold"
         android:typeface="normal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_download" />
+        app:layout_constraintTop_toBottomOf="@id/project_files" />
 
     <Switch
         android:id="@+id/switch_upload"
@@ -91,7 +59,7 @@
         android:textCursorDrawable="@color/blue_700"
         android:typeface="normal"
         app:layout_constraintStart_toEndOf="@id/button_select_file"
-        app:layout_constraintTop_toBottomOf="@id/button_download"
+        app:layout_constraintTop_toBottomOf="@id/project_files"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <TextView
@@ -127,27 +95,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_select_file" />
-
-    <Button
-        android:id="@+id/button_share_file"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="20dp"
-        android:paddingStart="15dp"
-        android:background="@color/success_green"
-        android:drawableStart="@drawable/ic_whatsapp"
-        android:elegantTextHeight="true"
-        android:text="@string/share_file"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_add_file"
-        tools:ignore="RtlSymmetry" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
