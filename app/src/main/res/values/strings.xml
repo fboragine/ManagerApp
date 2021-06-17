@@ -54,6 +54,7 @@
     <string name="download_succ">File downloaded successfully</string>
     <string name="download_error">Download failed</string>
     <string name="no_selection_file">No file selected! Please select one or more file to download</string>
+    <string name="no_selection_file_del">No file selected! Please select one or more file to delete</string>
     <string name="download_select">Download selected file in progress</string>
     <string name="add_file">Add new file</string>
     <string name="upload_error">Upload error!</string>

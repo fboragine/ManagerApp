@@ -335,7 +335,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             // Set a click listener for the new menu item
             delete.setOnMenuItemClickListener(item -> {
                 if (adapter.selectedItem.size() == 0) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file_del), Toast.LENGTH_LONG).show();
                 } else {
                     for (int i = 0; i < adapter.selectedItem.size(); i++) {
                         deleteSelectedFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),

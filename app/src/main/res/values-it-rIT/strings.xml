@@ -53,6 +53,7 @@
     <string name="download_succ">File scaricato con successo</string>
     <string name="download_error">Scaricamento fallito</string>
     <string name="no_selection_file">Nessun file selezionato! Seleziona uno o più file da scaricare</string>
+    <string name="no_selection_file_del">Nessun file selezionato! Seleziona uno o più file da eliminare</string>
     <string name="download_select">Scaricamento del file selezionato in corso</string>
     <string name="add_file">Aggiungi un nuovo file</string>
     <string name="upload_error">Caricamento fallito!</string>
