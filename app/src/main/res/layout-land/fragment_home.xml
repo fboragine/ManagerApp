@@ -1,93 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_home"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
-    android:layout_marginBottom="?attr/actionBarSize"
-    android:orientation="vertical"
-    tools:context=".loggedUser.HomeFragment">
+    android:layout_width="match_parent">
 
-    <ScrollView
-        android:id="@+id/scroll_home"
+    <LinearLayout
+        android:id="@+id/main_home"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:orientation="vertical"
+        tools:context=".loggedUser.HomeFragment">
 
         <RelativeLayout
+            android:id="@+id/inProgressContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="200dp">
 
-            <RelativeLayout
-                android:id="@+id/inProgressContainer"
+            <TextView
+                android:id="@+id/inProgressTextView"
                 android:layout_width="match_parent"
-                android:layout_height="220dp">
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="2dp"
+                android:text="@string/in_progress_projects"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/inProgressTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="2dp"
-                    android:text="@string/in_progress_projects"
-                    android:textSize="20sp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/inProgressRecyclerView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/inProgressTextView"
-                    android:layout_centerHorizontal="true" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/closedContainer"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:layout_below="@id/inProgressContainer"
-                android:layout_marginTop="20dp">
-
-                <TextView
-                    android:id="@+id/closedTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="2dp"
-                    android:text="@string/closed_projects"
-                    android:textSize="20sp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/closedRecyclerView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/closedTextView"
-                    android:layout_centerHorizontal="true" />
-            </RelativeLayout>
-
-
-                <Button
-                    android:id="@+id/add_project_btn"
-                    android:layout_width="300dp"
-                    android:layout_height="26dp"
-                    android:layout_marginLeft="600px"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="200px"
-                    android:layout_marginBottom="10dp"
-                    android:layout_below="@+id/closedContainer"
-                    android:background="@color/success_green"
-                    android:text="@string/add_new_project"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:typeface="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/inProgressRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/inProgressTextView"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
-    </ScrollView>
 
+        <RelativeLayout
+            android:id="@+id/closedContainer"
+            android:layout_width="736dp"
+            android:layout_height="220dp"
+            android:layout_below="@id/inProgressContainer"
+            android:layout_marginTop="20dp">
 
+            <TextView
+                android:id="@+id/closedTextView"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="2dp"
+                android:text="@string/closed_projects"
+                android:textSize="20sp" />
 
-</RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/closedRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/closedTextView"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/closedContainer"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="340dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="150dp">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/add_project_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="8dp"
+                    android:src="@drawable/ic_add_24"
+                    app:backgroundTint="@color/deep_orange_500" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

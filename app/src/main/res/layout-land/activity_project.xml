@@ -50,7 +50,7 @@
             android:layout_centerInParent="true"
             android:fontFamily="@font/bungee"
             android:includeFontPadding="false"
-            android:text="Progetto 1"
+            android:text="@string/project_name_label"
             android:textColor="@color/white"
             android:textSize="20sp" />
       </RelativeLayout>
@@ -91,6 +91,7 @@
       </LinearLayout>
 
       <LinearLayout
+          android:id="@+id/layout_name"
           android:layout_width="match_parent"
           android:layout_height="200dp"
           android:layout_marginTop="10dp"
@@ -112,34 +113,34 @@
 
       <RelativeLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content">
+          android:layout_height="match_parent"
+          android:layout_below="@id/layout_name"
+          >
+
         <Button
             android:id="@+id/project_files"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="DOCUMENTS"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="285dp"
+            android:layout_marginBottom="75dp"
+            android:backgroundTint="?attr/colorSecondary"
             android:drawableLeft="@drawable/ic_folder"
-            android:drawablePadding="10dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:backgroundTint="@color/deep_orange_500"
             android:onClick="go_to_documents"
-            app:layout_constraintBottom_toTopOf="@id/set_exam_result"/>
+            android:text="@string/documents"
+            android:textColor="?attr/colorOnSecondary" />
 
         <Button
             android:id="@+id/set_exam_result"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/project_files"
-            android:layout_marginLeft="20dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="25dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/success_green"
+            android:layout_marginBottom="150dp"
+            android:background="?attr/colorSecondary"
             android:text="@string/set_result"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:typeface="normal"
-            app:layout_constraintTop_toBottomOf="@id/project_files" />
+            android:textColor="?attr/colorOnSecondary"/>
       </RelativeLayout>
     </LinearLayout>
   </ScrollView>

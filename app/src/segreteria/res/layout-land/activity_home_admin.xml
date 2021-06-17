@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".guest.GuestActivity">
+    tools:context=".segreteria.admin.HomeAdminActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_toolbar"
@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:theme="?attr/actionBarTheme"
-        app:menu="@menu/bottom_guest_menu"/>
+        app:menu="@menu/bottom_admin_menu"/>
 
     <fragment
         android:id="@+id/fragment"
@@ -39,10 +39,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/guest_nav" />
+        app:navGraph="@navigation/admin_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

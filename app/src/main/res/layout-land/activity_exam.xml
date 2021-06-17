@@ -67,17 +67,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:paddingStart="55dp"
-                android:paddingEnd="10dp"
-                app:layout_constraintTop_toTopOf="parent">
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:paddingStart="55dp"
                 android:paddingEnd="10dp">
 
@@ -89,21 +80,23 @@
 
                 <ListView
                     android:id="@+id/exam_teachers"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></ListView>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp">
+                android:layout_height="70dp"
+                android:layout_marginBottom="75dp">
                 <Button
                     android:id="@+id/project_files"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="See projects"
-                    android:drawablePadding="10dp"
+                    android:layout_marginBottom="75dp"
+                    android:text="@string/projects"
                     android:layout_centerInParent="true"
-                    android:backgroundTint="@color/deep_orange_500"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:textColor="?attr/colorOnSecondary"
                     android:onClick="go_to_projects"/>
             </RelativeLayout>
         </LinearLayout>

@@ -2,7 +2,6 @@
 .gradle
 /local.properties
 *.idea
-/.build.gradle
 /.idea/build.gradle
 /.idea/compiler.xml
 /.idea/misc.xml
