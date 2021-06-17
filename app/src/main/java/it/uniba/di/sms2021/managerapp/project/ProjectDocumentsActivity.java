@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ListView;
@@ -31,6 +33,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -60,19 +63,24 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     FirebaseStorage storage;
     private Progetto progetto;
     private ListView listViewFiles;
+    private FileListAdapter adapter;
     private static List<SpecsFile> files;
+    protected static final int DOWNLOAD_ITEM_ID = View.generateViewId();
+    protected static final int WHATSAPP_ITEM_ID = View.generateViewId();
+    protected static final int DELETE_ITEM_ID = View.generateViewId();
 
     private static final int WRITE_ID = 324;
     private static final int READ_ID = 816;
     private static final int DELETE_ID = 496;
 
     Button btnDownload;
+    private Boolean clicked = false;
+
     Button btnUploadFile;
-    Button btnSelectFile;
-    Button shareBtn;
-    Button deleteBtn;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    Switch switchUpload;
+    FloatingActionButton btnAdd;
+    FloatingActionButton btnAddFile;
+    FloatingActionButton btnAddImage;
+    Boolean switchUpload = false;
     TextView selectedFileLab;
 
     //track Choosing Image Intent
@@ -110,13 +118,12 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getString(R.string.dir_create), Toast.LENGTH_SHORT).show();
         }
 
-        btnDownload = findViewById(R.id.button_download);
-        btnUploadFile = findViewById(R.id.button_add_file);
-        btnSelectFile = findViewById(R.id.button_select_file);
-        shareBtn = findViewById(R.id.button_share_file);
-        deleteBtn = findViewById(R.id.button_delete);
 
-        switchUpload = findViewById(R.id.switch_upload);
+        btnUploadFile = findViewById(R.id.button_add_file);
+        btnAdd = findViewById(R.id.add_btn);
+        btnAddFile = findViewById(R.id.add_file_btn);
+        btnAddImage = findViewById(R.id.add_image_btn);
+
         selectedFileLab = findViewById(R.id.selected_file);
         selectedFileLab.setVisibility(View.INVISIBLE);
         createExplorerFile();
@@ -126,7 +133,12 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         btnUploadFile.setOnClickListener(v -> checkPermissionFuntion(Manifest.permission.READ_EXTERNAL_STORAGE, READ_ID));
         btnSelectFile.setOnClickListener(v -> showChoosingFile());
         shareBtn.setOnClickListener(v -> shareOnWhatsapp());
-        
+        btnUploadFile.setOnClickListener(v -> uploadFile(fileUri));
+
+        btnAdd.setOnClickListener(v -> onAddButtonClicked());
+        btnAddFile.setOnClickListener(v -> showChoosingFile());
+        btnAddImage.setOnClickListener(v -> showChoosingImage());
+
         getFileList(new SpecsCallback() {
             @Override
             public synchronized void onCallback(SpecsFile specsFile, boolean flag) {
@@ -135,6 +147,39 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                     listViewFiles = findViewById(R.id.project_files);
                     adapter = new FileListAdapter(getApplicationContext(), files);
                     listViewFiles.setAdapter(adapter);
+                }
+            }
+        });
+    }
+
+    private void onAddButtonClicked() {
+        visibility(clicked);
+        animation(clicked);
+        if(!clicked) clicked = true;
+        else clicked = false;
+    }
+
+    private void visibility(Boolean clicked) {
+        if(!clicked) {
+            btnAddFile.setVisibility(View.VISIBLE);
+            btnAddImage.setVisibility(View.VISIBLE);
+        } else {
+            btnAddFile.setVisibility(View.INVISIBLE);
+            btnAddImage.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void animation(Boolean clicked) {
+        if(!clicked) {
+            btnAddFile.startAnimation(AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim));
+            btnAddImage.startAnimation(AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim));
+            btnAdd.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim));
+        } else {
+            btnAddFile.startAnimation(AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim));
+            btnAddImage.startAnimation(AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim));
+            btnAdd.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim));
+        }
+    }
 
                     btnDownload.setOnClickListener(v -> {
                         if(adapter.selectedItem.size() == 0) {
@@ -260,12 +305,17 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     }
 
     private void showChoosingFile() {
+        switchUpload = false;
         Intent intent = new Intent();
-        if(switchUpload.isChecked()) {
-            intent.setTypeAndNormalize("image/*");
-        }else {
-            intent.setTypeAndNormalize("application/*");
-        }
+        intent.setTypeAndNormalize("application/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSING_IMAGE_REQUEST);
+    }
+
+    private void showChoosingImage() {
+        switchUpload = true;
+        Intent intent = new Intent();
+        intent.setTypeAndNormalize("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSING_IMAGE_REQUEST);
     }
@@ -365,7 +415,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         if (requestCode == CHOOSING_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             this.fileUri = data.getData();
             try {
-                if(switchUpload.isChecked()) {
+                if(switchUpload) {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
                 }
             } catch (IOException e) {
@@ -390,6 +440,98 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
 
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
+        // Add Download Menu Item
+        int downloadId = DOWNLOAD_ITEM_ID;
+        if (menu.findItem(downloadId) == null) {
+            // If it not exists then add the menu item to menu
+            MenuItem download = menu.add(
+                    Menu.NONE,
+                    downloadId,
+                    1,
+                    getString(R.string.download_bt_doc)
+            );
+
+            // Set an icon for the new menu item
+            download.setIcon(R.drawable.ic_baseline_download_24);
+
+            // Set the show as action flags for new menu item
+            download.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            // Set a click listener for the new menu item
+            download.setOnMenuItemClickListener(item -> {
+                if(adapter.selectedItem.size() == 0) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
+                }else {
+                    for(int i = 0; i< adapter.selectedItem.size(); i++) {
+                        downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
+                                adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
+                    }
+                }
+                return true;
+            });
+        }
+
+        // Add Delete Menu Item
+        int deleteId = DELETE_ITEM_ID;
+        if (menu.findItem(deleteId) == null) {
+            // If it not exists then add the menu item to menu
+            MenuItem delete = menu.add(
+                    Menu.NONE,
+                    deleteId,
+                    2,
+                    getString(R.string.delete_bt_doc)
+            );
+
+            // Set an icon for the new menu item
+            delete.setIcon(R.drawable.ic_baseline_delete_24);
+
+            // Set the show as action flags for new menu item
+            delete.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            // Set a click listener for the new menu item
+            delete.setOnMenuItemClickListener(item -> {
+                if (adapter.selectedItem.size() == 0) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file_del), Toast.LENGTH_LONG).show();
+                } else {
+                    for (int i = 0; i < adapter.selectedItem.size(); i++) {
+                        deleteSelectedFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
+                                adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
+                    }
+                }
+                return true;
+            });
+        }
+
+        // Add Whatsapp Menu Item
+        int whatsappId = WHATSAPP_ITEM_ID;
+        if (menu.findItem(whatsappId) == null) {
+            // If it not exists then add the menu item to menu
+            MenuItem whatsapp = menu.add(
+                    Menu.NONE,
+                    whatsappId,
+                    3,
+                    getString(R.string.whatsapp)
+            );
+
+            // Set an icon for the new menu item
+            whatsapp.setIcon(R.drawable.ic_whatsapp);
+
+            // Set the show as action flags for new menu item
+            whatsapp.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            // Set a click listener for the new menu item
+            whatsapp.setOnMenuItemClickListener(item -> {
+                shareOnWhatsapp();
+                return true;
+            });
+        }
+
+        super.onPrepareOptionsMenu(menu);
         return true;
     }
 

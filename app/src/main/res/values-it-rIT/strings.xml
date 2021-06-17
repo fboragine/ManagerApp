@@ -53,6 +53,7 @@
     <string name="download_succ">File scaricato con successo</string>
     <string name="download_error">Scaricamento fallito</string>
     <string name="no_selection_file">Nessun file selezionato! Seleziona uno o più file da scaricare</string>
+    <string name="no_selection_file_del">Nessun file selezionato! Seleziona uno o più file da eliminare</string>
     <string name="download_select">Scaricamento del file selezionato in corso</string>
     <string name="add_file">Aggiungi un nuovo file</string>
     <string name="upload_error">Caricamento fallito!</string>
@@ -94,7 +95,7 @@
     <string name="registration">Registrazione</string>
     <string name="signin_success">Registazione avvenuta con successo</string>
     <string name="img_upload">Immagine caricata</string>
-    <string name="imgProfile_msg">Inserire l\'immagine del profilo, all\'interno della cartella ManagerApp, situata nel seguente percorso: Android/data/it.uniba.sms.2021.managerapp/files</string>
+    <string name="imgProfile_msg">Inserire la nuova immagine all\'interno della cartella Android per modificare la foto del profilo</string>
     <string name="esami_passati">Esami passati</string>
     <string name="esami_da_svolgere">Esami non passati</string>
     <string name="set_result">Vota il progetto</string>
@@ -108,7 +109,7 @@
     <string name="language">Seleziona la lingua</string>
     <string name="select">Seleziona</string>
     <string name="share_file">Condividi file su whatsapp</string>
-    <string name="file_upload_lab_btn">Carica file selezionato</string>
+    <string name="file_upload_lab_btn">Carica</string>
     <string name="nofile_to_share">Seleziona file dal bottone \"Aggiungi nuovo file\"</string>
     <string name="delete_bt_doc">Elimina</string>
     <string name="delete_select">" Eliminazione in corso"</string>
@@ -139,6 +140,8 @@
     <string name="teacher_dialog_title">Seleziona i professori</string>
     <string name="change_select_teachers">Cambia professori selezionati</string>
     <string name="add">Aggiungi</string>
+    <string name="whatsapp">Condividi con Whatsapp</string>
+    <string name="transition">transition</string>
     <string name="cds_with_student_error">Questo corso di studio possiede almeno uno studente registrato, non è possibile eliminarlo!</string>
     <string name="label_cDs">Seleziona il corso di studio</string>
     <string name="label_teacher">Seleziona il docente</string>
