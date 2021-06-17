@@ -109,7 +109,7 @@
     <string name="language">Seleziona la lingua</string>
     <string name="select">Seleziona</string>
     <string name="share_file">Condividi file su whatsapp</string>
-    <string name="file_upload_lab_btn">Carica file selezionato</string>
+    <string name="file_upload_lab_btn">Carica</string>
     <string name="nofile_to_share">Seleziona file dal bottone \"Aggiungi nuovo file\"</string>
     <string name="delete_bt_doc">Elimina</string>
     <string name="delete_select">" Eliminazione in corso"</string>
