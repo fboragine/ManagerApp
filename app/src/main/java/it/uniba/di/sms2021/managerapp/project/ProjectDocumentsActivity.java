@@ -18,6 +18,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ListView;
@@ -25,6 +27,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -58,9 +61,13 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     protected static final int WHATSAPP_ITEM_ID = View.generateViewId();
     protected static final int DELETE_ITEM_ID = View.generateViewId();
 
+    private Boolean clicked = false;
+
     Button btnUploadFile;
-    Button btnSelectFile;
-    Switch switchUpload;
+    FloatingActionButton btnAdd;
+    FloatingActionButton btnAddFile;
+    FloatingActionButton btnAddImage;
+    Boolean switchUpload = false;
     TextView selectedFileLab;
 
     //track Choosing Image Intent
@@ -97,10 +104,12 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getString(R.string.dir_create), Toast.LENGTH_SHORT).show();
         }
 
-        btnUploadFile = findViewById(R.id.button_add_file);
-        btnSelectFile = findViewById(R.id.button_select_file);
 
-        switchUpload = findViewById(R.id.switch_upload);
+        btnUploadFile = findViewById(R.id.button_add_file);
+        btnAdd = findViewById(R.id.add_btn);
+        btnAddFile = findViewById(R.id.add_file_btn);
+        btnAddImage = findViewById(R.id.add_image_btn);
+
         selectedFileLab = findViewById(R.id.selected_file);
         selectedFileLab.setVisibility(View.INVISIBLE);
         createExplorerFile();
@@ -108,7 +117,10 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
 
     private void createExplorerFile() {
         btnUploadFile.setOnClickListener(v -> uploadFile(fileUri));
-        btnSelectFile.setOnClickListener(v -> showChoosingFile());
+
+        btnAdd.setOnClickListener(v -> onAddButtonClicked());
+        btnAddFile.setOnClickListener(v -> showChoosingFile());
+        btnAddImage.setOnClickListener(v -> showChoosingImage());
         
         getFileList(new SpecsCallback() {
             @Override
@@ -121,6 +133,36 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void onAddButtonClicked() {
+        visibility(clicked);
+        animation(clicked);
+
+        if(!clicked) clicked = true;
+        else clicked = false;
+    }
+
+    private void visibility(Boolean clicked) {
+        if(!clicked) {
+            btnAddFile.setVisibility(View.VISIBLE);
+            btnAddImage.setVisibility(View.VISIBLE);
+        } else {
+            btnAddFile.setVisibility(View.INVISIBLE);
+            btnAddImage.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void animation(Boolean clicked) {
+        if(!clicked) {
+            btnAddFile.startAnimation(AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim));
+            btnAddImage.startAnimation(AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim));
+            btnAdd.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim));
+        } else {
+            btnAddFile.startAnimation(AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim));
+            btnAddImage.startAnimation(AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim));
+            btnAdd.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim));
+        }
     }
 
     private void deleteSelectedFile(String nomeFile, String percorso) {
@@ -156,12 +198,17 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     }
 
     private void showChoosingFile() {
+        switchUpload = false;
         Intent intent = new Intent();
-        if(switchUpload.isChecked()) {
-            intent.setType("image/*");
-        }else {
-            intent.setType("application/*");
-        }
+        intent.setType("application/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSING_IMAGE_REQUEST);
+    }
+
+    private void showChoosingImage() {
+        switchUpload = true;
+        Intent intent = new Intent();
+        intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSING_IMAGE_REQUEST);
     }
@@ -261,7 +308,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         if (requestCode == CHOOSING_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             this.fileUri = data.getData();
             try {
-                if(switchUpload.isChecked()) {
+                if(switchUpload) {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
                 }
             } catch (IOException e) {
@@ -335,7 +382,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             // Set a click listener for the new menu item
             delete.setOnMenuItemClickListener(item -> {
                 if (adapter.selectedItem.size() == 0) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file_del), Toast.LENGTH_LONG).show();
                 } else {
                     for (int i = 0; i < adapter.selectedItem.size(); i++) {
                         deleteSelectedFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),

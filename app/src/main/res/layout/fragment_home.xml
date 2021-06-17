@@ -59,26 +59,23 @@
 
     <RelativeLayout
         android:id="@+id/layout_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/scroll_home"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="280dp"
-        android:layout_marginRight="40dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/add_project_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
                 app:backgroundTint="@color/deep_orange_500"
                 android:elevation="8dp"
                 android:src="@drawable/ic_add_24"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
     </RelativeLayout>
 </LinearLayout>
