@@ -148,4 +148,9 @@
     <string name="no_project_linked_error">There is no exam linked to some project</string>
     <string name="err_delete_tea">Before deleting the teacher make sure that all related exams have at least one other teacher.</string>
     <string name="teach_miss">No teacher has been assigned</string>
+    <string name="permission_enable_msg">Thanks for enabling the permission</string>
+    <string name="allow_perm_msg">Please allow the Permission to use this functionality</string>
+    <string name="perm_need_title">Permission Needed</string>
+    <string name="perm_need_storage_msg">Permission is needed to access files from your device...</string>
+    <string name="not_valid_chosen">File chosen not valid!</string>
 </resources>

@@ -2,19 +2,25 @@ package it.uniba.di.sms2021.managerapp.project;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +33,8 @@ import android.widget.Toast;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +62,10 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private ListView listViewFiles;
     private static List<SpecsFile> files;
 
+    private static final int WRITE_ID = 324;
+    private static final int READ_ID = 816;
+    private static final int DELETE_ID = 496;
+
     Button btnDownload;
     Button btnUploadFile;
     Button btnSelectFile;
@@ -68,6 +80,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private Uri fileUri;
     private Bitmap bitmap;
     private ProgressDialog progressDialog;
+    FileListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +123,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     }
 
     private void createExplorerFile() {
-        btnUploadFile.setOnClickListener(v -> uploadFile(fileUri));
+        btnUploadFile.setOnClickListener(v -> checkPermissionFuntion(Manifest.permission.READ_EXTERNAL_STORAGE, READ_ID));
         btnSelectFile.setOnClickListener(v -> showChoosingFile());
         shareBtn.setOnClickListener(v -> shareOnWhatsapp());
         
@@ -120,33 +133,98 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                 files.add(specsFile);
                 if(flag) {
                     listViewFiles = findViewById(R.id.project_files);
-                    FileListAdapter adapter = new FileListAdapter(getApplicationContext(), files);
+                    adapter = new FileListAdapter(getApplicationContext(), files);
                     listViewFiles.setAdapter(adapter);
 
                     btnDownload.setOnClickListener(v -> {
                         if(adapter.selectedItem.size() == 0) {
                             Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
                         }else {
-                            for(int i = 0; i< adapter.selectedItem.size(); i++) {
-                                downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
-                                                     adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
-                            }
+                            checkPermissionFuntion(Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_ID);
                         }
                     });
 
-                    deleteBtn.setOnClickListener(v -> {
-                        if (adapter.selectedItem.size() == 0) {
-                            Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
-                        } else {
-                            for (int i = 0; i < adapter.selectedItem.size(); i++) {
-                                deleteSelectedFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
-                                        adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
-                            }
-                        }
-                    });
+                    deleteBtn.setOnClickListener(v -> checkPermissionFuntion(Manifest.permission.WRITE_EXTERNAL_STORAGE, DELETE_ID));
                 }
             }
         });
+    }
+
+
+    // This function is called when user accept or decline the permission.
+// Request Code is used to check which permission called this function.
+// This request code is provided when user is prompt for permission.
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String @NotNull [] permissions, int @NotNull [] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            switch(requestCode) {
+                case READ_ID: {
+                    if(fileUri != null) {
+                        uploadFile(fileUri);
+                    }else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_file_upload), Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
+                case WRITE_ID: {
+                    for(int i = 0; i< adapter.selectedItem.size(); i++) {
+                        downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
+                                adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
+                    }
+                }
+                break;
+                case DELETE_ID: {
+                    if (adapter.selectedItem.size() == 0) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
+                    } else {
+                        for (int i = 0; i < adapter.selectedItem.size(); i++) {
+                            deleteSelectedFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
+                                    adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
+                        }
+                    }
+                }
+                break;
+            }
+        } else {
+            Toast.makeText(this, getString(R.string.allow_perm_msg), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void requestStoragePermissionDialog(String permission, int permission_id)
+    {
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this, permission))
+        {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.perm_need_title)
+                    .setMessage(R.string.perm_need_storage_msg)
+                    .setPositiveButton("OK", (dialog, which) -> requestPermissionFunction(permission, permission_id))
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss()).create().show();
+        }
+        else
+        {
+            ActivityCompat.requestPermissions(this,new String[]{permission},permission_id);
+        }
+    }
+
+    private void requestPermissionFunction(String permission, int permission_id) {
+        ActivityCompat.requestPermissions(this,new String[]{permission},permission_id);
+    }
+
+    private void checkPermissionFuntion(String permission, int permission_id) {
+        if (ContextCompat.checkSelfPermission(
+                getApplicationContext(), permission) == PackageManager.PERMISSION_DENIED) {
+            requestStoragePermissionDialog(permission, permission_id);
+        }else {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,permission)) {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                ActivityCompat.requestPermissions(this, new String[]{permission}, permission_id);
+            }
+
+        }
     }
 
     private void deleteSelectedFile(String nomeFile, String percorso) {
@@ -184,9 +262,9 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private void showChoosingFile() {
         Intent intent = new Intent();
         if(switchUpload.isChecked()) {
-            intent.setType("image/*");
+            intent.setTypeAndNormalize("image/*");
         }else {
-            intent.setType("application/*");
+            intent.setTypeAndNormalize("application/*");
         }
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSING_IMAGE_REQUEST);
@@ -224,7 +302,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         }).addOnFailureListener(exception -> progressDialog.dismiss()).addOnPausedListener(taskSnapshot -> Toast.makeText(getApplicationContext(), getString(R.string.donwload_stop), Toast.LENGTH_LONG).show());
     }
 
-    public void uploadFile(Uri fileUrl) {
+    public void uploadFile(@NonNull Uri fileUrl) {
         if (fileUrl != null) {
             String fileName = fileUrl.getPath().substring(fileUrl.getPath().lastIndexOf("/")+1, fileUrl.getPath().lastIndexOf("."));
 
@@ -293,8 +371,15 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            selectedFileLab.setText(fileUri.getPath().substring(fileUri.getPath().lastIndexOf("/")+1));
-            selectedFileLab.setVisibility(View.VISIBLE);
+
+            String fileSelected = fileUri.getPath().substring(fileUri.getPath().lastIndexOf("/") + 1);
+            if(fileSelected.contains(".") && fileUri != null) {
+                selectedFileLab.setText(fileSelected);
+                selectedFileLab.setVisibility(View.VISIBLE);
+            } else {
+                this.fileUri = null;
+                Toast.makeText(getApplicationContext(), getString(R.string.not_valid_chosen), Toast.LENGTH_LONG).show();
+            }
         }
     }
 

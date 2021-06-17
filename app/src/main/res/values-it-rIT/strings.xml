@@ -147,4 +147,9 @@
     <string name="exam_delete_error">Alcuni studenti devono completare questo esame, quindi non è possibile eliminarlo</string>
     <string name="no_exam_linked_error">Nessun studente è collegato a questo esame</string>
     <string name="no_project_linked_error">Nessun esame è collegato a questo progetto</string>
+    <string name="permission_enable_msg">Grazie per aver abilitato i permessi necessari</string>
+    <string name="allow_perm_msg">Si prega di abilitare i permessi per usare questa funzionalità</string>
+    <string name="perm_need_title">Permesso necessario</string>
+    <string name="not_valid_chosen">File scelto non valido</string>
+    <string name="perm_need_storage_msg">Il permesso è necessario per accedere ai file del dispositivo, si prega di fornire il consenso per tale permesso</string>
 </resources>
