@@ -7,7 +7,7 @@
     <string name="course">Course</string>
     <string name="action_filter">Filter</string>
     <string name="action_settings">Settings</string>
-    <string name="btn_forgot_password">Forgot your password?</string>
+    <string name="btn_forgot_password">Forgot password?</string>
     <string name="password">Password</string>
     <string name="btn_already_reg">Already registered. Login Me!</string>
     <string name="surname">Surname</string>
@@ -148,4 +148,12 @@
     <string name="no_project_linked_error">There is no exam linked to some project</string>
     <string name="err_delete_tea">Before deleting the teacher make sure that all related exams have at least one other teacher.</string>
     <string name="teach_miss">No teacher has been assigned</string>
+    <string name="add_btn_description">Add button</string>
+    <string name="delete">Delete</string>
+    <string name="course_deleted">Course deleted</string>
+    <string name="exam_deleted">Exam deleted</string>
+    <string name="projects">Projects</string>
+    <string name="documents">Documents</string>
+    <string name="english">English</string>
+    <string name="italian">Italian</string>
 </resources>

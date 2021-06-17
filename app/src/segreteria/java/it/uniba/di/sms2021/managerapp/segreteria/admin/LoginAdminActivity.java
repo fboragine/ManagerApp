@@ -1,12 +1,5 @@
 package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,7 +10,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -31,7 +25,6 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.segreteria.entities.Segreteria;
@@ -77,19 +70,16 @@ public class LoginAdminActivity extends AppCompatActivity {
                         login(email.getText().toString(), password.getText().toString());
                     }
                 } else if (v.getId() == R.id.btn_reset_password_admin) {
-                    // TODO implementare il reset della password
                     if(layout.getVisibility() == View.VISIBLE) {
-                        layout.setVisibility(View.GONE);
-                        btnResetPsw.setText(R.string.btn_goto_login);
+                        layout.setVisibility(View.INVISIBLE);
+                        btnResetPsw.setText(R.string.login);
                         btnLogin.setVisibility(View.GONE);
                         btnResetPswConfirm.setVisibility(View.VISIBLE);
-                        Toast.makeText(getApplicationContext(),getString(R.string.msg_reset), Toast.LENGTH_LONG).show();
-
                     }else {
                         layout.setVisibility(View.VISIBLE);
                         btnLogin.setVisibility(View.VISIBLE);
                         btnResetPswConfirm.setVisibility(View.GONE);
-                        btnResetPsw.setText(R.string.reset_password);
+                        btnResetPsw.setText(R.string.btn_forgot_password);
                         email.setText("");
                         password.setText("");
                     }

@@ -1,19 +1,15 @@
-package it.uniba.di.sms2021.managerapp.segreteria;
+package it.uniba.di.sms2021.managerapp.segreteria.editItem;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,43 +23,43 @@ import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
-import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
-public class EditCourseFragment extends Fragment {
+public class EditCourseActivity extends AppCompatActivity {
+
+    public static final int SAVE_ITEM_ID = View.generateViewId();
+    public static final int DELETE_ITEM_ID = View.generateViewId();
+    public static final int SETTINGS_ITEM_ID = View.generateViewId();
 
     private EditText editName;
     private EditText editDescription;
-    private final CorsoDiStudio cDsSelected;
+    private CorsoDiStudio cDsSelected;
     private FirebaseFirestore db;
 
-    public EditCourseFragment(CorsoDiStudio corsoDiStudio) {
-        this.cDsSelected = corsoDiStudio;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_course);
 
-        setHasOptionsMenu(true);
-    }
+        final Intent src = getIntent();
+        if(src != null) {
+            cDsSelected = src.getParcelableExtra("cDs");
+        }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View vistaModifica = inflater.inflate(R.layout.fragment_edit_course, container, false);
+        Toolbar toolbar = findViewById(R.id.top_toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setTitle("Edit Course");
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
+        toolbar.setNavigationOnClickListener(view -> finish());
 
-        editName = vistaModifica.findViewById(R.id.name_course);
+        editName = findViewById(R.id.name_course);
         editName.setText(cDsSelected.getNome());
 
-        editDescription = vistaModifica.findViewById(R.id.description_course);
+        editDescription = findViewById(R.id.description_course);
         editDescription.setText(cDsSelected.getDescrizione());
 
-        Button deleteBtn = vistaModifica.findViewById(R.id.button_delete_course);
-        deleteBtn.setOnClickListener((view) -> deleteCds());
         db = FirebaseFirestore.getInstance();
-
-        return vistaModifica;
     }
 
     /**
@@ -74,7 +70,6 @@ public class EditCourseFragment extends Fragment {
      * - Cancellazione di tutti i progetti e le relative cartelle collegati agli esami rimossi;
      */
     private void deleteCds() {
-
         db.collection("studenti")
                 .whereEqualTo("cDs", this.cDsSelected.getIdCorsoDiStudio())
                 .get().addOnCompleteListener(task -> {
@@ -83,7 +78,7 @@ public class EditCourseFragment extends Fragment {
                     rimozioneEsami();
                     db.collection("corsiDiStudio").document(this.cDsSelected.getIdCorsoDiStudio()).delete();
                 }else {
-                    Toast.makeText(requireActivity().getApplicationContext(), R.string.cds_with_student_error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.cds_with_student_error, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -141,27 +136,41 @@ public class EditCourseFragment extends Fragment {
                     for (StorageReference item : listResult.getItems()) {
                         item.delete();
                     }
-
-                    getActivity().finish();
-                    getActivity().startActivity(getActivity().getIntent());
                 })
-                .addOnFailureListener(e -> Toast.makeText(requireActivity().getApplicationContext(), "File project: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "File project: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void modificaFile() {
+        if( !editName.getText().toString().matches("") &&
+                !editDescription.getText().toString().matches("")) {
+            Map<String ,Object> userModify = new HashMap<>();
+
+            userModify.put("descrizione",editDescription.getText().toString());
+            userModify.put("id", this.cDsSelected.getIdCorsoDiStudio());
+            userModify.put("nome", editName.getText().toString());
+
+            DocumentReference docUpdate = db.collection("corsiDiStudio").document(this.cDsSelected.getIdCorsoDiStudio());
+
+            docUpdate
+                    .update(userModify)
+                    .addOnSuccessListener(aVoid -> Toast.makeText(getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), R.string.error_save, Toast.LENGTH_SHORT).show());
+        }
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.action_search);
-        menuItem.setVisible(false);
+        if (menuItem != null)
+            menuItem.setVisible(false);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-
+    public boolean onPrepareOptionsMenu(Menu menu) {
         // Add Save Menu Item
-        int saveId = HomeAdminActivity.SAVE_ITEM_ID;
+        int saveId = SAVE_ITEM_ID;
         if (menu.findItem(saveId) == null) {
             // If it not exists then add the menu item to menu
             MenuItem save = menu.add(
@@ -180,56 +189,61 @@ public class EditCourseFragment extends Fragment {
             // Set a click listener for the new menu item
             save.setOnMenuItemClickListener(item -> {
                 modificaFile();
-                Toast.makeText(requireActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-                getActivity().startActivity(getActivity().getIntent());
+                Toast.makeText(getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show();
+                finish();
                 return true;
             });
 
         }
 
-        // Add Cancel Menu Item
-        int cancelId = HomeAdminActivity.CANCEL_ITEM_ID;
-        if (menu.findItem(cancelId) == null) {
+        // Add Delete Menu Item
+        int deleteId = DELETE_ITEM_ID;
+        if (menu.findItem(deleteId) == null) {
             // If it not exists then add the menu item to menu
-            MenuItem cancel = menu.add(
+            MenuItem delete = menu.add(
                     Menu.NONE,
-                    cancelId,
+                    deleteId,
                     2,
-                    getString(R.string.cancel)
+                    getString(R.string.delete)
             );
 
             // Set an icon for the new menu item
-            cancel.setIcon(R.drawable.ic_edit_off);
+            delete.setIcon(R.drawable.ic_delete);
 
             // Set the show as action flags for new menu item
-            cancel.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            delete.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             // Set a click listener for the new menu item
-            cancel.setOnMenuItemClickListener(item -> {
-                Toast.makeText(requireContext().getApplicationContext(), R.string.undone_save, Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-                getActivity().startActivity(getActivity().getIntent());
+            delete.setOnMenuItemClickListener(item -> {
+                deleteCds();
+                Toast.makeText(getApplicationContext(), R.string.course_deleted, Toast.LENGTH_SHORT).show();
+                finish();
                 return true;
             });
         }
-    }
 
-    private void modificaFile() {
-        if( !editName.getText().toString().matches("") &&
-            !editDescription.getText().toString().matches("")) {
-            Map<String ,Object> userModify = new HashMap<>();
+        // Add Settings Menu Item
+        int settingsId = SETTINGS_ITEM_ID;
+        if (menu.findItem(settingsId) == null) {
+            // If it not exists then add the menu item to menu
+            MenuItem settings = menu.add(
+                    Menu.NONE,
+                    settingsId,
+                    100,
+                    getString(R.string.action_settings)
+            );
 
-            userModify.put("descrizione",editDescription.getText().toString());
-            userModify.put("id", this.cDsSelected.getIdCorsoDiStudio());
-            userModify.put("nome", editName.getText().toString());
+            // Set the show as action flags for new menu item
+            settings.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER);
 
-            DocumentReference docUpdate = db.collection("corsiDiStudio").document(this.cDsSelected.getIdCorsoDiStudio());
-
-            docUpdate
-                    .update(userModify)
-                    .addOnSuccessListener(aVoid -> Toast.makeText(requireActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(e -> Toast.makeText(requireActivity().getApplicationContext(), R.string.error_save, Toast.LENGTH_SHORT).show());
+            // Set a click listener for the new menu item
+            settings.setOnMenuItemClickListener(item -> {
+                Intent intent = new Intent(getApplicationContext(), Settings.class);
+                startActivity(intent);
+                return true;
+            });
         }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 }

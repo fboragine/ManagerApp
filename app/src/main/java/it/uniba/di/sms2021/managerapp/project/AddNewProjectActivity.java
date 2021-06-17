@@ -1,14 +1,8 @@
 package it.uniba.di.sms2021.managerapp.project;
 
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +14,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -166,8 +165,6 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
             // Chiude il dialog box e modifica il testo nel bottone
             dialog.dismiss();
             addAttendees.setText(R.string.change_select_attendees);
-            int color = Color.parseColor("#63A4FF");
-            addAttendees.setBackgroundColor(color);
         });
 
         // Imposta un'eventuale azione in caso di click su pulsante negativo quindi cancel
@@ -203,8 +200,6 @@ public class AddNewProjectActivity extends AppCompatActivity implements View.OnC
             dialog.dismiss();
 
             addExam.setText(R.string.change_select_exam);
-            int color = Color.parseColor("#63A4FF");
-            addExam.setBackgroundColor(color);
 
             selectedExam.setVisibility(View.VISIBLE);
 

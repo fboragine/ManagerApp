@@ -38,6 +38,7 @@ public class ProfileAdminFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View vistaProfilo = inflater.inflate(R.layout.fragment_profile_admin, container, false);
+        ((HomeAdminActivity) requireActivity()).disableBackArrow();
 
         TextView label = vistaProfilo.findViewById(R.id.profile_email);
         label.setText(HomeAdminActivity.getLoggedAdmin().getEmail());
@@ -47,10 +48,9 @@ public class ProfileAdminFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
