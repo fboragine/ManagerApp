@@ -20,16 +20,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import it.uniba.di.sms2021.managerapp.R;
@@ -73,7 +71,6 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private static final int READ_ID = 816;
     private static final int DELETE_ID = 496;
 
-    Button btnDownload;
     private Boolean clicked = false;
 
     Button btnUploadFile;
@@ -88,7 +85,6 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private Uri fileUri;
     private Bitmap bitmap;
     private ProgressDialog progressDialog;
-    FileListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +96,10 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             progetto = src.getParcelableExtra("progetto");
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
+        Toolbar toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
-        getSupportActionBar().setTitle(progetto.getNome());
+        Objects.requireNonNull(getSupportActionBar()).setTitle(progetto.getNome());
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
         toolbar.setNavigationOnClickListener(view -> finish());
 
@@ -131,8 +127,6 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
 
     private void createExplorerFile() {
         btnUploadFile.setOnClickListener(v -> checkPermissionFuntion(Manifest.permission.READ_EXTERNAL_STORAGE, READ_ID));
-        btnSelectFile.setOnClickListener(v -> showChoosingFile());
-        shareBtn.setOnClickListener(v -> shareOnWhatsapp());
         btnUploadFile.setOnClickListener(v -> uploadFile(fileUri));
 
         btnAdd.setOnClickListener(v -> onAddButtonClicked());
@@ -179,20 +173,6 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             btnAddImage.startAnimation(AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim));
             btnAdd.startAnimation(AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim));
         }
-    }
-
-                    btnDownload.setOnClickListener(v -> {
-                        if(adapter.selectedItem.size() == 0) {
-                            Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
-                        }else {
-                            checkPermissionFuntion(Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_ID);
-                        }
-                    });
-
-                    deleteBtn.setOnClickListener(v -> checkPermissionFuntion(Manifest.permission.WRITE_EXTERNAL_STORAGE, DELETE_ID));
-                }
-            }
-        });
     }
 
 
@@ -467,10 +447,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                 if(adapter.selectedItem.size() == 0) {
                     Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
                 }else {
-                    for(int i = 0; i< adapter.selectedItem.size(); i++) {
-                        downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
-                                adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
-                    }
+                    checkPermissionFuntion(Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_ID);
                 }
                 return true;
             });
@@ -495,14 +472,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
 
             // Set a click listener for the new menu item
             delete.setOnMenuItemClickListener(item -> {
-                if (adapter.selectedItem.size() == 0) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file_del), Toast.LENGTH_LONG).show();
-                } else {
-                    for (int i = 0; i < adapter.selectedItem.size(); i++) {
-                        deleteSelectedFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
-                                adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
-                    }
-                }
+                checkPermissionFuntion(Manifest.permission.WRITE_EXTERNAL_STORAGE, DELETE_ID);
                 return true;
             });
         }
