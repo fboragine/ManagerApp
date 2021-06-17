@@ -51,21 +51,21 @@
 
     <Button
         android:id="@+id/button_add_file"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="50dp"
         android:layout_marginRight="20dp"
-        android:background="@color/success_green"
+        android:background="@color/deep_orange_500"
+        android:elevation="2dp"
         android:text="@string/file_upload_lab_btn"
-        android:drawableLeft="@drawable/ic_baseline_arrow_drop_up_24"
-        android:layout_centerHorizontal="true"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/project_files" />
+        app:layout_constraintTop_toBottomOf="@id/project_files"/>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

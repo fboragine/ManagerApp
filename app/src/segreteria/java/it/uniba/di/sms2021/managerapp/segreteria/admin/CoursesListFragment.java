@@ -14,6 +14,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -23,7 +24,7 @@ import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
-import it.uniba.di.sms2021.managerapp.segreteria.editItem.EditCourseActivity;
+import it.uniba.di.sms2021.managerapp.segreteria.EditCourseFragment;
 import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 import it.uniba.di.sms2021.managerapp.service.ListViewAdapter;
 
@@ -50,13 +51,12 @@ public class CoursesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewCoursesList = inflater.inflate(R.layout.fragment_courses_list, container, false);
-        return viewCoursesList;
-    }
 
-    private synchronized void getCourses() {
+        ((HomeAdminActivity)requireActivity()).disableBackArrow();
+        corsi = new ArrayList<>();
+
         db.collection("corsiDiStudio").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                corsi = new ArrayList<>();
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                     CorsoDiStudio corsoDiStudio = new CorsoDiStudio(document.getString("id"),
                             document.getString("nome"),
@@ -73,28 +73,21 @@ public class CoursesListFragment extends Fragment {
                 courseListView.setAdapter(adapter);
 
                 courseListView.setOnItemClickListener((parent, view, position, id) -> {
-//                    EditCourseFragment courseEditFragment = new EditCourseFragment(corsi.get(position));
-//                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-//                    fragmentTransaction.hide(Objects.requireNonNull(getParentFragmentManager().getPrimaryNavigationFragment()));
-//                    fragmentTransaction.add(R.id.fragment, courseEditFragment);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
-                    Intent intent = new Intent(requireActivity().getApplicationContext(), EditCourseActivity.class);
-                    intent.putExtra("cDs",corsi.get(position));
-                    startActivity(intent);
+                    EditCourseFragment examListFragment = new EditCourseFragment(corsi.get(position));
+                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment, examListFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 });
             }
         });
-    }
 
-    @Override
-    public void onResume() {
-        getCourses();
-        super.onResume();
+        return viewCoursesList;
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_search);
@@ -116,15 +109,13 @@ public class CoursesListFragment extends Fragment {
                 return true;
             }
         });
-
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(requireActivity().getApplicationContext(), SettingsAdmin.class);
+            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsAdmin.class);
             startActivity(intent);
             return true;
         }

@@ -1,5 +1,12 @@
 package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -7,11 +14,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -25,6 +30,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.segreteria.entities.Segreteria;
@@ -46,64 +52,37 @@ public class LoginAdminActivity extends AppCompatActivity {
 
         File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
 
-        traduci(file.exists());
+        if(file.exists()) {
+            traduci(true);
+        } else {
+            traduci(false);
+        }
 
         String pathSegreteria = getExternalFilesDir(null).getPath() + "/segreteria.srl";
         File loggedSegreteria = new File(pathSegreteria);
 
-        if(Objects.requireNonNull(getApplicationContext().getExternalFilesDir(null).listFiles()).length == 0 || !loggedSegreteria.exists()){
+        if(getApplicationContext().getExternalFilesDir(null).listFiles().length == 0 || !loggedSegreteria.exists()){
             Button btnLogin = findViewById(R.id.buttonLogin);
-            Button btnResetPsw = findViewById(R.id.btn_reset_password_admin);
-            Button btnResetPswConfirm = findViewById(R.id.btn_reset_password_confirm);
-            LinearLayout layout = findViewById(R.id.pw_layout);
+            Button btnResetPsw = findViewById(R.id.btn_reset_password);
 
             mAuth = FirebaseAuth.getInstance();
             db = FirebaseFirestore.getInstance();
-            btnResetPswConfirm.setVisibility(View.GONE);
-            email = findViewById(R.id.emailTxt);
-            password = findViewById(R.id.passwordTxt);
 
             View.OnClickListener listener = v -> {
                 if (v.getId() == R.id.buttonLogin) {
+                    email = findViewById(R.id.emailTxt);
+                    password = findViewById(R.id.passwordTxt);
                     if (!email.getText().toString().matches("") &&
                             !password.getText().toString().matches("")) {
                         login(email.getText().toString(), password.getText().toString());
                     }
-                } else if (v.getId() == R.id.btn_reset_password_admin) {
-                    if(layout.getVisibility() == View.VISIBLE) {
-                        layout.setVisibility(View.INVISIBLE);
-                        btnResetPsw.setText(R.string.login);
-                        btnLogin.setVisibility(View.GONE);
-                        btnResetPswConfirm.setVisibility(View.VISIBLE);
-                    }else {
-                        layout.setVisibility(View.VISIBLE);
-                        btnLogin.setVisibility(View.VISIBLE);
-                        btnResetPswConfirm.setVisibility(View.GONE);
-                        btnResetPsw.setText(R.string.btn_forgot_password);
-                        email.setText("");
-                        password.setText("");
-                    }
-                }else if(v.getId() == R.id.btn_reset_password_confirm) {
-                    String emailAddress = email.getText().toString();
-                    if(!emailAddress.matches("")) {
-                        FirebaseAuth auth = FirebaseAuth.getInstance();
-                        auth.sendPasswordResetEmail(emailAddress)
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(getApplicationContext(), getString(R.string.email_sent), Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }else {
-                        Toast.makeText(getApplicationContext(),getString(R.string.error_email_sent), Toast.LENGTH_SHORT).show();
-                    }
+                } else if (v.getId() == R.id.btn_reset_password) {
+                    // TODO implementare il reset della password
                 }
             };
 
             btnLogin.setOnClickListener(listener);
             btnResetPsw.setOnClickListener(listener);
-            btnResetPswConfirm.setOnClickListener(listener);
         } else {
             Intent intent = new Intent(getApplicationContext(), HomeAdminActivity.class);
             startActivity(intent);

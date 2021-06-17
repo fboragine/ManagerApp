@@ -23,11 +23,9 @@ tools:context=".service.Settings">
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/top_toolbar">
+    android:layout_marginTop="?attr/actionBarSize">
 
     <TextView
         android:id="@+id/language"
@@ -46,7 +44,7 @@ tools:context=".service.Settings">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="150dp"
         android:orientation="vertical">
 
         <RadioButton
@@ -54,27 +52,31 @@ tools:context=".service.Settings">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/english"
-            android:textSize="16sp"/>
+            android:text="English"
+            android:buttonTint="@color/blue_700"
+            android:textSize="16dp"/>
 
         <RadioButton
             android:id="@+id/radio_italian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/italian"
-            android:textSize="16sp"/>
+            android:text="Italian"
+            android:buttonTint="@color/blue_700"
+            android:textSize="16dp"/>
     </RadioGroup>
 
     <Button
         android:id="@+id/logout"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_width="250dp"
+        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="100dp"
         android:text="@string/logout"
         android:layout_gravity="center"
-        android:drawableLeft="@drawable/ic_logout"
-        android:backgroundTint="?attr/colorSecondary"
-        android:textColor="?attr/colorOnSecondary"/>
+        android:background="@color/blue_700"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:typeface="normal" />
 </LinearLayout>
 
 

@@ -22,26 +22,26 @@
 
     <RelativeLayout
         android:id="@+id/selectItemLayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/top_register_item_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp">
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/menu"
-            android:layout_width="match_parent"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:id="@+id/selectText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:hint="@string/add">
-            <AutoCompleteTextView
-                android:id="@+id/dropdown_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:text="@string/add"
+            android:textStyle="bold"
+            android:textSize="15sp" />
+        <Spinner
+            android:id="@+id/itemSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:layout_alignBottom="@id/selectText"
+            android:layout_toEndOf="@id/selectText"/>
     </RelativeLayout>
 
 

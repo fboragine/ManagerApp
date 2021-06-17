@@ -7,7 +7,7 @@
     <string name="course">Course</string>
     <string name="action_filter">Filter</string>
     <string name="action_settings">Settings</string>
-    <string name="btn_forgot_password">Forgot password?</string>
+    <string name="btn_forgot_password">Forgot your password?</string>
     <string name="password">Password</string>
     <string name="btn_already_reg">Already registered. Login Me!</string>
     <string name="surname">Surname</string>
@@ -151,4 +151,4 @@
     <string name="exam_delete_error">Some student have to do this exam so it cannot be deleted</string>
     <string name="no_exam_linked_error">There is no student linked to this exam</string>
     <string name="no_project_linked_error">There is no exam linked to some project</string>
-</resources>
+    </resources>

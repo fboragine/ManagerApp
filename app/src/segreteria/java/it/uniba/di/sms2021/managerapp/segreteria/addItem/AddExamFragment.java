@@ -1,6 +1,7 @@
 package it.uniba.di.sms2021.managerapp.segreteria.addItem;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
@@ -65,7 +65,7 @@ public class AddExamFragment extends Fragment {
                     if (task.isSuccessful()) {
                         ArrayList<CorsoDiStudio> displayCorsi = new ArrayList<>();
 
-                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
                             CorsoDiStudio newCourse = new CorsoDiStudio(document.getString("id"), document.getString("nome"), document.getString("descrizione"));
                             displayCorsi.add(newCourse);
                         }
@@ -94,6 +94,8 @@ public class AddExamFragment extends Fragment {
                         dialog.dismiss();
 
                         addCdSButton.setText(R.string.change_select_course);
+                        int color = Color.parseColor("#63A4FF");
+                        addCdSButton.setBackgroundColor(color);
 
                         selectedCourse.setVisibility(View.VISIBLE);
                     });
@@ -123,7 +125,7 @@ public class AddExamFragment extends Fragment {
                         if (task.isSuccessful()) {
                             ArrayList<Docente> displayDocenti = new ArrayList<>();
 
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
                                 Docente newTeacher = new Docente( document.getString("id"), document.getString("matricola"), document.getString("nome"), document.getString("cognome"), document.getString("email"));
                                 displayDocenti.add(newTeacher);
                             }
@@ -172,6 +174,8 @@ public class AddExamFragment extends Fragment {
                         //Chiude il dialog box e modifica il testo nel bottone
                         dialog.dismiss();
                         addTeacherButton.setText(R.string.change_select_teachers);
+                        int color = Color.parseColor("#63A4FF");
+                        addTeacherButton.setBackgroundColor(color);
                     });
 
                     // Imposta un'eventuale azione in caso di click su pulsante negativo quindi cancel

@@ -37,12 +37,12 @@
                 android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:background="?attr/colorSecondary"
+                android:background="@color/deep_orange_500"
                 android:gravity="center_vertical"
                 android:paddingStart="5dp"
                 android:paddingEnd="2dp"
                 android:text="@string/project_exam_label"
-                android:textColor="?attr/colorOnSecondary"
+                android:textColor="@color/black"
                 android:textSize="20sp"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

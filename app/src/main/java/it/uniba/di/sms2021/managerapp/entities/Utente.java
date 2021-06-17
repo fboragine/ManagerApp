@@ -1,11 +1,8 @@
 package it.uniba.di.sms2021.managerapp.entities;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
-public abstract class Utente  implements Serializable, Parcelable {
+public abstract class Utente  implements Serializable {
     private static final long serialVersionUID = 160L;
 
     private String id;
@@ -27,14 +24,6 @@ public abstract class Utente  implements Serializable, Parcelable {
     public Utente(String id, String email) {
         this.id = id;
         this.email = email;
-    }
-
-    protected Utente(Parcel in) {
-        id = in.readString();
-        matricola = in.readString();
-        nome = in.readString();
-        cognome = in.readString();
-        email = in.readString();
     }
 
     public String getMatricola() {
@@ -75,19 +64,5 @@ public abstract class Utente  implements Serializable, Parcelable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(matricola);
-        dest.writeString(nome);
-        dest.writeString(cognome);
-        dest.writeString(email);
     }
 }

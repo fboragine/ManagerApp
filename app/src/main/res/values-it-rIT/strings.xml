@@ -63,7 +63,7 @@
     <string name="file_upload">Il file è stato caricato</string>
     <string name="email_sent">Email inviata. Controlla la tua posta!</string>
     <string name="reset_password">Resetta la password</string>
-    <string name="msg_reset">Inserisci la mail di cui vuoi resettare la password</string>
+    <string name="msg_reset">Inserisci la mail se vuoi resettare la password</string>
     <string name="donwload_stop">Scaricamento in pausa!</string>
     <string name="upload_stop">Caricamento in pausa!</string>
     <string name="btn_goto_login">Torna alla pagina di accesso</string>
@@ -147,15 +147,4 @@
     <string name="label_teacher">Seleziona il docente</string>
     <string name="err_delete_tea">Prima di eliminare il docente assicurarsi che tutti gli esami correlati abbiano almeno un altro docente.</string>
     <string name="teach_miss">Nessun docente è stao assegnato</string>
-    <string name="exam_delete_error">Alcuni studenti devono completare questo esame, quindi non è possibile eliminarlo</string>
-    <string name="no_exam_linked_error">Nessun studente è collegato a questo esame</string>
-    <string name="no_project_linked_error">Nessun esame è collegato a questo progetto</string>
-    <string name="add_btn_description">Tasto di aggiunta</string>
-    <string name="delete">Elimina</string>
-    <string name="course_deleted">Corso eliminato</string>
-    <string name="exam_deleted">Esame eliminato</string>
-    <string name="projects">Progetti</string>
-    <string name="documents">Documenti</string>
-    <string name="english">Inglese</string>
-    <string name="italian">Italiano</string>
 </resources>

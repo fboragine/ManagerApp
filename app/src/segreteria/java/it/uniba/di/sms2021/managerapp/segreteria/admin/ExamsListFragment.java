@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,9 +24,10 @@ import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
-import it.uniba.di.sms2021.managerapp.segreteria.editItem.EditExamActivity;
+import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class ExamsListFragment extends Fragment {
 
@@ -50,11 +52,15 @@ public class ExamsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         viewExamsList = inflater.inflate(R.layout.fragment_exams_list, container, false);
 
+        ((HomeAdminActivity)requireActivity()).disableBackArrow();
+        esami = new ArrayList<>();
+
+        getExams();
+
         return viewExamsList;
     }
 
     private synchronized void getExams() {
-        esami = new ArrayList<>();
         db.collection("esami").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
@@ -75,9 +81,12 @@ public class ExamsListFragment extends Fragment {
                 examListView.setAdapter(adapter);
 
                 examListView.setOnItemClickListener((parent, view, position, id) -> {
-                    Intent intent = new Intent(requireActivity().getApplicationContext(), EditExamActivity.class);
-                    intent.putExtra("esame",esami.get(position));
-                    startActivity(intent);
+                    // TODO implementare la logica per il click sul docente
+//                    ExamListFragment examListFragment = new ExamListFragment(corsiDiStudio.get(i).getIdCorsoDiStudio());
+//                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+//                    fragmentTransaction.replace(R.id.fragment, examListFragment);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
                 });
             }
         });
@@ -85,6 +94,7 @@ public class ExamsListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_search);
@@ -106,15 +116,13 @@ public class ExamsListFragment extends Fragment {
                 return true;
             }
         });
-
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(requireActivity().getApplicationContext(), SettingsAdmin.class);
+            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsAdmin.class);
             startActivity(intent);
             return true;
         }
@@ -128,7 +136,7 @@ public class ExamsListFragment extends Fragment {
 
     @Override
     public void onResume() {
-        getExams();
         super.onResume();
+
     }
 }

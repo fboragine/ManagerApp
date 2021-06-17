@@ -2,7 +2,11 @@ package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,9 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,9 +27,11 @@ import java.util.Objects;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
-import it.uniba.di.sms2021.managerapp.segreteria.editItem.EditProfileActivity;
+import it.uniba.di.sms2021.managerapp.segreteria.ProfileFragmentSegreteria;
+import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.service.SettingsAdmin;
 import it.uniba.di.sms2021.managerapp.segreteria.service.UserListAdapter;
+import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class StudentsListFragment extends Fragment {
 
@@ -51,12 +55,9 @@ public class StudentsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewStudentList = inflater.inflate(R.layout.fragment_students_list, container, false);
-
-        return viewStudentList;
-    }
-
-    private synchronized void getStudents() {
+        ((HomeAdminActivity) requireActivity()).disableBackArrow();
         studenti = new ArrayList<>();
+
         db.collection("studenti").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
@@ -78,23 +79,21 @@ public class StudentsListFragment extends Fragment {
                 studentListView.setAdapter(adapter);
 
                 studentListView.setOnItemClickListener((parent, view, position, id) -> {
-                    Intent intent = new Intent(requireActivity().getApplicationContext(), EditProfileActivity.class);
-                    intent.putExtra("utente", (Parcelable) studenti.get(position));
-                    intent.putExtra("isStudent", true);
-                    startActivity(intent);
+                    ProfileFragmentSegreteria profileFragment = new ProfileFragmentSegreteria(studenti.get(position), true);
+                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment, profileFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 });
             }
         });
-    }
 
-    @Override
-    public void onResume() {
-        getStudents();
-        super.onResume();
+        return viewStudentList;
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.toolbar_menu, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_search);
@@ -116,15 +115,13 @@ public class StudentsListFragment extends Fragment {
                 return true;
             }
         });
-
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(requireActivity().getApplicationContext(), SettingsAdmin.class);
+            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsAdmin.class);
             startActivity(intent);
             return true;
         }
