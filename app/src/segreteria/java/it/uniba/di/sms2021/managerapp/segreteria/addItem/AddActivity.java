@@ -6,10 +6,9 @@ import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.CorsoDiStudio;
@@ -35,9 +35,9 @@ public class AddActivity extends AppCompatActivity {
     private AddExamFragment examFragment;
     private AddCourseFragment courseFragment;
     private AddTeacherFragment teacherFragment;
-    private Spinner spinner;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
+    private int selected = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,35 +52,32 @@ public class AddActivity extends AppCompatActivity {
 
         // Add the drop down menu
         String[] items = new String[]{getString(R.string.teacher), getString(R.string.exam), getString(R.string.course)};
-        spinner = findViewById(R.id.itemSpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Cambio del fragment
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                switch (position) {
-                    case 0:
-                        teacherFragment = new AddTeacherFragment();
-                        transaction.replace(R.id.currentFrame, teacherFragment);
-                        break;
-                    case 1:
-                        examFragment = new AddExamFragment();
-                        transaction.replace(R.id.currentFrame, examFragment);
-                        break;
-                    case 2:
-                        courseFragment = new AddCourseFragment();
-                        transaction.replace(R.id.currentFrame, courseFragment);
-                        break;
-                }
-                transaction.commit();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item_dropdown, items);
+        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.dropdown_textView);
+        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setText(items[0], false);
+        selected = 0;
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            // Cambio del fragment
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            switch (position) {
+                case 0:
+                    teacherFragment = new AddTeacherFragment();
+                    transaction.replace(R.id.currentFrame, teacherFragment);
+                    selected = 0;
+                    break;
+                case 1:
+                    examFragment = new AddExamFragment();
+                    transaction.replace(R.id.currentFrame, examFragment);
+                    selected = 1;
+                    break;
+                case 2:
+                    courseFragment = new AddCourseFragment();
+                    transaction.replace(R.id.currentFrame, courseFragment);
+                    selected = 2;
+                    break;
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            transaction.commit();
         });
 
         // Add the fragment
@@ -106,10 +103,10 @@ public class AddActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.do_registration:
-                switch (spinner.getSelectedItemPosition()) {
+                switch (selected) {
                     case 0:
                         Docente newTeacher = teacherFragment.getDocente();
-                        EditText teacherPassword = teacherFragment.getView().findViewById(R.id.teacher_password);
+                        EditText teacherPassword = teacherFragment.requireView().findViewById(R.id.teacher_password);
 
                         //Controllo che l'utente non abbia lasciato valori nulli
                         if( !newTeacher.getNome().equals("")
@@ -132,11 +129,11 @@ public class AddActivity extends AppCompatActivity {
                             mAuth.createUserWithEmailAndPassword(newTeacher.getEmail(), teacherPassword.getText().toString()).addOnCompleteListener(task -> {
                                 if(task.isSuccessful()) {
 
-                                    teacher.put("id", mAuth.getCurrentUser().getUid());
+                                    teacher.put("id", Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                                     DocumentReference documentReference = db.collection("docenti").document(mAuth.getCurrentUser().getUid());
                                     documentReference.set(teacher);
                                 }else {
-                                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
                             finish();
@@ -148,7 +145,7 @@ public class AddActivity extends AppCompatActivity {
                         Esame newExam = examFragment.getExam();
 
                         // Controllo che l'utente non abbia lasciato valori nulli
-                        if (!newExam.getcDs().equals("") && !newExam.getDescrizione().equals("") && !newExam.getNome().equals("") && newExam.getIdDocenti() != null) {
+                        if (!newExam.getcDs().equals("") && !newExam.getDescrizione().equals("") && !newExam.getNome().equals("")) {
                             //Creazione dell'hash map per inserire l'esame nel DB
                             Map<String ,Object> exam = new HashMap<>();
 

@@ -1,14 +1,7 @@
 package it.uniba.di.sms2021.managerapp.guest;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.Menu;
@@ -18,6 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -99,7 +98,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 myCallback.onCallback(displayCds);
             } else {
-                Toast.makeText(getApplicationContext(),getString(R.string.error_get_doc) + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getString(R.string.error_get_doc) + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -125,8 +124,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             // Chiude il dialog box e modifica il testo nel bottone
             dialog.dismiss();
             addCourse.setText(R.string.change_select_course);
-            int color = Color.parseColor("#63A4FF");
-            addCourse.setBackgroundColor(color);
 
             selectedCds.setVisibility(View.VISIBLE);
 
@@ -184,7 +181,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             //crea l'autentication e inserisce l'utente nel firebase
             mAuth.createUserWithEmailAndPassword(email.getText().toString(), pw.getText().toString()).addOnCompleteListener(task -> {
                 if(task.isSuccessful()) {
-                    user.put("id", mAuth.getCurrentUser().getUid());
+                    user.put("id", Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                     DocumentReference documentReference = collectionReference.document(mAuth.getCurrentUser().getUid());
                     documentReference.set(user);
 
@@ -194,7 +191,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                     // entrare nella activity da loggato
                     finish();
                 }else {
-                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }else {
@@ -205,13 +202,13 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     private void insertData() {
         db.collection("esami").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
+                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                     if (cds.equals(document.getString("cDs"))) {
 
                         Map<String, Object> link = new HashMap<>();
                         link.put("id", "");
                         link.put("idEsame", document.get("id"));
-                        link.put("idStudente", mAuth.getCurrentUser().getUid());
+                        link.put("idStudente", Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                         link.put("stato", false);
 
                         db.collection("esamiStudente").add(link).addOnSuccessListener(documentReference -> documentReference.update("id", documentReference.getId()));

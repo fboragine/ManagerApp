@@ -152,4 +152,12 @@
     <string name="perm_need_title">Permesso necessario</string>
     <string name="not_valid_chosen">File scelto non valido</string>
     <string name="perm_need_storage_msg">Il permesso è necessario per accedere ai file del dispositivo, si prega di fornire il consenso per tale permesso</string>
+    <string name="add_btn_description">Tasto di aggiunta</string>
+    <string name="delete">Elimina</string>
+    <string name="course_deleted">Corso eliminato</string>
+    <string name="exam_deleted">Esame eliminato</string>
+    <string name="projects">Progetti</string>
+    <string name="documents">Documenti</string>
+    <string name="english">Inglese</string>
+    <string name="italian">Italiano</string>
 </resources>
