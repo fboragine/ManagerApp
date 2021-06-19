@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -127,7 +128,6 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
 
     private void createExplorerFile() {
         btnUploadFile.setOnClickListener(v -> checkPermissionFuntion(Manifest.permission.READ_EXTERNAL_STORAGE, READ_ID));
-        btnUploadFile.setOnClickListener(v -> uploadFile(fileUri));
 
         btnAdd.setOnClickListener(v -> onAddButtonClicked());
         btnAddFile.setOnClickListener(v -> showChoosingFile());
@@ -261,16 +261,16 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         progressDialog.show();
 
         islandRef.delete()
-                 .addOnSuccessListener(aVoid -> {
-                     progressDialog.dismiss();
-                     Toast.makeText(getApplicationContext(), getString(R.string.delete_succ) + ": " + nomeFile, Toast.LENGTH_LONG).show();
-                     finish();
-                     startActivity(getIntent());
-                 })
-                 .addOnFailureListener(exception -> {
-                     progressDialog.dismiss();
-                     Toast.makeText(getApplicationContext(), getString(R.string.delete_error) + ": " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                 });
+                .addOnSuccessListener(aVoid -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), getString(R.string.delete_succ) + ": " + nomeFile, Toast.LENGTH_LONG).show();
+                    finish();
+                    startActivity(getIntent());
+                })
+                .addOnFailureListener(exception -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), getString(R.string.delete_error) + ": " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 
     private synchronized void shareOnWhatsapp() {

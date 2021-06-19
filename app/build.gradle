@@ -9,9 +9,9 @@ android {
     signingConfigs {
         SegreteriaSigningConfig {
             storePassword 'pippo123'
-            keyAlias 'key0'
+            keyAlias 'ManagerAppKey'
             keyPassword 'pippo123'
-            storeFile file('C:\\Users\\nicoc\\MyKeyStore\\ManagerAppKeystroke.jks')
+            storeFile file('C:\\Users\\fishe\\mykeystore\\ManagerAppKey.jks')
         }
     }
     compileSdkVersion 30
