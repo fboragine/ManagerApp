@@ -156,4 +156,6 @@
     <string name="documents">Documents</string>
     <string name="english">English</string>
     <string name="italian">Italian</string>
+    <string name="no_selection_file_del">No file selected! Please select one or more file to delete</string>
+    <string name="whatsapp">Share on Whatsapp</string>
 </resources>
