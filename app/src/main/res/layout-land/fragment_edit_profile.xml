@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="60dp"
+        android:layout_height="match_parent"
+        tools:context=".loggedUser.EditProfileFragment">
+
+        <ScrollView
+            android:id="@+id/ScrollViewID"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RelativeLayout
+                    android:id="@+id/presentation"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/blue_200"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:id="@+id/ic_action_name"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:contentDescription="@string/profile_image"
+                        android:src="@drawable/ic_action_name" />
+
+                    <Button
+                        android:id="@+id/edit_img_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ic_action_name"
+                        android:backgroundTint="?attr/colorSecondary"
+                        android:text="@string/edit_image"
+                        android:textColor="?attr/colorOnSecondary" />
+
+                    <EditText
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@+id/ic_action_name"
+                        android:autofillHints="Name"
+                        android:fontFamily="@font/bungee"
+                        android:hint="Mario"
+                        android:includeFontPadding="false"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/surname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@+id/name"
+                        android:autofillHints="Surname"
+                        android:fontFamily="@font/bungee"
+                        android:hint="Rossi"
+                        android:includeFontPadding="false"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/serial_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_below="@+id/name"
+                        android:layout_toEndOf="@+id/ic_action_name"
+                        android:fontFamily="@font/bungee"
+                        android:autofillHints="Serial Number"
+                        android:hint="@string/serial_number"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/white"
+                        android:inputType="number"
+                        android:textSize="15sp" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:paddingStart="55dp"
+                    android:paddingEnd="55dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/email"
+                        android:src="@drawable/ic_baseline_email_24" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        app:boxBackgroundColor="?attr/colorOnPrimary"
+                        android:hint="@string/e_mail">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/email_txt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:paddingStart="55dp"
+                    android:paddingEnd="55dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/password"
+                        android:src="@drawable/ic_baseline_vpn_key_24" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        app:boxBackgroundColor="?attr/colorOnPrimary"
+                        android:hint="@string/password"
+                        app:errorEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/pw_txt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp">
+
+                    <TextView
+                        android:id="@+id/advertise"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/imgProfile_msg"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="15sp"
+                        android:textColor="#FF0000"
+                        android:elegantTextHeight="true"
+                        android:typeface="normal"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

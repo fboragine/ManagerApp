@@ -11,7 +11,7 @@ android {
             storePassword 'pippo123'
             keyAlias 'ManagerAppKey'
             keyPassword 'pippo123'
-            storeFile file('C:\\Users\\fishe\\mykeystore\\ManagerAppKey.jks')
+            storeFile file('C:\\Users\\leomr\\mykeystore\\ManagerAppKey.jks')
         }
     }
     compileSdkVersion 30

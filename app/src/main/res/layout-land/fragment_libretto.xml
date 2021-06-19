@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="60dp"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".loggedUser.LibrettoFragment"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/loginType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/passed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/esami_passati"/>
+
+        <RadioButton
+            android:id="@+id/not_passed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/esami_da_svolgere"/>
+    </RadioGroup>
+
+    <ListView
+        android:id="@+id/listLibretto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
