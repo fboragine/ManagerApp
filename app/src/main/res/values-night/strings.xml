@@ -53,7 +53,7 @@
     <string name="download_bt_doc">Download</string>
     <string name="download_succ">File downloaded successfully</string>
     <string name="download_error">Download failed</string>
-    <string name="no_selection_file">No file selected! Please select one or more file to download</string>
+    <string name="no_selection_file">No file selected! Please select one or more file</string>
     <string name="no_selection_file_del">No file selected! Please select one or more file to delete</string>
     <string name="download_select">Download selected file in progress</string>
     <string name="add_file">Add new file</string>
@@ -111,7 +111,6 @@
     <string name="select">Select</string>
     <string name="share_file">Share file on whatsapp</string>
     <string name="file_upload_lab_btn">Upload</string>
-    <string name="nofile_to_share">Select a file</string>
     <string name="delete_bt_doc">Delete</string>
     <string name="delete_select">" Delete in progress"</string>
     <string name="delete_succ">File deleted successfully</string>
