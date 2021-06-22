@@ -1,13 +1,17 @@
 package it.uniba.di.sms2021.managerapp.segreteria.addItem;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,7 +25,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -44,47 +54,15 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
+        File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
+
+        traduci(file.exists());
+
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
         Toolbar toolbar = findViewById(R.id.top_register_item_toolbar);
         setSupportActionBar(toolbar);
-
-        // Add the drop down menu
-        String[] items = new String[]{getString(R.string.teacher), getString(R.string.exam), getString(R.string.course)};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item_dropdown, items);
-        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.dropdown_textView);
-        autoCompleteTextView.setAdapter(adapter);
-        autoCompleteTextView.setText(items[0], false);
-        selected = 0;
-        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
-            // Cambio del fragment
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            switch (position) {
-                case 0:
-                    teacherFragment = new AddTeacherFragment();
-                    transaction.replace(R.id.currentFrame, teacherFragment);
-                    selected = 0;
-                    break;
-                case 1:
-                    examFragment = new AddExamFragment();
-                    transaction.replace(R.id.currentFrame, examFragment);
-                    selected = 1;
-                    break;
-                case 2:
-                    courseFragment = new AddCourseFragment();
-                    transaction.replace(R.id.currentFrame, courseFragment);
-                    selected = 2;
-                    break;
-            }
-            transaction.commit();
-        });
-
-        // Add the fragment
-        teacherFragment = new AddTeacherFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.currentFrame, teacherFragment);
-        transaction.commit();
     }
 
     @Nullable
@@ -190,5 +168,80 @@ public class AddActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        String[] items = new String[]{getString(R.string.teacher), getString(R.string.exam), getString(R.string.course)};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item_dropdown, items);
+        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.dropdown_textView);
+        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setText(items[0], false);
+        selected = 0;
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            // Cambio del fragment
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            switch (position) {
+                case 0:
+                    teacherFragment = new AddTeacherFragment();
+                    transaction.replace(R.id.currentFrame, teacherFragment);
+                    selected = 0;
+                    break;
+                case 1:
+                    examFragment = new AddExamFragment();
+                    transaction.replace(R.id.currentFrame, examFragment);
+                    selected = 1;
+                    break;
+                case 2:
+                    courseFragment = new AddCourseFragment();
+                    transaction.replace(R.id.currentFrame, courseFragment);
+                    selected = 2;
+                    break;
+            }
+            transaction.commit();
+        });
+
+        // Add the fragment
+        teacherFragment = new AddTeacherFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.currentFrame, teacherFragment);
+        transaction.commit();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    public void traduci(Boolean flag) {
+
+        Locale locale;
+        if (!flag) {
+            File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
+            locale = Locale.ENGLISH;
+            file.delete();
+            saveFile("EN");
+        } else {
+            File file = new File(getApplicationContext().getExternalFilesDir(null), "EN");
+            locale = Locale.ITALIAN;
+            file.delete();
+            saveFile("IT");
+        }
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    public void saveFile(String FILE_NAME) {
+        ObjectOutput out;
+
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(new File(getBaseContext().getExternalFilesDir(null), FILE_NAME)));
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

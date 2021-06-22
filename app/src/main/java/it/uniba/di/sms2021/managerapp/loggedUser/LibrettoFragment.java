@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +48,7 @@ public class LibrettoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        esami = new ArrayList<Esame>();
 
         db = FirebaseFirestore.getInstance();
 
@@ -55,8 +57,9 @@ public class LibrettoFragment extends Fragment {
             cds = StudentActivity.loggedStudent.getcDs();
             uidStudente = StudentActivity.loggedStudent.getId();
             uidDocente = "";
-
-            riempiArray();
+            if (!esami.isEmpty()) {
+                riempiArray();
+            }
         }else {
             loginFile = new File(getActivity().getApplicationContext().getExternalFilesDir(null), "docenti.srl");
             if (loginFile.exists()) {

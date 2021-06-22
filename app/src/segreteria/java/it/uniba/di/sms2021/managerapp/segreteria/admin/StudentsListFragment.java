@@ -55,8 +55,7 @@ public class StudentsListFragment extends Fragment {
         return viewStudentList;
     }
 
-    private synchronized void getStudents() {
-        studenti = new ArrayList<>();
+    private synchronized void getStudents(ArrayList<Utente> studenti) {
         db.collection("studenti").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
@@ -89,7 +88,8 @@ public class StudentsListFragment extends Fragment {
 
     @Override
     public void onResume() {
-        getStudents();
+        studenti = new ArrayList<>();
+        getStudents(studenti);
         super.onResume();
     }
 

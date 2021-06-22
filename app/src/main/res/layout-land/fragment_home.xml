@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_home"
     android:layout_width="match_parent"
@@ -8,16 +9,12 @@
     android:layout_marginBottom="?attr/actionBarSize"
     android:orientation="vertical"
     tools:context=".loggedUser.HomeFragment">
-
     <ScrollView
-        android:id="@+id/scroll_home"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
             <RelativeLayout
                 android:id="@+id/inProgressContainer"
                 android:layout_width="match_parent"
@@ -45,8 +42,8 @@
                 android:id="@+id/closedContainer"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
-                android:layout_below="@id/inProgressContainer"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/inProgressContainer">
 
                 <TextView
                     android:id="@+id/closedTextView"
@@ -65,25 +62,31 @@
                     android:layout_below="@id/closedTextView"
                     android:layout_centerHorizontal="true" />
             </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/layout_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/closedContainer"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/closedContainer">
 
-                <Button
-                    android:id="@+id/add_project_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_new_project"
-                    android:layout_centerInParent="true"
-                    android:backgroundTint="?attr/colorSecondary"
-                    android:textColor="?attr/colorOnSecondary"/>
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/add_project_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="10dp"
+                        app:backgroundTint="@color/deep_orange_500"
+                        android:elevation="8dp"
+                        android:src="@drawable/ic_add_24"/>
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
-</RelativeLayout>
+
+
+</LinearLayout>

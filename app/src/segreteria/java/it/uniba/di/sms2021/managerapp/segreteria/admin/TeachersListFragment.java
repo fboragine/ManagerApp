@@ -54,41 +54,36 @@ public class TeachersListFragment extends Fragment {
         return viewTeachersList;
     }
 
-    private synchronized void getTeachers() {
-        docenti = new ArrayList<>();
-        db.collection("docenti").get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                    Docente docente = new Docente(document.getString("id"),
-                            document.getString("matricola"),
-                            document.getString("nome"),
-                            document.getString("cognome"),
-                            document.getString("email"));
-                    docenti.add(docente);
+    private synchronized void getTeachers(ArrayList<Utente> docenti) {
+        if(docenti.isEmpty()) {
+            db.collection("docenti").get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                        Docente docente = new Docente(document.getString("id"),
+                                document.getString("matricola"),
+                                document.getString("nome"),
+                                document.getString("cognome"),
+                                document.getString("email"));
+                        docenti.add(docente);
+                    }
+
+                    teacherListView = viewTeachersList.findViewById(R.id.teacherListView);
+
+                    //pass results to listViewAdapter class
+                    adapter = new UserListAdapter(requireActivity().getApplicationContext(), docenti);
+
+                    //bind the adapter to the listView
+                    teacherListView.setAdapter(adapter);
+
+                    teacherListView.setOnItemClickListener((parent, view, position, id) -> {
+                        Intent intent = new Intent(requireActivity().getApplicationContext(), EditProfileActivity.class);
+                        intent.putExtra("utente", (Parcelable) docenti.get(position));
+                        intent.putExtra("isStudent", false);
+                        startActivity(intent);
+                    });
                 }
-
-                teacherListView = viewTeachersList.findViewById(R.id.teacherListView);
-
-                //pass results to listViewAdapter class
-                adapter = new UserListAdapter(requireActivity().getApplicationContext(), docenti);
-
-                //bind the adapter to the listView
-                teacherListView.setAdapter(adapter);
-
-                teacherListView.setOnItemClickListener((parent, view, position, id) -> {
-                    Intent intent = new Intent(requireActivity().getApplicationContext(), EditProfileActivity.class);
-                    intent.putExtra("utente", (Parcelable) docenti.get(position));
-                    intent.putExtra("isStudent", false);
-                    startActivity(intent);
-                });
-            }
-        });
-    }
-
-    @Override
-    public void onResume() {
-        getTeachers();
-        super.onResume();
+            });
+        }
     }
 
     @Override
@@ -133,5 +128,12 @@ public class TeachersListFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onResume() {
+        docenti = new ArrayList<>();
+        getTeachers(docenti);
+        super.onResume();
     }
 }

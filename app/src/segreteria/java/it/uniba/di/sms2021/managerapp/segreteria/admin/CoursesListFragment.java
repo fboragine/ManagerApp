@@ -53,10 +53,9 @@ public class CoursesListFragment extends Fragment {
         return viewCoursesList;
     }
 
-    private synchronized void getCourses() {
+    private synchronized void getCourses(ArrayList<CorsoDiStudio> corsi) {
         db.collection("corsiDiStudio").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                corsi = new ArrayList<>();
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                     CorsoDiStudio corsoDiStudio = new CorsoDiStudio(document.getString("id"),
                             document.getString("nome"),
@@ -89,7 +88,8 @@ public class CoursesListFragment extends Fragment {
 
     @Override
     public void onResume() {
-        getCourses();
+        corsi = new ArrayList<CorsoDiStudio>();
+        getCourses(corsi);
         super.onResume();
     }
 
