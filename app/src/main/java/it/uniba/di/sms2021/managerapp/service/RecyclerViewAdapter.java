@@ -52,9 +52,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         getEsame(project.get(i).getCodiceEsame(), viewHolder);
         viewHolder.setClickListener((view, position, isLongClick) -> {
             if (isLongClick) {
-                Toast.makeText(context, "#" + position + " - " + project.get(position) + " (Long click)", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.project)+" : "+ project.get(position).getNome(), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(context, "#" + position + " - " + project.get(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.project)+" : "+ project.get(position).getNome(), Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(context, ProjectActivity.class);
                 intent.putExtra("progetto",project.get(position));

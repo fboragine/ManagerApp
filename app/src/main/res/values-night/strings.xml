@@ -155,4 +155,5 @@
     <string name="not_valid_chosen">File chosen not valid!</string>
     <string name="whatsapp">Share on Whatsapp</string>
     <string name="transition">transition</string>
+    <string name="project">Project</string>
 </resources>

@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -181,15 +182,11 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                                             if (deleteFileImg.exists()) {
                                                 getActivity().getApplicationContext().deleteFile(deleteFileImg.getName());
                                             }
-                                        }else {
-                                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
                                         }
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
                                 }
-                            } else {
-                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -248,6 +245,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         if (requestCode == CHOOSING_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             this.fileUri = data.getData();
+            if(!this.fileUri.toString().equals("")){
+                changedImgProfile = true;
+            }
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), fileUri);
                 profileImg.setImageURI(this.fileUri);
@@ -386,8 +386,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
                 DocumentReference docUpdate = db.collection("studenti").document(StudentActivity.loggedUser.getId());
                 modifyFirebase(docUpdate, userModify);
-            }else {
-                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
             }
 
         }else if(StudentActivity.loginFile.getName().matches("docenti.srl")) {
@@ -404,8 +402,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
                 DocumentReference docUpdate = db.collection("docenti").document(mAuth.getCurrentUser().getUid());
                 modifyFirebase(docUpdate, userModify);
-            }else {
-                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.not_delete), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -448,7 +444,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.edit_img_btn){
-            changedImgProfile = true;
             showChoosingFile();
         }
     }

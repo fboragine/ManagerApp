@@ -82,9 +82,7 @@ public class StudentActivity extends AppCompatActivity {
     private void createUserMediaDir() {
         String path = getExternalFilesDir(null).getPath() + "/user media/";
         File f1 = new File(path);
-        if(f1.mkdir()) {
-            Toast.makeText(getApplicationContext(), getString(R.string.dir_create), Toast.LENGTH_SHORT).show();
-        }
+        f1.mkdir();
     }
 
     protected void readFile(String filename){

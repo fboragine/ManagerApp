@@ -112,10 +112,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
 
         String path = getExternalFilesDir(null).getPath() + "/projects files/";
         File f1 = new File(path);
-        if(f1.mkdir()) {
-            Toast.makeText(getApplicationContext(), getString(R.string.dir_create), Toast.LENGTH_SHORT).show();
-        }
-
+        f1.mkdir();
 
         btnUploadFile = findViewById(R.id.button_add_file);
         btnAdd = findViewById(R.id.add_btn);
@@ -309,9 +306,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private void createProjectDir() {
         String path = getExternalFilesDir(null).getPath() + "/projects files/" + progetto.getNome();
         File f1 = new File(path);
-        if(f1.mkdir()) {
-            Toast.makeText(getApplicationContext(), getString(R.string.dir_create), Toast.LENGTH_SHORT).show();
-        }
+        f1.mkdir();
     }
 
     public void downloadFile(String nomeFile, String percorso, boolean flag) {
