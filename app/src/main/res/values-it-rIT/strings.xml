@@ -71,7 +71,7 @@
     <string name="teachers">Professori</string>
     <string name="teacher">Professore</string>
     <string name="add_new_project">Aggiungi un nuovo progetto</string>
-    <string name="closed_projects">Progetti finiti.</string>
+    <string name="closed_projects">Progetti finiti</string>
     <string name="in_progress_projects">Progetti in corso</string>
     <string name="error_email_sent">Il campo email non può essere vuoto!</string>
     <string name="informatica">Informatica</string>

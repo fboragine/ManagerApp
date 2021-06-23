@@ -74,7 +74,7 @@
     <string name="courses">Courses</string>
     <string name="teacher">Teacher</string>
     <string name="add_new_project">Add new project</string>
-    <string name="closed_projects">Closed Projects</string>
+    <string name="closed_projects">Closed projects</string>
     <string name="in_progress_projects">In Progress Projects</string>
     <string name="name_project">Name project</string>
     <string name="description_project">Project description</string>
