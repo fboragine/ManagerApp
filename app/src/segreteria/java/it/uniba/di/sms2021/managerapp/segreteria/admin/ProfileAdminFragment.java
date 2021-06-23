@@ -80,38 +80,5 @@ public class ProfileAdminFragment extends Fragment {
                 return true;
             });
         }
-
-        // Add Logout Menu Item
-        int logoutId = HomeAdminActivity.LOGOUT_ITEM_ID;
-        if (menu.findItem(logoutId) == null) {
-            // If it not exists then add the menu item to menu
-            MenuItem logout = menu.add(
-                    Menu.NONE,
-                    logoutId,
-                    2,
-                    getString(R.string.logout)
-            );
-
-            // Set an icon for the new menu item
-            logout.setIcon(R.drawable.ic_logout);
-
-            // Set the show as action flags for new menu item
-            logout.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            // Set a click listener for the new menu item
-            logout.setOnMenuItemClickListener(item -> {
-               logout();
-                return true;
-            });
-        }
-    }
-
-    public void logout(){
-        FirebaseAuth.getInstance().signOut();
-        HomeAdminActivity.getLoginFile().delete();
-        Toast.makeText(getContext(),R.string.logout, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(requireActivity().getApplicationContext(), LoginAdminActivity.class);
-        startActivity(intent);
-        requireActivity().finish();
     }
 }

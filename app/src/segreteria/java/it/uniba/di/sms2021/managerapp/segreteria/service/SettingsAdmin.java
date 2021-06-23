@@ -29,6 +29,7 @@ import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
 import it.uniba.di.sms2021.managerapp.entities.Utente;
 import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
+import it.uniba.di.sms2021.managerapp.segreteria.admin.HomeAdminActivity;
 import it.uniba.di.sms2021.managerapp.segreteria.admin.LoginAdminActivity;
 
 public class SettingsAdmin extends AppCompatActivity {
@@ -56,7 +57,12 @@ public class SettingsAdmin extends AppCompatActivity {
         linguaIta.setOnCheckedChangeListener((buttonView, isChecked) -> traduci(linguaIta.isChecked()));
 
         Button logout = findViewById(R.id.logout);
-        logout.setVisibility(View.GONE);
+        logout.setOnClickListener(v -> {
+            logout();
+            Intent intent = new Intent(getApplicationContext(), GuestActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         loginFile = new File(getApplicationContext().getExternalFilesDir(null), "segreteria.srl");
     }
@@ -102,5 +108,14 @@ public class SettingsAdmin extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void logout(){
+        FirebaseAuth.getInstance().signOut();
+        HomeAdminActivity.getLoginFile().delete();
+        Toast.makeText(getApplicationContext(),R.string.logout, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), LoginAdminActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
