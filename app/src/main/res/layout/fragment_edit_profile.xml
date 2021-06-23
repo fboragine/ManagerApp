@@ -35,7 +35,6 @@
                         android:id="@+id/ic_action_name"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_centerVertical="true"
                         android:contentDescription="@string/profile_image"
                         android:src="@drawable/ic_action_name" />
 
@@ -44,7 +43,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginTop="135dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@id/ic_action_name"
                         android:background="@color/blue_500"
                         android:text="@string/edit_image"
                         android:textColor="@color/white" />
@@ -115,7 +115,9 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/e_mail">
+                        android:hint="@string/e_mail"
+                        android:layout_marginStart="10dp"
+                        app:boxBackgroundColor="?attr/colorOnPrimary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/email_txt"
