@@ -136,6 +136,7 @@ public class EditCourseActivity extends AppCompatActivity {
                     for (StorageReference item : listResult.getItems()) {
                         item.delete();
                     }
+                    Toast.makeText(getApplicationContext(), R.string.course_deleted, Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "File project: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
@@ -216,7 +217,6 @@ public class EditCourseActivity extends AppCompatActivity {
             // Set a click listener for the new menu item
             delete.setOnMenuItemClickListener(item -> {
                 deleteCds();
-                Toast.makeText(getApplicationContext(), R.string.course_deleted, Toast.LENGTH_SHORT).show();
                 finish();
                 return true;
             });

@@ -145,7 +145,6 @@
                     android:layout_gravity="center_vertical"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
-                    android:text="@string/informatica"
                     android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>

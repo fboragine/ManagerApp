@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import java.util.Objects;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Progetto;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.loggedUser.StudentActivity;
 import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener{
@@ -126,7 +128,8 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                             if (Integer.parseInt(textField.getText().toString()) >= 18) {
                                 isPromosso = true;
                             }
-                            db.collection("esamiStudente").document(document.getId()).update("stato", isPromosso)
+                            Log.d(null, "BOOLEAN PROMOSSO --> CHIUSURA PROGETTO: "+!isPromosso);
+                            db.collection("progetti").document(progetto.getId()).update("stato", !isPromosso)
                                          .addOnSuccessListener(aVoid -> db.collection("esamiStudente").document(document.getId()).update("commento", textField.getText().toString())
                                                                                 .addOnSuccessListener(aVoid1 -> dialog.dismiss()));
                         }
@@ -166,6 +169,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                                                                                                           Toast.makeText(getApplicationContext(), R.string.succesful_rate, Toast.LENGTH_LONG).show();
                                                                                                           progetto.setValutato(true);
                                                                                                           dialog.dismiss();
+                                                                                                          refreshActivity();
                                                                                                       }));
                                                                                   }
                                                                               }))
@@ -179,6 +183,12 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                                                                               })
                 )
                 .show();
+    }
+
+    private void refreshActivity() {
+        Intent intent = new Intent(getApplicationContext(), StudentActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void getDisplayName() {

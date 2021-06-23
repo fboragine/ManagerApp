@@ -42,6 +42,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView profileImg;
     private Utente utente;
     private Boolean isStudent;
+    private TextView label;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class EditProfileActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
         toolbar.setNavigationOnClickListener(view -> finish());
 
-        TextView label = findViewById(R.id.name);
+        label = findViewById(R.id.name);
         label.setText(utente.getNome());
 
         label = findViewById(R.id.surname);
@@ -77,6 +78,16 @@ public class EditProfileActivity extends AppCompatActivity {
 
         profileImg = findViewById(R.id.ic_action_name);
         viewImgProfile();
+
+        label = findViewById(R.id.profile_course);
+        if(isStudent) {
+            db.collection("studenti").document(utente.getId()).get().addOnSuccessListener(documentSnapshot -> {
+                db.collection("corsiDiStudio").document(Objects.requireNonNull(documentSnapshot.getString("cDs"))).get().addOnSuccessListener(documentSnapshotCds -> {
+                    label.setText(Objects.requireNonNull(Objects.requireNonNull(documentSnapshotCds.getData()).get("nome")).toString());
+                });
+            });
+        }
+
     }
 
     @Override
