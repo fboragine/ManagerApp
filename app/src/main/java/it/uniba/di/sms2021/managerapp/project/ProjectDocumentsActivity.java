@@ -23,7 +23,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -84,6 +83,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     //track Choosing Image Intent
     private static final int CHOOSING_IMAGE_REQUEST = 1234;
     private Uri fileUri;
+    private ArrayList<Uri> fileShareUri;
     private Bitmap bitmap;
     private ProgressDialog progressDialog;
 
@@ -108,6 +108,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         files = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
+        fileShareUri = new ArrayList<>();
 
         String path = getExternalFilesDir(null).getPath() + "/projects files/";
         File f1 = new File(path);
@@ -196,7 +197,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                 case WRITE_ID: {
                     for(int i = 0; i< adapter.selectedItem.size(); i++) {
                         downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
-                                adapter.getItem(adapter.selectedItem.get(i)).getPercorso());
+                                adapter.getItem(adapter.selectedItem.get(i)).getPercorso(),false);
                     }
                 }
                 break;
@@ -274,13 +275,18 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     }
 
     private synchronized void shareOnWhatsapp() {
-        if(fileUri != null) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("application/vnd.android.package-archive");
-            intent.putExtra(Intent.EXTRA_STREAM, fileUri);
-            startActivity(Intent.createChooser(intent, "Share file via"));
+        if(adapter.selectedItem.size() != 0) {
+            for(int i = 0; i< adapter.selectedItem.size(); i++) {
+                downloadFile(adapter.getItem(adapter.selectedItem.get(i)).getNome(),
+                        adapter.getItem(adapter.selectedItem.get(i)).getPercorso(),true);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("application/vnd.android.package-archive");
+                intent.putExtra(Intent.EXTRA_STREAM, fileShareUri.get(i));
+                startActivity(Intent.createChooser(intent, "Share file via"));
+            }
+
         }else {
-            Toast.makeText(getApplicationContext(), getString(R.string.nofile_to_share), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.no_selection_file), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -308,7 +314,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         }
     }
 
-    public void downloadFile(String nomeFile, String percorso) {
+    public void downloadFile(String nomeFile, String percorso, boolean flag) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference islandRef = storageRef.child(percorso);
@@ -317,12 +323,18 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
 
         createProjectDir();
 
+        if(flag) {
+            fileShareUri.add(Uri.parse(new File(localFile.getPath()).toString()));
+        }
+
         progressDialog.setTitle(getString(R.string.download_select));
         progressDialog.show();
 
         islandRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+            if(!flag) {
+                Toast.makeText(getApplicationContext(), getString(R.string.download_succ) + ": " + nomeFile, Toast.LENGTH_LONG).show();
+            }
             progressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), getString(R.string.download_succ) + ": " + nomeFile, Toast.LENGTH_LONG).show();
         }).addOnProgressListener(taskSnapshot -> {
             // progress percentage
             double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
@@ -333,40 +345,36 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     }
 
     public void uploadFile(@NonNull Uri fileUrl) {
-        if (fileUrl != null) {
-            String fileName = fileUrl.getPath().substring(fileUrl.getPath().lastIndexOf("/")+1, fileUrl.getPath().lastIndexOf("."));
+        String fileName = fileUrl.getPath().substring(fileUrl.getPath().lastIndexOf("/")+1, fileUrl.getPath().lastIndexOf("."));
 
-            if (!validateInputFileName(fileName)) {
-                return;
-            }
-            progressDialog.setTitle(getString(R.string.upload_label));
-            progressDialog.show();
-
-            StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("progetti/" + progetto.getId());
-            StorageReference fileRef = fileReference.child(fileName + "." + getFileExtension(fileUrl));
-
-            fileRef.putFile(fileUrl)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        progressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), getString(R.string.file_upload), Toast.LENGTH_LONG).show();
-                        finish();
-                        startActivity(getIntent());
-                    })
-                    .addOnFailureListener(exception -> {
-                        progressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-                    })
-                    .addOnProgressListener(taskSnapshot -> {
-                        // progress percentage
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-
-                        // percentage in progress dialog
-                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
-                    })
-                    .addOnPausedListener(taskSnapshot -> Toast.makeText(getApplicationContext(), getString(R.string.upload_stop), Toast.LENGTH_LONG).show());
-        } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.no_file_upload), Toast.LENGTH_LONG).show();
+        if (!validateInputFileName(fileName)) {
+            return;
         }
+        progressDialog.setTitle(getString(R.string.upload_label));
+        progressDialog.show();
+
+        StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("progetti/" + progetto.getId());
+        StorageReference fileRef = fileReference.child(fileName + "." + getFileExtension(fileUrl));
+
+        fileRef.putFile(fileUrl)
+                .addOnSuccessListener(taskSnapshot -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), getString(R.string.file_upload), Toast.LENGTH_LONG).show();
+                    finish();
+                    startActivity(getIntent());
+                })
+                .addOnFailureListener(exception -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                })
+                .addOnProgressListener(taskSnapshot -> {
+                    // progress percentage
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                    // percentage in progress dialog
+                    progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                })
+                .addOnPausedListener(taskSnapshot -> Toast.makeText(getApplicationContext(), getString(R.string.upload_stop), Toast.LENGTH_LONG).show());
     }
 
     private boolean validateInputFileName(String fileName) {
