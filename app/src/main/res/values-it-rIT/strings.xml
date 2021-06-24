@@ -7,14 +7,14 @@
     <string name="course">Corso</string>
     <string name="action_filter">Filtro</string>
     <string name="action_settings">Impostazioni</string>
-    <string name="btn_forgot_password">Password dimenticata?</string>
+    <string name="btn_forgot_password">PASSWORD DIMENTICATA?</string>
     <string name="password">Password</string>
     <string name="btn_already_reg">Già registrato. Accedi!</string>
     <string name="surname">Cognome</string>
     <string name="e_mail">E-mail</string>
     <string name="name">Nome</string>
     <string name="btn_goto_register">Non hai ancora un account? Registrati ora.</string>
-    <string name="login">Accedi</string>
+    <string name="login">ACCEDI</string>
     <string name="save">Salva</string>
     <string name="home">Home</string>
     <string name="exams">Esami</string>
