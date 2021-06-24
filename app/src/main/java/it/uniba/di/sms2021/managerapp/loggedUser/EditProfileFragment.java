@@ -1,22 +1,26 @@
 package it.uniba.di.sms2021.managerapp.loggedUser;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +39,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -66,6 +72,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private final String defaultImgProfile = "imgProfile.png";
     private static final int CHOOSING_IMAGE_REQUEST = 1234;
     boolean changedImgProfile = false;
+
+    private static final int CHANGE_IMAGE_ID = 689;
 
     private Uri fileUri;
     private Bitmap bitmap;
@@ -118,6 +126,14 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         File localFile = new File(getActivity().getExternalFilesDir(null) + "/user media", defaultImgProfile);
         if(localFile.exists()) {
             profileImg.setImageURI(Uri.parse(localFile.getPath()));
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.edit_img_btn){
+            //showChoosingFile();
+            checkPermissionFuntion(Manifest.permission.READ_EXTERNAL_STORAGE, CHANGE_IMAGE_ID);
         }
     }
 
@@ -226,6 +242,59 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         }
 
         super.onPrepareOptionsMenu(menu);
+    }
+
+    // This function is called when user accept or decline the permission.
+// Request Code is used to check which permission called this function.
+// This request code is provided when user is prompt for permission.
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String @NotNull [] permissions, int @NotNull [] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (requestCode == CHANGE_IMAGE_ID) {
+                showChoosingFile();
+            }
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.allow_perm_msg), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void requestStoragePermissionDialog(String permission, int permission_id)
+    {
+        if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission))
+        {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.perm_need_title)
+                    .setMessage(R.string.perm_need_storage_msg)
+                    .setPositiveButton("OK", (dialog, which) -> requestPermissionFunction(permission, permission_id))
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss()).create().show();
+        }
+        else
+        {
+            ActivityCompat.requestPermissions(getActivity(),new String[]{permission},permission_id);
+        }
+    }
+
+    private void requestPermissionFunction(String permission, int permission_id) {
+        ActivityCompat.requestPermissions(getActivity(),new String[]{permission},permission_id);
+    }
+
+    private void checkPermissionFuntion(String permission, int permission_id) {
+        if (ContextCompat.checkSelfPermission(
+                getActivity().getApplicationContext(), permission) == PackageManager.PERMISSION_DENIED) {
+            requestStoragePermissionDialog(permission, permission_id);
+        }else {
+
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),permission)) {
+                // You can directly ask for the permission.
+                showChoosingFile();
+                // The registered ActivityResultCallback gets the result of this request.
+                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, permission_id);
+            }
+
+        }
     }
 
     private void showChoosingFile() {
@@ -439,12 +508,5 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         .update(userModify)
         .addOnSuccessListener(aVoid -> Toast.makeText(getActivity().getApplicationContext(), R.string.succesful_save, Toast.LENGTH_SHORT).show())
         .addOnFailureListener(e -> Toast.makeText(getActivity().getApplicationContext(), R.string.error_save, Toast.LENGTH_SHORT).show());
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.edit_img_btn){
-            showChoosingFile();
-        }
     }
 }
