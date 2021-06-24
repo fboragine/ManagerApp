@@ -1,6 +1,7 @@
 package it.uniba.di.sms2021.managerapp.segreteria.admin;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -20,8 +21,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.util.Locale;
 import java.util.Set;
 
 import it.uniba.di.sms2021.managerapp.R;
@@ -44,6 +49,9 @@ public class HomeAdminActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_admin);
+
+        File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
+        traduci(file.exists());
 
         toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
@@ -119,5 +127,36 @@ public class HomeAdminActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void traduci(Boolean flag) {
+
+        Locale locale;
+        if (!flag) {
+            File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
+            locale = Locale.ENGLISH;
+            file.delete();
+            saveFile("EN");
+        } else {
+            File file = new File(getApplicationContext().getExternalFilesDir(null), "EN");
+            locale = Locale.ITALIAN;
+            file.delete();
+            saveFile("IT");
+        }
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    public void saveFile(String FILE_NAME) {
+        ObjectOutput out;
+
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(new File(getBaseContext().getExternalFilesDir(null), FILE_NAME)));
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

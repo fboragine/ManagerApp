@@ -45,7 +45,6 @@ public class LoginAdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login_admin);
 
         File file = new File(getApplicationContext().getExternalFilesDir(null), "IT");
-
         traduci(file.exists());
 
         String pathSegreteria = getExternalFilesDir(null).getPath() + "/segreteria.srl";
