@@ -71,7 +71,7 @@ public class LoginAdminActivity extends AppCompatActivity {
                 } else if (v.getId() == R.id.btn_reset_password_admin) {
                     if(layout.getVisibility() == View.VISIBLE) {
                         layout.setVisibility(View.INVISIBLE);
-                        btnResetPsw.setText(R.string.login);
+                        btnResetPsw.setText(R.string.login_btn);
                         btnLogin.setVisibility(View.GONE);
                         btnResetPswConfirm.setVisibility(View.VISIBLE);
                     }else {
