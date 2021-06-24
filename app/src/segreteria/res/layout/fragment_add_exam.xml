@@ -68,7 +68,6 @@
                 android:layout_marginTop="20dp"
                 android:elegantTextHeight="true"
                 android:text="@string/select_course"
-                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:typeface="normal" />
 
@@ -103,7 +102,6 @@
                 android:layout_marginTop="20dp"
                 android:elegantTextHeight="true"
                 android:text="@string/select_teacher"
-                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:typeface="normal" />
 
