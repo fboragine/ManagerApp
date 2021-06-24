@@ -26,7 +26,7 @@
             <RelativeLayout
                 android:id="@+id/presentation"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="150dp"
                 android:background="@color/blue_200"
                 android:padding="20dp">
 
