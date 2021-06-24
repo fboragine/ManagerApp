@@ -15,7 +15,8 @@
     <string name="register">Register</string>
     <string name="name">Name</string>
     <string name="btn_goto_register">Do not have an account yet? Register Now.</string>
-    <string name="login">LOGIN</string>
+    <string name="login">Login</string>
+    <string name="login_btn">LOGIN</string>
     <string name="save">Save</string>
     <string name="home">Home</string>
     <string name="exams">Exams</string>
@@ -23,7 +24,6 @@
     <string name="edit">Edit</string>
     <string name="search">Search</string>
     <string name="cancel">Cancel</string>
-    <string name="signup">Sign up</string>
     <string name="edit_image">Edit image</string>
     <string name="serial_number">705624</string>
     <string name="description">Description</string>
@@ -64,7 +64,7 @@
     <string name="file_upload">File was be uploaded</string>
     <string name="email_sent">Email sent! Check your mailbox!</string>
     <string name="reset_password">Reset Password</string>
-    <string name="msg_reset">Insert email that need of password reset</string>
+    <string name="msg_reset">Enter your account email address</string>
     <string name="error_email_sent">Mail address cannot be empty!</string>
     <string name="donwload_stop">Download is paused!</string>
     <string name="upload_stop">Upload is paused!</string>

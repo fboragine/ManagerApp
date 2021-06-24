@@ -151,7 +151,7 @@
                     android:id="@+id/buttonLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/login"
+                    android:text="@string/login_btn"
                     android:layout_gravity="center"
                     android:backgroundTint="?attr/colorSecondary"
                     android:textColor="?attr/colorOnSecondary"/>
@@ -162,14 +162,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_reset_password"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     style="?attr/materialButtonOutlinedStyle"
                     android:text="@string/btn_forgot_password"

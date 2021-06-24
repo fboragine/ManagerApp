@@ -14,7 +14,8 @@
     <string name="e_mail">E-mail</string>
     <string name="name">Nome</string>
     <string name="btn_goto_register">Non hai ancora un account? Registrati ora.</string>
-    <string name="login">ACCEDI</string>
+    <string name="login">Accedi</string>
+    <string name="login_btn">ACCEDI</string>
     <string name="save">Salva</string>
     <string name="home">Home</string>
     <string name="exams">Esami</string>
@@ -22,7 +23,7 @@
     <string name="edit">Modifica</string>
     <string name="search">Ricerca</string>
     <string name="cancel">Cancella</string>
-    <string name="signup">Registrati</string>
+    <string name="register">Registrati</string>
     <string name="edit_image">Modifica immagine</string>
     <string name="serial_number">705624</string>
     <string name="description">Descrizione</string>
@@ -63,7 +64,7 @@
     <string name="file_upload">Il file è stato caricato</string>
     <string name="email_sent">Email inviata. Controlla la tua posta!</string>
     <string name="reset_password">Resetta la password</string>
-    <string name="msg_reset">Inserisci la mail di cui vuoi resettare la password</string>
+    <string name="msg_reset">Inserisci l\'indirizzo email dell\'account</string>
     <string name="donwload_stop">Scaricamento in pausa!</string>
     <string name="upload_stop">Caricamento in pausa!</string>
     <string name="btn_goto_login">Torna alla pagina di accesso</string>
@@ -75,7 +76,6 @@
     <string name="in_progress_projects">Progetti in corso</string>
     <string name="error_email_sent">Il campo email non può essere vuoto!</string>
     <string name="informatica">Informatica</string>
-    <string name="register">Registrazione</string>
     <string name="name_project">Nome del progetto</string>
     <string name="description_project">Descrizione del progetto</string>
     <string name="label_exams">Seleziona l\'esame</string>

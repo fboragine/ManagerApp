@@ -102,7 +102,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 btnConfirmResetPw.setVisibility(View.VISIBLE);
                 btnLogin.setVisibility(View.GONE);
 
-                btnResetPw.setText(R.string.login);
+                btnResetPw.setText(R.string.login_btn);
 
                 Toast.makeText(getActivity().getApplicationContext(),getString(R.string.msg_reset), Toast.LENGTH_LONG).show();
             }else {
