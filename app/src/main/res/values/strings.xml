@@ -164,4 +164,5 @@
     <string name="perm_need_storage_msg">Permission is needed to access files from your device</string>
     <string name="not_valid_chosen">File chosen not valid!</string>
     <string name="project">Project</string>
+    <string name="upload_file_msg">Insert the new file in the Android folder to upload</string>
 </resources>

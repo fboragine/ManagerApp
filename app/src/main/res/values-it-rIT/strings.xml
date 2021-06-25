@@ -163,4 +163,5 @@
     <string name="english">Inglese</string>
     <string name="italian">Italiano</string>
     <string name="project">Progetto</string>
+    <string name="upload_file_msg">Inserire il nuovo file all\'interno della cartella Android per caricarlo</string>
 </resources>

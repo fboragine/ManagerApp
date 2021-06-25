@@ -156,4 +156,5 @@
     <string name="whatsapp">Share on Whatsapp</string>
     <string name="transition">transition</string>
     <string name="project">Project</string>
+    <string name="upload_file_msg">Insert the new file in the Android folder to upload</string>
 </resources>

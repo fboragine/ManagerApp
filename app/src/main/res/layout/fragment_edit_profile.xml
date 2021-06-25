@@ -160,9 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="60dp"
                     android:paddingStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="2dp">
+                    android:paddingEnd="20dp">
 
                     <TextView
                         android:id="@+id/advertise"
