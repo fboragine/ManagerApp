@@ -145,7 +145,7 @@ public class LibrettoFragment extends Fragment {
                     if(cds.equals(document.getString("cDs"))) {
                         Esame esame = new Esame(document.getString("id"),
                                 document.getString("nome"),
-                                document.getString("desrizione"),
+                                document.getString("descrizione"),
                                 document.getString("cDs"),
                                 (ArrayList<String>) document.get("idDocenti"));
 
@@ -189,7 +189,7 @@ public class LibrettoFragment extends Fragment {
 
                     Esame esame = new Esame(document.getString("id"),
                             document.getString("nome"),
-                            document.getString("desrizione"),
+                            document.getString("descrizione"),
                             document.getString("cDs"),
                             (ArrayList<String>) document.get("idDocenti"));
 
