@@ -2,11 +2,6 @@ package it.uniba.di.sms2021.managerapp.loggedUser;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +13,9 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -27,7 +25,6 @@ import java.util.ArrayList;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Esame;
 import it.uniba.di.sms2021.managerapp.exam.ExamActivity;
-
 import it.uniba.di.sms2021.managerapp.service.ExamListAdapter;
 import it.uniba.di.sms2021.managerapp.service.Settings;
 
@@ -48,7 +45,7 @@ public class LibrettoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        esami = new ArrayList<Esame>();
+        esami = new ArrayList<>();
 
         db = FirebaseFirestore.getInstance();
 
