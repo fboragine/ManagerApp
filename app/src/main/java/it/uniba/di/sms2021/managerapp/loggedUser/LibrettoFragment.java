@@ -70,6 +70,8 @@ public class LibrettoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewExamList = inflater.inflate(R.layout.fragment_libretto, container, false);
 
+        listView = viewExamList.findViewById(R.id.listLibretto);
+
         if(!uidStudente.equals("")) {
             passato = viewExamList.findViewById(R.id.passed);
 
@@ -82,6 +84,7 @@ public class LibrettoFragment extends Fragment {
             TextView notpassedExam = viewExamList.findViewById(R.id.not_passed);
             notpassedExam.setVisibility(View.GONE);
         }
+        setVisibility();
 
         return viewExamList;
     }
@@ -159,11 +162,11 @@ public class LibrettoFragment extends Fragment {
                                         }
                                     }
                                 }
-                                listView = viewExamList.findViewById(R.id.listLibretto);
                                 //pass results to listViewAdapter class
                                 adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
                                 //bind the adapter to the listview
                                 listView.setAdapter(adapterEsami);
+                                setVisibility();
 
                                 listView.setOnItemClickListener((adapterView, view, i, l) -> {
                                     Intent intent = new Intent(getActivity().getApplicationContext(), ExamActivity.class);
@@ -196,11 +199,11 @@ public class LibrettoFragment extends Fragment {
                         }
                     }
 
-                    listView = viewExamList.findViewById(R.id.listLibretto);
                     //pass results to listViewAdapter class
                     adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
                     //bind the adapter to the listview
                     listView.setAdapter(adapterEsami);
+                    setVisibility();
 
                     listView.setOnItemClickListener((adapterView, view, i, l) -> {
                         Intent intent = new Intent(getActivity().getApplicationContext(), ExamActivity.class);
@@ -210,5 +213,17 @@ public class LibrettoFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void setVisibility() {
+        if (esami.isEmpty()) {
+            listView.setVisibility(View.GONE);
+            TextView textView = viewExamList.findViewById(R.id.noExamView);
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            listView.setVisibility(View.VISIBLE);
+            TextView textView = viewExamList.findViewById(R.id.noExamView);
+            textView.setVisibility(View.GONE);
+        }
     }
 }

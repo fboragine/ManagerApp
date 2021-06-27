@@ -104,6 +104,8 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
         toolbar.setNavigationOnClickListener(view -> finish());
 
+        listViewFiles = findViewById(R.id.project_files);
+
         // Get the default bucket from a custom FirebaseApp
         storage = FirebaseStorage.getInstance();
         files = new ArrayList<>();
@@ -122,6 +124,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         selectedFileLab = findViewById(R.id.selected_file);
         selectedFileLab.setVisibility(View.INVISIBLE);
         createExplorerFile();
+        setFilesVisibility();
     }
 
     private void createExplorerFile() {
@@ -136,9 +139,9 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
             public synchronized void onCallback(SpecsFile specsFile, boolean flag) {
                 files.add(specsFile);
                 if(flag) {
-                    listViewFiles = findViewById(R.id.project_files);
                     adapter = new FileListAdapter(getApplicationContext(), files);
                     listViewFiles.setAdapter(adapter);
+                    setFilesVisibility();
                 }
             }
         });
@@ -147,8 +150,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
     private void onAddButtonClicked() {
         visibility(clicked);
         animation(clicked);
-        if(!clicked) clicked = true;
-        else clicked = false;
+        clicked = !clicked;
     }
 
     private void visibility(Boolean clicked) {
@@ -546,16 +548,21 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
                                 percorso
                                 );
 
-                        if(i.get() < listResult.getItems().size()-1) {
-                            myCallback.onCallback(auxFile, false);
-                        }else {
-                            myCallback.onCallback(auxFile, true);
-                        }
+                        myCallback.onCallback(auxFile, i.get() >= listResult.getItems().size() - 1);
                         i.getAndIncrement();
                     });
                 }
             }
         })
         .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void setFilesVisibility() {
+        TextView textView = findViewById(R.id.noFileView);
+        if (files.isEmpty()) {
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.GONE);
+        }
     }
 }

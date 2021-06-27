@@ -9,8 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -53,9 +51,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private View viewHome;
     private File loggedStudente;
     private File loggedDocente;
-
-    private final Locale lingua = Locale.ITALIAN;
-    private TextView testo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,8 +109,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                 document.getBoolean("valutato"));
 
                         visualizzaProgettiStudente(progetto);
+                        initProjectView();
                     }
-                    initProjectView();
                 }
             });
         }
@@ -151,8 +146,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             document.getBoolean("valutato"));
 
                     visualizzaProgettiDocente(esame, progetto);
+                    initProjectView();
                 }
-                initProjectView();
             }
         });
     }
@@ -172,13 +167,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         closedAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), closedProject);
         closedRecyclerView.setAdapter(closedAdapter);
 
-        if (closedProject.isEmpty()) {
-            RelativeLayout relativeLayout = viewHome.findViewById(R.id.closedContainer);
-            relativeLayout.setVisibility(View.INVISIBLE);
-        }
         if (inProgressProject.isEmpty()) {
-            RelativeLayout relativeLayout = viewHome.findViewById(R.id.inProgressContainer);
-            relativeLayout.setVisibility(View.INVISIBLE);
+            inProgressRecyclerView.setVisibility(View.GONE);
+            TextView textView = viewHome.findViewById(R.id.noInProgressView);
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            inProgressRecyclerView.setVisibility(View.VISIBLE);
+            TextView textView = viewHome.findViewById(R.id.noInProgressView);
+            textView.setVisibility(View.GONE);
+        }
+        if (closedProject.isEmpty()) {
+            closedRecyclerView.setVisibility(View.GONE);
+            TextView textView = viewHome.findViewById(R.id.noClosedView);
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            closedRecyclerView.setVisibility(View.VISIBLE);
+            TextView textView = viewHome.findViewById(R.id.noClosedView);
+            textView.setVisibility(View.GONE);
         }
     }
 

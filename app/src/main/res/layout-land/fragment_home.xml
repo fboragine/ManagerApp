@@ -36,6 +36,18 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/inProgressTextView"
                     android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:id="@+id/noInProgressView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/inProgressTextView"
+                    android:gravity="center"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:textSize="18sp"
+                    android:text="@string/no_inprogress_projects"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -61,6 +73,18 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/closedTextView"
                     android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:id="@+id/noClosedView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/closedTextView"
+                    android:gravity="center"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:textSize="18sp"
+                    android:text="@string/no_closed_projects"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <RelativeLayout

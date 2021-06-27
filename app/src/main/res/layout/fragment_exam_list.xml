@@ -12,4 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/noExamView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:layout_marginTop="20dp"
+        android:textSize="18sp"
+        android:text="@string/no_exams"
+        android:visibility="gone"/>
+
 </FrameLayout>

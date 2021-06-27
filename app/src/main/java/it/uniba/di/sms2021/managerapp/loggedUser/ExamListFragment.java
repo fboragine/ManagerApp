@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -57,6 +58,7 @@ public class ExamListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewExamList = inflater.inflate(R.layout.fragment_guest_home, container, false);
 
+        listView = viewExamList.findViewById(R.id.listView);
         ((GuestActivity)getActivity()).enableBackArrow();
 
         db.collection("esami").get().addOnCompleteListener(task -> {
@@ -72,11 +74,11 @@ public class ExamListFragment extends Fragment {
                     }
                 }
 
-                listView = viewExamList.findViewById(R.id.listView);
                 //pass results to listViewAdapter class
                 adapterEsami = new ExamListAdapter(getActivity().getApplicationContext(), esami);
                 //bind the adapter to the listview
                 listView.setAdapter(adapterEsami);
+                setExamVisibility();
 
                 listView.setOnItemClickListener((adapterView, view, i, l) -> {
                     Intent intent = new Intent(getActivity().getApplicationContext(), ExamActivity.class);
@@ -85,6 +87,7 @@ public class ExamListFragment extends Fragment {
                 });
             }
         });
+        setExamVisibility();
 
         return viewExamList;
     }
@@ -131,5 +134,16 @@ public class ExamListFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
+    }
+
+    private void setExamVisibility() {
+        TextView textView = viewExamList.findViewById(R.id.noExamView);
+        if (esami.isEmpty()) {
+            textView.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        } else {
+            textView.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }
     }
 }

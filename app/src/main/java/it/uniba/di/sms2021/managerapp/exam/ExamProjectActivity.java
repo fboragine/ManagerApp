@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,6 +45,8 @@ public class ExamProjectActivity extends AppCompatActivity {
             esame = src.getParcelableExtra("esame");
         }
 
+        listView = findViewById(R.id.listView);
+
         db = FirebaseFirestore.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
@@ -56,6 +60,7 @@ public class ExamProjectActivity extends AppCompatActivity {
         progetti = new ArrayList<>();
 
         getProgetti();
+        setProjectsVisibility();
     }
 
     public void getProgetti() {
@@ -76,9 +81,9 @@ public class ExamProjectActivity extends AppCompatActivity {
                     }
                 }
 
-                listView = (ListView)findViewById(R.id.listView);
                 adapterProgetti = new ProjectListAdapter(getApplicationContext(), progetti);
                 listView.setAdapter(adapterProgetti);
+                setProjectsVisibility();
 
                 listView.setOnItemClickListener((adapterView, view, i, l) -> {
                     Intent intent = new Intent(getApplicationContext(), ProjectActivity.class);
@@ -115,5 +120,16 @@ public class ExamProjectActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    private void setProjectsVisibility() {
+        TextView textView = findViewById(R.id.noProjectsView);
+        if (progetti.isEmpty()) {
+            textView.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        } else {
+            textView.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }
     }
 }

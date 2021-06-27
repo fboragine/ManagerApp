@@ -165,4 +165,9 @@
     <string name="not_valid_chosen">File chosen not valid!</string>
     <string name="project">Project</string>
     <string name="upload_file_msg">Insert the new file in the Android folder to upload</string>
+    <string name="no_inprogress_projects">There are no projects in progress</string>
+    <string name="no_closed_projects">There are no closed projects</string>
+    <string name="no_exams">There are no exams</string>
+    <string name="no_files">There are no files</string>
+    <string name="no_projects">There are no projects</string>
 </resources>

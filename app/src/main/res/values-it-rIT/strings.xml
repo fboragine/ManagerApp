@@ -164,4 +164,9 @@
     <string name="italian">Italiano</string>
     <string name="project">Progetto</string>
     <string name="upload_file_msg">Inserire il nuovo file all\'interno della cartella Android per caricarlo</string>
+    <string name="no_inprogress_projects">Non ci sono progetti in corso</string>
+    <string name="no_closed_projects">Non ci sono progetti conclusi</string>
+    <string name="no_exams">Non ci sono esami</string>
+    <string name="no_files">Non ci sono file</string>
+    <string name="no_projects">Non ci sono progetti</string>
 </resources>
