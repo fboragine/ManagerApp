@@ -53,6 +53,7 @@ import java.util.Map;
 import it.uniba.di.sms2021.managerapp.R;
 import it.uniba.di.sms2021.managerapp.entities.Docente;
 import it.uniba.di.sms2021.managerapp.entities.Studente;
+import it.uniba.di.sms2021.managerapp.guest.GuestActivity;
 import it.uniba.di.sms2021.managerapp.service.Settings;
 
 public class EditProfileFragment extends Fragment implements View.OnClickListener{
@@ -93,7 +94,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        ((StudentActivity)getActivity()).disableBackArrow();
+
         vistaModifica = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
         editName = vistaModifica.findViewById(R.id.name);

@@ -39,16 +39,20 @@ public class StudentActivity extends AppCompatActivity {
     protected static Studente loggedStudent;
     protected static Docente loggedDocent;
 
+    private Toolbar toolbar;
+
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.top_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle("Home");
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
+        toolbar.setNavigationOnClickListener(view -> goBackFragment());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         NavController navController = Navigation.findNavController(findViewById(R.id.fragment));
@@ -106,5 +110,23 @@ public class StudentActivity extends AppCompatActivity {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void goBackFragment() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    public void disableBackArrow() {
+        toolbar.setNavigationIcon(null);
+    }
+
+    public void enableBackArrow() {
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_new_24);
+        toolbar.setNavigationOnClickListener(view -> goBackFragment());
     }
 }
