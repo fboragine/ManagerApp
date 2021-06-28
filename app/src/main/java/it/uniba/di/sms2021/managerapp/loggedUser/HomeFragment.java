@@ -69,7 +69,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        ((StudentActivity)getActivity()).disableBackArrow();
+
         viewHome = inflater.inflate(R.layout.fragment_home, container, false);
 
         inProgressProject = new ArrayList<>();
