@@ -69,8 +69,8 @@
     <string name="upload_stop">Caricamento in pausa!</string>
     <string name="btn_goto_login">Torna alla pagina di accesso</string>
     <string name="exam_name">Nome esame</string>
-    <string name="teachers">Professori</string>
-    <string name="teacher">Professore</string>
+    <string name="teachers">Docenti</string>
+    <string name="teacher">Docente</string>
     <string name="add_new_project">Aggiungi un nuovo progetto</string>
     <string name="closed_projects">Progetti finiti</string>
     <string name="in_progress_projects">Progetti in corso</string>
@@ -131,12 +131,12 @@
     <string name="secretariat">Segreteria</string>
     <string name="courses">Corsi</string>
     <string name="exam_description">Descrizione esame</string>
-    <string name="select_teacher">Seleziona Professore</string>
-    <string name="add_teacher">Aggiungi Professore</string>
+    <string name="select_teacher">Seleziona Docente</string>
+    <string name="add_teacher">Aggiungi Docente</string>
     <string name="course_name">Nome corso</string>
     <string name="course_description">Descrizione corso</string>
     <string name="cds_dialog_title">Scegli un corso</string>
-    <string name="teacher_dialog_title">Seleziona i professori</string>
+    <string name="teacher_dialog_title">Seleziona i docenti</string>
     <string name="change_select_teachers">Cambia professori selezionati</string>
     <string name="add">Aggiungi</string>
     <string name="whatsapp">Condividi con Whatsapp</string>
