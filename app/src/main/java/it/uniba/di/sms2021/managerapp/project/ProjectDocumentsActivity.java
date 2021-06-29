@@ -105,6 +105,7 @@ public class ProjectDocumentsActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(view -> finish());
 
         listViewFiles = findViewById(R.id.project_files);
+        adapter = new FileListAdapter();
 
         // Get the default bucket from a custom FirebaseApp
         storage = FirebaseStorage.getInstance();

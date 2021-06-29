@@ -31,6 +31,11 @@ public class FileListAdapter extends BaseAdapter {
         selectedItem = new ArrayList<>();
     }
 
+    public FileListAdapter(){
+        item = null;
+        selectedItem = new ArrayList<>();
+    }
+
     @Override
     public int getCount() { return item.size(); }
 
