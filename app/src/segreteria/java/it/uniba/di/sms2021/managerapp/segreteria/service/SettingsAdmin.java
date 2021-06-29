@@ -59,9 +59,6 @@ public class SettingsAdmin extends AppCompatActivity {
         Button logout = findViewById(R.id.logout);
         logout.setOnClickListener(v -> {
             logout();
-            Intent intent = new Intent(getApplicationContext(), GuestActivity.class);
-            startActivity(intent);
-            finish();
         });
 
         loginFile = new File(getApplicationContext().getExternalFilesDir(null), "segreteria.srl");
