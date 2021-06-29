@@ -40,28 +40,6 @@
 
             </RelativeLayout>
 
-            <RadioGroup
-                android:id="@+id/loginType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/radio_student"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/student"/>
-
-                <RadioButton
-                    android:id="@+id/radio_teacher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/teacher"/>
-            </RadioGroup>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

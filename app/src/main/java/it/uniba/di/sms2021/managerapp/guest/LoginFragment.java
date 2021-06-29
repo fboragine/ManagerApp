@@ -44,7 +44,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     Button btnConfirmResetPw;
     EditText email;
     EditText password;
-    RadioButton studenteLogin;
     LinearLayout passwordLayout;
 
     private FirebaseAuth mAuth;
@@ -71,7 +70,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         btnResetPw = (Button) vistaLogin.findViewById(R.id.btn_reset_password);
         email = (EditText)vistaLogin.findViewById(R.id.emailTxt);
         password = (EditText)vistaLogin.findViewById(R.id.passwordTxt);
-        studenteLogin = (RadioButton) vistaLogin.findViewById(R.id.radio_student);
         btnConfirmResetPw = (Button) vistaLogin.findViewById(R.id.reset_password_btn);
         passwordLayout = vistaLogin.findViewById(R.id.password_layout);
 
@@ -150,12 +148,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 FirebaseUser user;
 
                 user = mAuth.getCurrentUser();
-
-                if(studenteLogin.isChecked()){
-                    getDataFromFireStore(user.getUid(),"studenti");
-                }else {
-                    getDataFromFireStore(user.getUid(),"docenti");
-                }
+                getDataFromFireStore(user.getUid());
             }
             else {
                 // If sign in fails, display a message to the user.
@@ -165,43 +158,47 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void getDataFromFireStore(String id, String collectionPath) {
-        DocumentReference docRef = db.collection(collectionPath).document(id);
+    public void getDataFromFireStore(String id) {
+        DocumentReference docRefStudenti = db.collection("studenti").document(id);
 
-        docRef.get().addOnCompleteListener((OnCompleteListener<DocumentSnapshot>) task -> {
+        docRefStudenti.get().addOnCompleteListener((OnCompleteListener<DocumentSnapshot>) task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-
                 if (document.exists()) {
-                    if(collectionPath.matches("studenti")){
-                        Studente risultato;
-                        risultato = new Studente(
-                                (String) document.get("id"),
-                                (String) document.get("matricola"),
-                                (String) document.get("nome"),
-                                (String) document.get("cognome"),
-                                (String) document.get("email"),
-                                (String) document.get("cDs"));
-                        salvaSessione((Object)risultato, collectionPath);
-
-                    } else if(collectionPath.matches("docenti")){
-                        Docente risultato;
-                        risultato = new Docente(
-                                (String) document.get("id"),
-                                (String) document.get("matricola"),
-                                (String) document.get("nome"),
-                                (String) document.get("cognome"),
-                                (String) document.get("email"));
-                        salvaSessione((Object)risultato, collectionPath);
-                    }
-
+                    Studente risultato;
+                    risultato = new Studente(
+                            (String) document.get("id"),
+                            (String) document.get("matricola"),
+                            (String) document.get("nome"),
+                            (String) document.get("cognome"),
+                            (String) document.get("email"),
+                            (String) document.get("cDs"));
+                    salvaSessione((Object)risultato, "studenti");
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.doc_not_found, Toast.LENGTH_LONG).show();
-                    FirebaseUser userDelete = FirebaseAuth.getInstance().getCurrentUser();
-                    userDelete.delete();
+                    DocumentReference docRefDocenti = db.collection("docenti").document(id);
 
-                    Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
-                    startActivity(intent);
+                    docRefDocenti.get().addOnCompleteListener((OnCompleteListener<DocumentSnapshot>) task2 -> {
+                        if (task2.isSuccessful()) {
+                            DocumentSnapshot document2 = task2.getResult();
+                            if (document2.exists()) {
+                                Docente risultato;
+                                risultato = new Docente(
+                                        (String) document2.get("id"),
+                                        (String) document2.get("matricola"),
+                                        (String) document2.get("nome"),
+                                        (String) document2.get("cognome"),
+                                        (String) document2.get("email"));
+                                salvaSessione((Object) risultato, "docenti");
+                            }
+                        } else {
+                            Toast.makeText(getActivity().getApplicationContext(), R.string.doc_not_found, Toast.LENGTH_LONG).show();
+                            FirebaseUser userDelete = FirebaseAuth.getInstance().getCurrentUser();
+                            userDelete.delete();
+
+                            Intent intent = new Intent(getActivity().getApplicationContext(), GuestActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                 }
             } else {
                 Toast.makeText(getActivity().getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
