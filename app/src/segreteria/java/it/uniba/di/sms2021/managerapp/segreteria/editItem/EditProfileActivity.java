@@ -81,11 +81,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
         label = findViewById(R.id.profile_course);
         if(isStudent) {
+            findViewById(R.id.layout_course).setVisibility(View.VISIBLE);
             db.collection("studenti").document(utente.getId()).get().addOnSuccessListener(documentSnapshot -> {
                 db.collection("corsiDiStudio").document(Objects.requireNonNull(documentSnapshot.getString("cDs"))).get().addOnSuccessListener(documentSnapshotCds -> {
                     label.setText(Objects.requireNonNull(Objects.requireNonNull(documentSnapshotCds.getData()).get("nome")).toString());
                 });
             });
+        }else {
+            findViewById(R.id.layout_course).setVisibility(View.GONE);
         }
 
     }
