@@ -52,7 +52,6 @@
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/ic_action_name"
                     android:fontFamily="@font/bungee"
                     android:includeFontPadding="false"
                     android:text="@string/course"
