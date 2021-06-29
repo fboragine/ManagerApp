@@ -8,5 +8,6 @@
     <color name="deep_orange_700">#C41C00</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="night_gray">#131313</color>131313
+    <color name="night_gray">#131313</color>
+    <color name="bg_night_gray">#292929</color>
 </resources>

@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue_500</item>
         <item name="colorPrimaryVariant">@color/blue_700</item>
-        <item name="colorOnPrimary">#131313</item>
+        <item name="colorOnPrimary">@color/night_gray</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/deep_orange_500</item>
         <item name="colorSecondaryVariant">@color/deep_orange_700</item>
@@ -12,5 +12,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:itemBackground">@color/bg_night_gray</item>
+        <item name="android:itemTextAppearance">@style/CustomTextMenu</item>
+    </style>
+
+    <style name="CustomTextMenu" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 </resources>

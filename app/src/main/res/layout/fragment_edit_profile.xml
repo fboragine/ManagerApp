@@ -45,9 +45,9 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="10dp"
                         android:layout_below="@id/ic_action_name"
-                        android:background="@color/blue_500"
                         android:text="@string/edit_image"
-                        android:textColor="@color/white" />
+                        android:backgroundTint="?attr/colorSecondary"
+                        android:textColor="?attr/colorOnSecondary"/>
 
                     <EditText
                         android:id="@+id/name"
